@@ -1,0 +1,40 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
+<!-- above set at the top of the file will set     -->
+<!-- the browser's rendering engine into           -->
+<!-- "Quirks Mode". Replacing this declaration     -->
+<!-- with a "Standards Mode" doctype is supported, -->
+<!-- but may lead to some differences in layout.   -->
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Immopoly</title>
+  </head>
+
+  <body>
+    <h1>Immopoly!</h1>
+
+	<b>Register</b><br/>
+    <form action="/user/register">
+		username:<input type="text" name="username"/>&nbsp;password:<input type="text" name="password"/>&nbsp;<input type="submit"/>
+	</form>
+	<br/>
+	<b>Login</b><br/>
+    <form action="/user/login">
+		username:<input type="text" name="username"/>&nbsp;password:<input type="text" name="password"/>&nbsp;<input type="submit"/>
+	</form>
+	<br/>
+	<b>Info</b><br/>
+    <form action="/user/info">
+		token:<input type="text" name="token"/>&nbsp;<input type="submit"/>
+	</form>
+	<br/>
+	<br/>
+	<b>add</b><br/>
+    <form action="/portfolio/add">
+		token:<input type="text" name="token"/>&nbsp;expose:<input type="text" name="expose" value="39308535"/>&nbsp;<input type="submit"/>
+	</form>
+	<br/>
+  </body>
+</html>
