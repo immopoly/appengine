@@ -124,7 +124,7 @@ public class User extends org.immopoly.common.User implements JSONable {
 		try {
 			// last 10 history
 			JSONArray historyList = new JSONArray();
-			List<History> history = DBManager.getHistory(pm, id, 10);
+			List<History> history = DBManager.getHistory(pm, id, 15);
 			for (History h : history) {
 				historyList.put(h.toJSON());
 			}

@@ -58,7 +58,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 			Expose expose = DBManager.getExpose(pm, exposeId);
 			if (null != expose) {
 				if (expose.getUserId() == user.getId()) {
-					throw new ImmopolyException("gehört dir schon du penner", 201);
+					throw new ImmopolyException("gehï¿½rt dir schon du penner", 201);
 				} else {
 					// history eintrag
 					// other user
@@ -70,11 +70,11 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 						otherUser.setBalance(otherUser.getBalance() + fine);
 
 					history = new History(History.TYPE_EXPOSE_MONOPOLY_NEGATIVE, user.getId(), System.currentTimeMillis(), "Die Wohnung '"
-							+ expose.getName() + "' gehört schon '" + otherUser.getUserName() + "' Strafe "
+							+ expose.getName() + "' gehï¿½rt schon '" + otherUser.getUserName() + "' Strafe "
 							+ History.MONEYFORMAT.format(fine), fine);
 					if (null != otherUser) {
 						History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(), System
-								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' übernehmen: Belohung "
+								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' ï¿½bernehmen: Belohung "
 								+ History.MONEYFORMAT.format(fine), fine);
 						pm.makePersistent(otherHistory);
 					}
@@ -90,7 +90,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					expose = new Expose(user.getId(), obj);
 					// nur wohnungen mit rent
 					if (expose.getRent() == 0.0)
-						throw new ImmopolyException("Expose hat keinen Wert für Kaltmiete, sie kann nicht übernommen werden", 302);
+						throw new ImmopolyException("Expose hat keinen Wert fï¿½r Kaltmiete, sie kann nicht ï¿½bernommen werden", 302);
 					
 					//check distance to last exposes https://github.com/immopoly/immopoly/issues/26
 					if(!checkDistance(pm,expose))
@@ -99,8 +99,8 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					pm.makePersistent(expose);
 					double fine = 2 * expose.getRent() / 30.0;
 					history = new History(History.TYPE_EXPOSE_ADDED, user.getId(), System.currentTimeMillis(), "Du hast die Wohnung '"
-							+ expose.getName() + "' gemietet für " + History.MONEYFORMAT.format(expose.getRent())
-							+ " im Monat. Übernahmekosten: " + History.MONEYFORMAT.format(fine), fine);
+							+ expose.getName() + "' gemietet fï¿½r " + History.MONEYFORMAT.format(expose.getRent())
+							+ " im Monat. ï¿½bernahmekosten: " + History.MONEYFORMAT.format(fine), fine);
 					user.setBalance(user.getBalance() - fine);
 					pm.makePersistent(user);
 					pm.makePersistent(history);
@@ -120,13 +120,17 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 
 	private boolean checkDistance(PersistenceManager pm, Expose expose) {
 		//get last x entries
-		List<Expose> lastExposes	= DBManager.getLastExposes(pm, expose.getExposeId(),System.currentTimeMillis()-60*60*1000);
+		List<Expose> lastExposes	= DBManager.getLastExposes(pm, expose.getUserId(),System.currentTimeMillis()-(60*60*1000));
+		LOG.info("lastExposes "+lastExposes.size() + " userId: " +expose.getUserId()+" "+(System.currentTimeMillis()-(60*60*1000)));
 		for (Expose e : lastExposes) {
 			//wenn e weiter weg ist als MAX_SPOOFING_METER_PER_SECOND per return false
 			double distance = calcDistance(expose.getLatitude(),expose.getLongitude(),e.getLatitude(),e.getLongitude());
 			double distancePerSecond=distance/((System.currentTimeMillis()-e.getTime())/1000);
-			if(distancePerSecond>Const.MAX_SPOOFING_METER_PER_SECOND)
+			LOG.info("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_METER_PER_SECOND);
+			if(distancePerSecond>Const.MAX_SPOOFING_METER_PER_SECOND){
+				LOG.severe("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_METER_PER_SECOND);
 				return false;
+			}
 		}
 		return true;
 	}
