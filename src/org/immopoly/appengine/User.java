@@ -51,6 +51,12 @@ public class User extends org.immopoly.common.User implements JSONable {
 	private String password;
 
 	@Persistent
+	private String email;
+	
+	@Persistent
+	private String twitter;
+	
+	@Persistent
 	private double balance;
 
 	@Persistent
@@ -65,9 +71,10 @@ public class User extends org.immopoly.common.User implements JSONable {
 	@Persistent
 	private Double lastProvision;
 
-	public User(String name, String password) {
+	public User(String name, String password, String email, String twitter) {
 		this.username = name;
-
+		this.email = email;
+		this.twitter = twitter;
 		try {
 			MessageDigest m = MessageDigest.getInstance("MD5");
 			m.update(password.getBytes(), 0, password.length());
@@ -98,6 +105,8 @@ public class User extends org.immopoly.common.User implements JSONable {
 		JSONObject o = new JSONObject();
 		try {
 			o.put("username", username);
+			o.put("email", email);
+			o.put("twitter", twitter);
 			o.put("token", token);
 			o.put("info", getInfo(false));
 			resp.put("org.immopoly.common.User", o);
@@ -113,6 +122,7 @@ public class User extends org.immopoly.common.User implements JSONable {
 		JSONObject o = new JSONObject();
 		try {
 			o.put("username", username);
+			o.put("twitter", twitter);
 			o.put("info", getInfo(true));
 			resp.put("org.immopoly.common.User", o);
 		} catch (JSONException e) {
@@ -187,6 +197,15 @@ public class User extends org.immopoly.common.User implements JSONable {
 		this.username = username;
 	}
 
+	@Override
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	@Override
+	public void setTwitter(String twitter) {
+		this.twitter = twitter;
+	}
 	// @Override
 	// public void setPassword(String password) {
 	// this.password = password;
@@ -238,6 +257,16 @@ public class User extends org.immopoly.common.User implements JSONable {
 
 	public void setLastProvision(double lastProvision) {
 		this.lastProvision = lastProvision;
+	}
+
+	@Override
+	public String getEmail() {
+		return email;
+	}
+
+	@Override
+	public String getTwitter() {
+		return twitter;
 	}
 
 }

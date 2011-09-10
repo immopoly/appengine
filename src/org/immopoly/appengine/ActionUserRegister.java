@@ -42,6 +42,8 @@ public class ActionUserRegister extends AbstractAction {
 		try {
 			String username = req.getParameter(USERNAME);
 			String password = req.getParameter(PASSWORD);
+			String email = req.getParameter(EMAIL);
+			String twitter = req.getParameter(TWITTER);
 
 			if (null == username || username.length() == 0)
 				throw new ImmopolyException("missing username", 43);
@@ -54,7 +56,7 @@ public class ActionUserRegister extends AbstractAction {
 				throw new ImmopolyException("username already taken " + username, 45);
 			} else {
 				// kein user da? anlegen
-				user = new User(username, password);
+				user = new User(username, password,email,twitter);
 				pm.makePersistent(user);
 				resp.getOutputStream().write(user.toJSON().toString().getBytes("UTF-8"));
 			}

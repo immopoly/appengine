@@ -28,6 +28,8 @@ public interface Action {
 	public final String PASSWORD = "password";
 	public final String TOKEN = "token";
 	public final String EXPOSE = "expose";
+	public final String EMAIL = "email";
+	public final String TWITTER = "twitter";
 
 	String getURI();
 
