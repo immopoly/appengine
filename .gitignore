@@ -1,4 +1,9 @@
+bin/
 target
 *.swp
+war/
 
-war
+# eclipse stuff
+.classpath
+.project
+.settings/

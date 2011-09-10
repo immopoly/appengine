@@ -1,6 +1,7 @@
 package org.immopoly.appengine;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
@@ -73,7 +74,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 							+ History.MONEYFORMAT.format(fine), fine);
 					if (null != otherUser) {
 						History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(), System
-								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' �bernehmen: Belohung "
+								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' übernehmen: Belohung "
 								+ History.MONEYFORMAT.format(fine), fine);
 						pm.makePersistent(otherHistory);
 					}
@@ -89,7 +90,11 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					expose = new Expose(user.getId(), obj);
 					// nur wohnungen mit rent
 					if (expose.getRent() == 0.0)
-						throw new ImmopolyException("Expose hat keinen Wert f�r Kaltmiete, sie kann nicht �bernommen werden", 302);
+						throw new ImmopolyException("Expose hat keinen Wert für Kaltmiete, sie kann nicht übernommen werden", 302);
+					
+					//check distance to last exposes https://github.com/immopoly/immopoly/issues/26
+					if(!checkDistance(pm,expose))
+						throw new ImmopolyException("SPOOFING ALERT", 441);
 					pm.makePersistent(expose);
 					double fine = 2 * expose.getRent() / 30.0;
 					history = new History(History.TYPE_EXPOSE_ADDED, user.getId(), System.currentTimeMillis(), "Du hast die Wohnung '"
@@ -112,4 +117,34 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 		}
 	}
 
+	private boolean checkDistance(PersistenceManager pm, Expose expose) {
+		//get last x entries
+		List<Expose> lastExposes	= DBManager.getLastExposes(pm, expose.getUserId(),System.currentTimeMillis()-(60*60*1000));
+		LOG.info("lastExposes "+lastExposes.size() + " userId: " +expose.getUserId()+" "+(System.currentTimeMillis()-(60*60*1000)));
+		for (Expose e : lastExposes) {
+			//wenn e weiter weg ist als MAX_SPOOFING_METER_PER_SECOND per return false
+			double distance = calcDistance(expose.getLatitude(),expose.getLongitude(),e.getLatitude(),e.getLongitude());
+			double distancePerSecond=distance/((System.currentTimeMillis()-e.getTime())/1000);
+			LOG.info("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_METER_PER_SECOND);
+			if(distancePerSecond>Const.MAX_SPOOFING_METER_PER_SECOND){
+				LOG.severe("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_METER_PER_SECOND);
+				return false;
+			}
+		}
+		return true;
+	}
+	 public static double calcDistance(double lat1, double lng1, double lat2, double lng2) {
+		    double earthRadius = 3958.75;
+		    double dLat = Math.toRadians(lat2-lat1);
+		    double dLng = Math.toRadians(lng2-lng1);
+		    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		               Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+		               Math.sin(dLng/2) * Math.sin(dLng/2);
+		    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		    double dist = earthRadius * c;
+
+		    int meterConversion = 1609;
+
+		    return new Double(dist * meterConversion).doubleValue();
+ }
 }
