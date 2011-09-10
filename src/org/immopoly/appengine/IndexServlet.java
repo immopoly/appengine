@@ -57,7 +57,7 @@ public class IndexServlet extends HttpServlet {
 				try {
 					if (i > 1)
 						t5.append(", ");
-					t5.append(i).append(". ").append(u.getUserName()).append(" ")
+					t5.append(i).append(". <a href='/user/profile/").append(u.getUserName()).append("'>").append(u.getUserName()).append("</a> ")
 							.append(History.MONEYFORMAT.format(u.getBalance()));
 					i++;
 				} catch (Exception e) {
@@ -73,7 +73,7 @@ public class IndexServlet extends HttpServlet {
 				try {
 					User u = DBManager.getUser(pm, h.getUserId());
 					// history.append("<p class='c'><span>");
-					history.append("<li>").append(u.getUserName()).append(" ").append(DATE_FORMAT.format(h.getTime() + 2 * 60 * 60 * 1000))
+					history.append("<li><a href='/user/profile/").append(u.getUserName()).append("'>").append(u.getUserName()).append("</a> ").append(DATE_FORMAT.format(h.getTime() + 2 * 60 * 60 * 1000))
 							.append("<br/><p style='font-size:smaller;color:" + colorArray[h.getType()] + "'>").append(h.getText()).append(
 									"</p></li>");
 					// history.append("</span></p>");
