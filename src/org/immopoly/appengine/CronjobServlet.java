@@ -64,7 +64,7 @@ public class CronjobServlet extends HttpServlet {
 				LOG.info(" User " + user.getUserName());
 				resp.getWriter().write(" User " + user.getUserName());
 
-				// falls die berechnung länger als 1 Zyklus (siehe cron.xml)
+				// falls die Berechnung lÃ¤nger als 1 Zyklus (siehe cron.xml)
 				// dauert nicht wieder den gleichen Benutzer nehmen
 				user.setLastcalculation(System.currentTimeMillis());
 				pm.makePersistent(user);
@@ -96,7 +96,7 @@ public class CronjobServlet extends HttpServlet {
 
 						// Historieneintrag erstellen
 						History history = new History(History.TYPE_EXPOSE_SOLD, user.getId(), System.currentTimeMillis(), "Wohnung '"
-								+ expose.getName() + "' vermietet. Provision überwiesen: "
+								+ expose.getName() + "' vermietet. Provision Ã¼berwiesen: "
 								+ MONEYFORMAT.format(PROVISON_MULTIPLIER * expose.getRent()), PROVISON_MULTIPLIER * expose.getRent());
 
 						resp.getWriter().write(history.getText() + "<br>");
