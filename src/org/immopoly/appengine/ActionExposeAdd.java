@@ -74,7 +74,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 							+ History.MONEYFORMAT.format(fine), fine);
 					if (null != otherUser) {
 						History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(), System
-								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' �bernehmen: Belohung "
+								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' übernehmen: Belohung "
 								+ History.MONEYFORMAT.format(fine), fine);
 						pm.makePersistent(otherHistory);
 					}
