@@ -99,7 +99,7 @@ public class User extends org.immopoly.common.User implements JSONable {
 		try {
 			o.put("username", username);
 			o.put("token", token);
-			o.put("info", getInfo());
+			o.put("info", getInfo(false));
 			resp.put("org.immopoly.common.User", o);
 		} catch (JSONException e) {
 			LOG.log(Level.SEVERE, " User.toJSON ", e);
@@ -108,7 +108,21 @@ public class User extends org.immopoly.common.User implements JSONable {
 		return resp;
 	}
 
-	private JSONObject getInfo() throws JSONException {
+	public JSONObject toPublicJSON() {
+		JSONObject resp = new JSONObject();
+		JSONObject o = new JSONObject();
+		try {
+			o.put("username", username);
+			o.put("info", getInfo(true));
+			resp.put("org.immopoly.common.User", o);
+		} catch (JSONException e) {
+			LOG.log(Level.SEVERE, " User.toJSON ", e);
+			e.printStackTrace();
+		}
+		return resp;
+	}
+	
+	private JSONObject getInfo(boolean pub) throws JSONException {
 		JSONObject info = new JSONObject();
 		info.put("balance", balance);
 		if (null != lastRent)
@@ -130,19 +144,21 @@ public class User extends org.immopoly.common.User implements JSONable {
 			}
 			info.put("historyList", historyList);
 
-			// expose
-			JSONObject resultlist = new JSONObject();
-			JSONArray resultlistEntries = new JSONArray();
-			JSONArray resultlistEntry = new JSONArray();
-			// alle exposes des users holen
-
-			List<Expose> exposes = DBManager.getExposes(pm, id);
-			for (Expose expose : exposes) {
-				resultlistEntry.put(expose.toJSON());
+			if(!pub){
+				// expose
+				JSONObject resultlist = new JSONObject();
+				JSONArray resultlistEntries = new JSONArray();
+				JSONArray resultlistEntry = new JSONArray();
+				// alle exposes des users holen
+	
+				List<Expose> exposes = DBManager.getExposes(pm, id);
+				for (Expose expose : exposes) {
+					resultlistEntry.put(expose.toJSON());
+				}
+				resultlistEntries.put(resultlistEntry);
+				resultlist.put("resultlistEntries", resultlistEntries);
+				info.put("resultlist.resultlist", resultlist);
 			}
-			resultlistEntries.put(resultlistEntry);
-			resultlist.put("resultlistEntries", resultlistEntries);
-			info.put("resultlist.resultlist", resultlist);
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, " getInfo ", e);
 			e.printStackTrace();

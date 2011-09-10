@@ -40,6 +40,7 @@ public class ImmopolyServlet extends HttpServlet {
 		new ActionUserLogin(actions);
 		new ActionUserRegister(actions);
 		new ActionExposeAdd(actions);
+		new ActionPublicUserInfo(actions);
 	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -48,6 +49,9 @@ public class ImmopolyServlet extends HttpServlet {
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("text/plain");
 			String requestUri = req.getRequestURI();
+			
+//			if(requestUri.endsWith(".json"))
+				
 			for (Map.Entry<String, Action> a : actions.entrySet()) {
 				if (requestUri.contains(a.getKey())) {
 					a.getValue().execute(req, resp);
