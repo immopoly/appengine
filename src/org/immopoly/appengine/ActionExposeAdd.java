@@ -125,9 +125,9 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 			//wenn e weiter weg ist als MAX_SPOOFING_METER_PER_SECOND per return false
 			double distance = calcDistance(expose.getLatitude(),expose.getLongitude(),e.getLatitude(),e.getLongitude());
 			double distancePerSecond=distance/((System.currentTimeMillis()-e.getTime())/1000);
-			LOG.info("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_METER_PER_SECOND);
-			if(distancePerSecond>Const.MAX_SPOOFING_METER_PER_SECOND){
-				LOG.severe("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_METER_PER_SECOND);
+			LOG.info("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
+			if(distancePerSecond>Const.MAX_SPOOFING_DISTANCE_PER_SECOND){
+				LOG.severe("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
 				return false;
 			}
 		}
