@@ -57,7 +57,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 			Expose expose = DBManager.getExpose(pm, exposeId);
 			if (null != expose) {
 				if (expose.getUserId() == user.getId()) {
-					throw new ImmopolyException("gehört dir schon du penner", 201);
+					throw new ImmopolyException("gehÃ¶rt dir schon du penner", 201);
 				} else {
 					// history eintrag
 					// other user
@@ -69,11 +69,11 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 						otherUser.setBalance(otherUser.getBalance() + fine);
 
 					history = new History(History.TYPE_EXPOSE_MONOPOLY_NEGATIVE, user.getId(), System.currentTimeMillis(), "Die Wohnung '"
-							+ expose.getName() + "' gehört schon '" + otherUser.getUserName() + "' Strafe "
+							+ expose.getName() + "' gehÃ¶rt schon '" + otherUser.getUserName() + "' Strafe "
 							+ History.MONEYFORMAT.format(fine), fine);
 					if (null != otherUser) {
 						History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(), System
-								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' übernehmen: Belohung "
+								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' ï¿½bernehmen: Belohung "
 								+ History.MONEYFORMAT.format(fine), fine);
 						pm.makePersistent(otherHistory);
 					}
@@ -89,12 +89,12 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					expose = new Expose(user.getId(), obj);
 					// nur wohnungen mit rent
 					if (expose.getRent() == 0.0)
-						throw new ImmopolyException("Expose hat keinen Wert für Kaltmiete, sie kann nicht übernommen werden", 302);
+						throw new ImmopolyException("Expose hat keinen Wert fï¿½r Kaltmiete, sie kann nicht ï¿½bernommen werden", 302);
 					pm.makePersistent(expose);
 					double fine = 2 * expose.getRent() / 30.0;
 					history = new History(History.TYPE_EXPOSE_ADDED, user.getId(), System.currentTimeMillis(), "Du hast die Wohnung '"
-							+ expose.getName() + "' gemietet für " + History.MONEYFORMAT.format(expose.getRent())
-							+ " im Monat. Übernahmekosten: " + History.MONEYFORMAT.format(fine), fine);
+							+ expose.getName() + "' gemietet fÃ¼r " + History.MONEYFORMAT.format(expose.getRent())
+							+ " im Monat. Ãœbernahmekosten: " + History.MONEYFORMAT.format(fine), fine);
 					user.setBalance(user.getBalance() - fine);
 					pm.makePersistent(user);
 					pm.makePersistent(history);
