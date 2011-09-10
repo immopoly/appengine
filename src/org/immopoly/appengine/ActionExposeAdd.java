@@ -119,13 +119,17 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 
 	private boolean checkDistance(PersistenceManager pm, Expose expose) {
 		//get last x entries
-		List<Expose> lastExposes	= DBManager.getLastExposes(pm, expose.getExposeId(),System.currentTimeMillis()-60*60*1000);
+		List<Expose> lastExposes	= DBManager.getLastExposes(pm, expose.getUserId(),System.currentTimeMillis()-(60*60*1000));
+		LOG.info("lastExposes "+lastExposes.size() + " userId: " +expose.getUserId()+" "+(System.currentTimeMillis()-(60*60*1000)));
 		for (Expose e : lastExposes) {
 			//wenn e weiter weg ist als MAX_SPOOFING_METER_PER_SECOND per return false
 			double distance = calcDistance(expose.getLatitude(),expose.getLongitude(),e.getLatitude(),e.getLongitude());
 			double distancePerSecond=distance/((System.currentTimeMillis()-e.getTime())/1000);
-			if(distancePerSecond>Const.MAX_SPOOFING_METER_PER_SECOND)
+			LOG.info("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_METER_PER_SECOND);
+			if(distancePerSecond>Const.MAX_SPOOFING_METER_PER_SECOND){
+				LOG.severe("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_METER_PER_SECOND);
 				return false;
+			}
 		}
 		return true;
 	}
