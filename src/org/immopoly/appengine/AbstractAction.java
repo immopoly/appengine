@@ -1,5 +1,8 @@
 package org.immopoly.appengine;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -22,9 +25,31 @@ import java.util.logging.Logger;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 public abstract class AbstractAction implements Action {
-	Logger LOG = Logger.getLogger(this.getClass().getName());
-
+	
+	public static enum RESPONSETYPE{
+		HTML,JSON
+	}
+	
+	static Logger LOG = Logger.getLogger(AbstractAction.class.getName());
+	RESPONSETYPE responseType = RESPONSETYPE.JSON;
+	
 	protected AbstractAction(Map<String, Action> actions) {
 		actions.put(getURI(), this);
+	}
+	
+	protected String getTemplate(String template) {
+		return readFileAsString(template);
+	}
+
+	static String readFileAsString(String filePath) {
+		try {
+			byte[] buffer = new byte[(int) new File(filePath).length()];
+			BufferedInputStream f = new BufferedInputStream(new FileInputStream(filePath));
+			f.read(buffer);
+			return new String(buffer);
+		} catch (Exception e) {
+			LOG.severe("Konnte template " + filePath + " nich lesen " + e.getMessage());
+			return "Konnte template " + filePath + " nich lesen " + e.getMessage();
+		}
 	}
 }

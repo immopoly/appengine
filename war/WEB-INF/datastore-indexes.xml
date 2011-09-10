@@ -11,4 +11,9 @@
 		<property name="userId" direction="desc" />
 		<property name="balance" direction="desc" />
 	</datastore-index>	
+	<datastore-index kind="Expose" ancestor="false"
+		source="auto">
+		<property name="userId" direction="desc" />
+		<property name="time" direction="desc" />
+	</datastore-index>	
 </datastore-indexes>

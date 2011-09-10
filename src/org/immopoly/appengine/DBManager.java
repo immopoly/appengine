@@ -70,7 +70,18 @@ public class DBManager {
 		else
 			return result.get(0);
 	}
+	
+	public static User getUserByUsername(PersistenceManager pm, String username) {
+		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+		jdoql.append(User.class.getName());
+		jdoql.append(" WHERE username == '").append(username).append("' RANGE 0,1");
 
+		List<User> result = (List<User>) pm.newQuery(jdoql.toString()).execute();
+		if (null == result || result.size() == 0)
+			return null;
+		else
+			return result.get(0);
+	}
 	public static User getUser(PersistenceManager pm, long userId) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(User.class.getName());
