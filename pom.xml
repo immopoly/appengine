@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 		<modelVersion>4.0.0</modelVersion>
-		<groupId>org.immopoly.android</groupId>
+		<groupId>org.immopoly</groupId>
 		<artifactId>appengine</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 		<packaging>war</packaging>
@@ -63,12 +63,12 @@
 			<dependency>
 					<groupId>com.google.appengine</groupId>
 					<artifactId>appengine-api-labs</artifactId>
-					<version>1.5.2</version>
+					<version>1.5.3</version>
 			</dependency>
 			<dependency>
 					<groupId>com.google.appengine</groupId>
 					<artifactId>appengine-jsr107cache</artifactId>
-					<version>1.5.2</version>
+					<version>1.5.3</version>
 			</dependency>
 			<dependency>
 					<groupId>javax.servlet</groupId>
@@ -78,7 +78,8 @@
 	</dependencies>
 
 	<build>
-			<sourceDirectory>src</sourceDirectory> 
+		<outputDirectory>war/WEB-INF/classes</outputDirectory>
+		<sourceDirectory>src/main/java</sourceDirectory> 
 <!--
 		<resources>
 			<resource>
@@ -94,28 +95,62 @@
 
 		<plugins>
 				<plugin>
-						<artifactId>maven-resources-plugin</artifactId>
-						 <version>2.5</version>
-						<executions>
-								<execution>
-										<phase>initialize</phase>
-										<goals>
-												<goal>resources</goal>
-										</goals>
-								</execution>
-						</executions>
+					<artifactId>maven-eclipse-plugin</artifactId>
+					<version>2.5.1</version>
+					<configuration>
+						<!--
+							buildOutputDirectory doesn't work due to
+							http://jira.codehaus.org/browse/MECLIPSE-422 An workaround is the
+							outputDirectory at project/build level
+							<buildOutputDirectory>war/WEB-INF/classes</buildOutputDirectory>
+						-->
+						<testOutputDirectory>target/test-classes</testOutputDirectory>
+						<downloadJavadocs>true</downloadJavadocs>
+						<projectNameTemplate>immopoly-[artifactId]</projectNameTemplate>
+						<!--
+						<classpathContainers>
+							<classpathContainer>com.google.appengine.eclipse.core.GAE_CONTAINER</classpathContainer>
+						</classpathContainers>
+						-->
+						<buildcommands>
+							<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
+							<buildcommand>com.google.gdt.eclipse.core.webAppProjectValidator</buildcommand>
+							<buildcommand>com.google.appengine.eclipse.core.enhancerbuilder</buildcommand>
+							<buildcommand>com.google.appengine.eclipse.core.projectValidator</buildcommand>
+							<buildcommand>org.eclipse.m2e.core.maven2Builder</buildcommand>
+						</buildcommands>
+						<additionalProjectnatures>
+							<projectnature>org.eclipse.jdt.core.javanature</projectnature>
+							<projectnature>com.google.appengine.eclipse.core.gaeNature</projectnature>
+							<projectnature>com.google.gdt.eclipse.core.webAppNature</projectnature>
+							<projectnature>org.eclipse.m2e.core.maven2Nature</projectnature>
+						</additionalProjectnatures>
+						<excludes>
+							<!-- Included in GAE_CONTAINER -->
+						<!--
+							<exclude>com.google.appengine:appengine-api-1.0-sdk</exclude>
+							<exclude>com.google.appengine:appengine-api-1.0-labs</exclude>
+							<exclude>com.google.appengine.orm:datanucleus-appengine</exclude>
+							<exclude>org.datanucleus:datanucleus-jpa</exclude>
+							<exclude>org.datanucleus:datanucleus-core</exclude>
+							<exclude>org.apache.geronimo.specs:geronimo-jpa_3.0_spec</exclude>
+							<exclude>org.apache.geronimo.specs:geronimo-jta_1.1_spec</exclude>
+							<exclude>javax.jdo:jdo2-api</exclude>
+						-->
+						</excludes>
+					</configuration>
 				</plugin>
 				<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>build-helper-maven-plugin</artifactId>
 						<version>1.7</version>
 						<executions>
-								<execution>
-										<id>parse-version</id>
-										<goals>
-												<goal>parse-version</goal>
-										</goals>
-								</execution>
+							<execution>
+									<id>parse-version</id>
+									<goals>
+											<goal>parse-version</goal>
+									</goals>
+							</execution>
 						</executions>
 				</plugin>
 				<plugin>
@@ -205,7 +240,7 @@
 							<dependency>
 									<groupId>net.kindleit</groupId>
 									<artifactId>gae-runtime</artifactId>
-									<version>1.5.2</version>
+									<version>1.5.3</version>
 									<type>pom</type>
 							</dependency>
 					</dependencies>
@@ -251,6 +286,10 @@
 					<id>maven-gae-plugin-repo</id>
 					<name>Maven Google App Engine Repository</name>
 					<url>http://maven-gae-plugin.googlecode.com/svn/repository/</url>
+			</pluginRepository>
+			<pluginRepository>
+				<id>DataNucleus_2</id>
+				<url>http://www.datanucleus.org/downloads/maven2/</url>
 			</pluginRepository>
 	</pluginRepositories>
 
