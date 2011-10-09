@@ -104,7 +104,7 @@ public class DBManager {
 	public static List<Expose> getLastExposes(PersistenceManager pm, long userId, long minTime) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE userId == " + userId + " AND time > "+minTime);
+		jdoql.append(" WHERE userId == " + userId + " && time > " + minTime);
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 	

@@ -75,17 +75,21 @@ public class User extends org.immopoly.common.User implements JSONable {
 		this.username = name;
 		this.email = email;
 		this.twitter = twitter;
-		try {
-			MessageDigest m = MessageDigest.getInstance("MD5");
-			m.update(password.getBytes(), 0, password.length());
-			this.password = new BigInteger(1, m.digest()).toString(16);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
-
+		this.password = digestPassword(password);
 		this.balance = 5000;
 		this.lastcalculation = null;
 		generateToken();
+	}
+
+	public static String digestPassword(String password) {
+		try {
+			MessageDigest m = MessageDigest.getInstance("MD5");
+			m.update(password.getBytes(), 0, password.length());
+			return new BigInteger(1, m.digest()).toString(16);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	public Long getId() {
@@ -267,6 +271,10 @@ public class User extends org.immopoly.common.User implements JSONable {
 	@Override
 	public String getTwitter() {
 		return twitter;
+	}
+
+	public void setPassword(String password2) {
+		this.password = digestPassword(password2);
 	}
 
 }

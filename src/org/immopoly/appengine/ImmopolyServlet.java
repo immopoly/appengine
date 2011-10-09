@@ -39,6 +39,8 @@ public class ImmopolyServlet extends HttpServlet {
 		new ActionUserInfo(actions);
 		new ActionUserLogin(actions);
 		new ActionUserRegister(actions);
+		new ActionUserPassword(actions);
+		new ActionUserPasswordMail(actions);
 		new ActionExposeAdd(actions);
 		new ActionPublicUserInfo(actions);
 	}
