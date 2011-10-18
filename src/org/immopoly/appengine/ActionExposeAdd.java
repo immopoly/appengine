@@ -93,8 +93,8 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 						throw new ImmopolyException("Expose hat keinen Wert für Kaltmiete, sie kann nicht übernommen werden", 302);
 					
 					//check distance to last exposes https://github.com/immopoly/immopoly/issues/26
-					if(!checkDistance(pm,expose))
-						throw new ImmopolyException("SPOOFING ALERT", 441);
+					// if(!checkDistance(pm,expose))
+					// throw new ImmopolyException("SPOOFING ALERT", 441);
 					pm.makePersistent(expose);
 					double fine = 2 * expose.getRent() / 30.0;
 					history = new History(History.TYPE_EXPOSE_ADDED, user.getId(), System.currentTimeMillis(), "Du hast die Wohnung '"
