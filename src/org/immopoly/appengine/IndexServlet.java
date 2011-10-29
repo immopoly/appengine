@@ -40,49 +40,23 @@ public class IndexServlet extends HttpServlet {
 
 	public final String LOGIN = "login";
 
-	static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.GERMANY);
+	static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(
+			"dd.MM.yyyy HH:mm", Locale.GERMANY);
 	// static SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("",
 	// Locale.GERMANY);
-	private static String colorArray[] = new String[] { "", "black", "green", "green", "red" };
+	private static String colorArray[] = new String[] { "", "black", "green",
+			"green", "red" };
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			// filldummydb(pm);
+			filldummydb(pm);
 			String html = getBase();
 			// top5
-			List<User> top5 = DBManager.getTopUser(pm, 20);
-			StringBuffer t5 = new StringBuffer("");
-			int i = 1;
-			for (User u : top5) {
-				try {
-					if (i > 1)
-						t5.append(", ");
-					t5.append(i).append(". <a href='/user/profile/").append(u.getUserName()).append("'>").append(u.getUserName()).append("</a> ")
-							.append(History.MONEYFORMAT.format(u.getBalance()));
-					i++;
-				} catch (Exception e) {
-					LOG.log(Level.WARNING, "lalala ", e);
-				}
-			}
-			html = html.replace("_TOP5_", t5.toString());
-
+			html = generatetop5(pm, html);
 			// history
-			List<History> histories = DBManager.getAllHistory(pm, 10);
-			StringBuffer history = new StringBuffer("");
-			for (History h : histories) {
-				try {
-					User u = DBManager.getUser(pm, h.getUserId());
-					// history.append("<p class='c'><span>");
-					history.append("<li><a href='/user/profile/").append(u.getUserName()).append("'>").append(u.getUserName()).append("</a> ").append(DATE_FORMAT.format(h.getTime() + 2 * 60 * 60 * 1000))
-							.append("<br/><p style='font-size:smaller;color:" + colorArray[h.getType()] + "'>").append(h.getText()).append(
-									"</p></li>");
-					// history.append("</span></p>");
-				} catch (Exception e) {
-					LOG.log(Level.WARNING, h.getText(), e);
-				}
-			}
-			html = html.replace("_HISTORY_", history.toString());
+			html = generateHistory(pm, html);
 			resp.getWriter().write(html);
 		} finally {
 			pm.close();
@@ -90,13 +64,60 @@ public class IndexServlet extends HttpServlet {
 
 	}
 
+	private String generateHistory(PersistenceManager pm,String html ) {
+		List<History> histories = DBManager.getAllHistory(pm, 10);
+		StringBuffer history = new StringBuffer("");
+		for (History h : histories) {
+			try {
+				User u = DBManager.getUser(pm, h.getUserId());
+				// history.append("<p class='c'><span>");
+				history.append("<tr><td><a href='/user/profile/").append(
+						u.getUserName()).append("'>").append(
+						u.getUserName()).append("</a></td><td> ").append(
+						DATE_FORMAT
+								.format(h.getTime() + 2 * 60 * 60 * 1000))
+						.append(
+								"</td><td>")
+						.append(h.getText()).append("</td></tr>");
+				// history.append("</span></p>");
+			} catch (Exception e) {
+				LOG.log(Level.WARNING, h.getText(), e);
+			}
+		}
+		html = html.replace("_HISTORY_", history.toString());
+		return html;
+	}
+
+	private String generatetop5(PersistenceManager pm, String html) {
+		List<User> top5 = DBManager.getTopUser(pm, 20);
+		StringBuffer t5 = new StringBuffer("");
+		int i = 1;
+		for (User u : top5) {
+			try {
+				t5.append("<trfoo><td>").append(i).append(".</td><td>").append("<a href='/user/profile/");
+				t5.append(u.getUserName()).append("'>").append(u.getUserName()).append("</a></td>");
+				t5.append("<td>").append(History.MONEYFORMAT.format(u.getBalance())).append("</td>");
+				t5.append("</tr>");
+				i++;
+			} catch (Exception e) {
+				LOG.log(Level.WARNING, "lalala ", e);
+				System.out.println(e.getMessage());
+			}
+		}
+
+		html = html.replace("_TOP5_", t5.toString());
+		return html;
+// TODO Auto-generated method stub
+		
+	}
+
 	private void filldummydb(PersistenceManager pm) {
-		User u = new User("name", "password", "email@email.de", "twitter");
-		u.setBalance(154987);
+		User u = new User("wwaoname", "2password", "email@email.de", "twitter");
+		u.setBalance(2149127);
 		pm.makePersistent(u);
 
 		History h = new History(History.TYPE_EXPOSE_ADDED, u.getId(), System
-				.currentTimeMillis(), "text", 42);
+				.currentTimeMillis(), "jemand hat versucht mit einer Kettensaege in die wohnung einzubrechen und sich dabei den fuss verstaucht", 42);
 		pm.makePersistent(h);
 
 	}
@@ -108,11 +129,13 @@ public class IndexServlet extends HttpServlet {
 	static String readFileAsString(String filePath) {
 		try {
 			byte[] buffer = new byte[(int) new File(filePath).length()];
-			BufferedInputStream f = new BufferedInputStream(new FileInputStream(filePath));
+			BufferedInputStream f = new BufferedInputStream(
+					new FileInputStream(filePath));
 			f.read(buffer);
 			return new String(buffer);
 		} catch (Exception e) {
-			LOG.severe("Konnte template " + filePath + " nich lesen " + e.getMessage());
+			LOG.severe("Konnte template " + filePath + " nich lesen "
+					+ e.getMessage());
 			return "";
 		}
 	}

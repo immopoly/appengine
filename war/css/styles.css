@@ -239,10 +239,13 @@ footer{
 	font-size: 0.8em;
 	color: #646464;
 }
+
 table.tablesorter {
 	font-size: 12px;
 	border: 1px solid #000;
+	width: 100%;
 }
+
 table.tablesorter th {
 	text-align: left;
 	padding: 5px;
@@ -269,4 +272,8 @@ table.tablesorter .headerSortUp {
 table.tablesorter .headerSortDown {
 	background-image: url(../img/desc.png);
 	background-repeat: no-repeat;
+}
+
+ul.history {
+	list-style-type: none;
 }
