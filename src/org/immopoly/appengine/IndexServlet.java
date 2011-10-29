@@ -48,6 +48,7 @@ public class IndexServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
+			// filldummydb(pm);
 			String html = getBase();
 			// top5
 			List<User> top5 = DBManager.getTopUser(pm, 20);
@@ -86,6 +87,17 @@ public class IndexServlet extends HttpServlet {
 		} finally {
 			pm.close();
 		}
+
+	}
+
+	private void filldummydb(PersistenceManager pm) {
+		User u = new User("name", "password", "email@email.de", "twitter");
+		u.setBalance(154987);
+		pm.makePersistent(u);
+
+		History h = new History(History.TYPE_EXPOSE_ADDED, u.getId(), System
+				.currentTimeMillis(), "text", 42);
+		pm.makePersistent(h);
 
 	}
 
