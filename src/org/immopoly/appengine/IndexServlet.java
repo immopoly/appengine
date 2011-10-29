@@ -51,13 +51,13 @@ public class IndexServlet extends HttpServlet {
 			throws IOException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			filldummydb(pm);
+			//filldummydb(pm);
 			String html = getBase();
 			// top5
 			html = generatetop5(pm, html);
 			// history
 			html = generateHistory(pm, html);
-			resp.getWriter().write(html);
+			resp.getOutputStream().write(html.getBytes("utf-8"));
 		} finally {
 			pm.close();
 		}
