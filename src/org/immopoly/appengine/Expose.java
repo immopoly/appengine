@@ -55,6 +55,9 @@ public class Expose implements JSONable {
 	private Long time;
 
 	@Persistent
+	private Long deleted = null;
+
+	@Persistent
 	private Integer overtakestries = 0;
 
 	// public Expose(long exposeId, String name, double latitude, double
@@ -199,6 +202,10 @@ public class Expose implements JSONable {
 
 	public void setTime(Long time) {
 		this.time = time;
+	}
+
+	public void setDeleted(long currentTimeMillis) {
+		this.deleted = currentTimeMillis;
 	}
 
 }

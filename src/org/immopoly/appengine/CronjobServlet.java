@@ -105,8 +105,9 @@ public class CronjobServlet extends HttpServlet {
 
 						pm.makePersistent(history);
 
-						// loeschen
-						pm.deletePersistent(expose);
+						// nicht mehr loeschen sondern nur noch markieren
+						expose.setDeleted(System.currentTimeMillis());
+						pm.makePersistent(expose);
 					}
 					count++;
 				}
