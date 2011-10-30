@@ -3,7 +3,6 @@ package org.immopoly.appengine;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -11,8 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.immopoly.appengine.actions.Action;
+import org.immopoly.appengine.actions.ActionC2DMSend;
 import org.immopoly.appengine.actions.ActionExposeAdd;
+import org.immopoly.appengine.actions.ActionExposeRemove;
 import org.immopoly.appengine.actions.ActionPublicUserInfo;
+import org.immopoly.appengine.actions.ActionUserC2DMRegister;
 import org.immopoly.appengine.actions.ActionUserInfo;
 import org.immopoly.appengine.actions.ActionUserLogin;
 import org.immopoly.appengine.actions.ActionUserPassword;
@@ -51,7 +53,10 @@ public class ImmopolyServlet extends HttpServlet {
 		new ActionUserPassword(actions);
 		new ActionUserPasswordMail(actions);
 		new ActionExposeAdd(actions);
+		new ActionExposeRemove(actions);
 		new ActionPublicUserInfo(actions);
+		new ActionUserC2DMRegister(actions);
+		new ActionC2DMSend(actions);
 	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

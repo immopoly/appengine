@@ -79,11 +79,11 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 
 					history = new History(History.TYPE_EXPOSE_MONOPOLY_NEGATIVE, user.getId(), System.currentTimeMillis(), "Die Wohnung '"
 							+ expose.getName() + "' gehört schon '" + otherUser.getUserName() + "' Strafe "
-							+ History.MONEYFORMAT.format(fine), fine);
+							+ History.MONEYFORMAT.format(fine), fine, expose.getExposeId());
 					if (null != otherUser) {
 						History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(), System
 								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' übernehmen: Belohung "
-								+ History.MONEYFORMAT.format(fine), fine);
+								+ History.MONEYFORMAT.format(fine), fine, expose.getExposeId());
 						pm.makePersistent(otherHistory);
 					}
 					pm.makePersistent(history);
@@ -107,7 +107,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					double fine = 2 * expose.getRent() / 30.0;
 					history = new History(History.TYPE_EXPOSE_ADDED, user.getId(), System.currentTimeMillis(), "Du hast die Wohnung '"
 							+ expose.getName() + "' gemietet für " + History.MONEYFORMAT.format(expose.getRent())
-							+ " im Monat. Übernahmekosten: " + History.MONEYFORMAT.format(fine), fine);
+							+ " im Monat. Übernahmekosten: " + History.MONEYFORMAT.format(fine), fine, expose.getExposeId());
 					user.setBalance(user.getBalance() - fine);
 					pm.makePersistent(user);
 					pm.makePersistent(history);

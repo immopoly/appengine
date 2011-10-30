@@ -56,6 +56,7 @@ public class Expose implements JSONable {
 
 	@Persistent
 	private Integer overtakestries = 0;
+
 	// public Expose(long exposeId, String name, double latitude, double
 	// longitude, long userId, double rent) {
 	// this.exposeId = exposeId;
