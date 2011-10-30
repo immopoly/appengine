@@ -77,6 +77,7 @@ public class CronjobServlet extends HttpServlet {
 
 				for (Expose expose : exposes) {
 					if (expose.getDeleted() != null) {
+						// TODO schtief remove to JDOQL
 						LOG.log(Level.SEVERE, "Expose " + expose.getExposeId() + " already deleted on " + expose.getDeleted());
 						continue;
 					}
