@@ -1,4 +1,4 @@
-package org.immopoly.appengine;
+package org.immopoly.appengine.actions;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +30,7 @@ public interface Action {
 	public final String EXPOSE = "expose";
 	public final String EMAIL = "email";
 	public final String TWITTER = "twitter";
+	public final String C2DMREGISTRATIONID = "c2dmregistrationid";
 
 	String getURI();
 

@@ -71,6 +71,9 @@ public class User extends org.immopoly.common.User implements JSONable {
 	@Persistent
 	private Double lastProvision;
 
+	@Persistent
+	private String c2dmRegistrationId;
+
 	public User(String name, String password, String email, String twitter) {
 		this.username = name;
 		this.email = email;
@@ -275,6 +278,14 @@ public class User extends org.immopoly.common.User implements JSONable {
 
 	public void setPassword(String password2) {
 		this.password = digestPassword(password2);
+	}
+
+	public void setC2DMRegistrationId(String c2dmRegistrationId) {
+		this.c2dmRegistrationId = c2dmRegistrationId;
+	}
+
+	public String getC2dmRegistrationId() {
+		return c2dmRegistrationId;
 	}
 
 }

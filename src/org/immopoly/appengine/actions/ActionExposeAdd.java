@@ -1,4 +1,4 @@
-package org.immopoly.appengine;
+package org.immopoly.appengine.actions;
 
 import java.net.URL;
 import java.util.List;
@@ -8,6 +8,14 @@ import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.immopoly.appengine.Const;
+import org.immopoly.appengine.DBManager;
+import org.immopoly.appengine.Expose;
+import org.immopoly.appengine.History;
+import org.immopoly.appengine.OAuthData;
+import org.immopoly.appengine.PMF;
+import org.immopoly.appengine.User;
+import org.immopoly.appengine.WebHelper;
 import org.immopoly.common.ImmopolyException;
 import org.json.JSONObject;
 /*
@@ -30,7 +38,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 public class ActionExposeAdd extends AbstractAction implements Action {
 
-	protected ActionExposeAdd(Map<String, Action> actions) {
+	public ActionExposeAdd(Map<String, Action> actions) {
 		super(actions);
 	}
 

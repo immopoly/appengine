@@ -32,19 +32,15 @@ public class OAuthData {
 	public static final String ACCESS_TOKEN_ENDPOINT = SERVER + OAUTH_SECURITY_PREFIX + "access_token";
 	public static final String REQUEST_TOKEN_ENDPOINT = SERVER + OAUTH_SECURITY_PREFIX + "request_token";
 
-	public static final String CONSUMER_KEY = ""; // e. g. a system
-																// identifier
-	public static final String CONSUMER_SECRET = "";
-
 	// technical and business context of the search webservice
 	public static final String SEARCH_PREFIX = "/restapi/api" + "/search/v1.0/";
 
-	public static final OAuthConsumer consumer = new DefaultOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
+	public static final OAuthConsumer consumer = new DefaultOAuthConsumer(Secrets.CONSUMER_KEY, Secrets.CONSUMER_SECRET);
 
 	public static final OAuthProvider provider = new DefaultOAuthProvider(REQUEST_TOKEN_ENDPOINT, ACCESS_TOKEN_ENDPOINT,
 			AUTHORIZATION_ENDPOINT);
 
-	public static String accessToken = "";
+
 
 	public static boolean signedIn = false;
 

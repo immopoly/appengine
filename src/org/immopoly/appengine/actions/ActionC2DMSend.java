@@ -1,11 +1,16 @@
-package org.immopoly.appengine;
+package org.immopoly.appengine.actions;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.immopoly.appengine.DBManager;
+import org.immopoly.appengine.ImmopolyC2DMMessaging;
+import org.immopoly.appengine.PMF;
+import org.immopoly.appengine.User;
 import org.immopoly.common.ImmopolyException;
 /*
 This is the server side Google App Engine component of Immopoly
@@ -25,52 +30,44 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-public class ActionPublicUserInfo extends AbstractAction {
+public class ActionC2DMSend extends AbstractAction {
 
-	public ActionPublicUserInfo(Map<String, Action> actions) {
+	public ActionC2DMSend(Map<String, Action> actions) {
 		super(actions);
 	}
 
 	@Override
 	public String getURI() {
-		return "user/profile";
+		return "user/C2DMsend";
 	}
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ImmopolyException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			LOG.info("Profile "+req.getRequestURI());
-			String username = req.getRequestURI().substring(14);
-			//TODO schtief enhance framework for responsetyp enums
-			//check for .json
-			RESPONSETYPE mode = RESPONSETYPE.HTML;
-			if(username.endsWith(".json")){
-				username = username.replace(".json","");
-				mode= RESPONSETYPE.JSON;
-			}
-			LOG.info("username "+username);
-			if (null == username || username.length() == 0)
-				throw new ImmopolyException("missing username", 61);
+			String message = req.getParameter("message");
+			String username = req.getParameter(USERNAME);
 
 			User user = DBManager.getUserByUsername(pm, username);
 			if (null == user) {
-				throw new ImmopolyException("username not found " + username, 62);
-			} else {
-				LOG.info("Profile " + user.getUserName());
-				if(mode==RESPONSETYPE.JSON){
-					resp.getOutputStream().write(user.toPublicJSON().toString().getBytes("UTF-8"));
-				}else if(mode==RESPONSETYPE.HTML){
-					String template = getTemplate("Profile.html");
-					template = template.replace("_USERNAME_", username);
-					resp.setContentType("text/html");
-					resp.getWriter().write(template);
-				}
+				throw new ImmopolyException("user not found " + username, 62);
 			}
+			if (null == user.getC2dmRegistrationId()) {
+				throw new ImmopolyException("no c2dm registration found for " + username, 81);
+			}
+			ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+			Map<String, String[]> params = new HashMap<String, String[]>();
+			params.put("data.message", new String[] { message });
+			c2dm.sendNoRetry(user.getC2dmRegistrationId(), "mycollapse",
+					params, true);
+			LOG.info("Send c2dm message to" + user.getUserName() + " "
+					+ message);
+
+			resp.getOutputStream().write("OK".getBytes());
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not login user", 101, e);
+			throw new ImmopolyException("could not send c2dm", 82, e);
 		} finally {
 			pm.close();
 		}

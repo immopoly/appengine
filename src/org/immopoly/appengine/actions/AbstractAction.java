@@ -1,4 +1,4 @@
-package org.immopoly.appengine;
+package org.immopoly.appengine.actions;
 
 import java.io.BufferedInputStream;
 import java.io.File;

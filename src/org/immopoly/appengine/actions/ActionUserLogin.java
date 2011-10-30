@@ -1,4 +1,4 @@
-package org.immopoly.appengine;
+package org.immopoly.appengine.actions;
 
 import java.util.Map;
 
@@ -6,6 +6,9 @@ import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.immopoly.appengine.DBManager;
+import org.immopoly.appengine.PMF;
+import org.immopoly.appengine.User;
 import org.immopoly.common.ImmopolyException;
 /*
 This is the server side Google App Engine component of Immopoly
@@ -25,30 +28,37 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-public class ActionUserInfo extends AbstractAction {
+public class ActionUserLogin extends AbstractAction {
 
-	public ActionUserInfo(Map<String, Action> actions) {
+	public ActionUserLogin(Map<String, Action> actions) {
 		super(actions);
 	}
 
 	@Override
 	public String getURI() {
-		return "user/info";
+		return "user/login";
 	}
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ImmopolyException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			String token = req.getParameter(TOKEN);
-			if (null == token || token.length() == 0)
-				throw new ImmopolyException("missing token", 61);
+			String username = req.getParameter(USERNAME);
+			String password = req.getParameter(PASSWORD);
 
-			User user = DBManager.getUserByToken(pm, token);
-			LOG.info("Info " + user.getUserName() + " " + user.toJSON().toString());
+			if (null == username || username.length() == 0)
+				throw new ImmopolyException("missing username", 43);
+			if (null == password || password.length() == 0)
+				throw new ImmopolyException("missing password", 44);
+
+			User user = DBManager.getUser(pm, username, password);
 			if (null == user) {
-				throw new ImmopolyException("token not found " + token, 62);
+				throw new ImmopolyException("username or password not found " + username, 51);
 			} else {
+				// LOG.info("login  "+username);
+				// generate new token
+				user.generateToken();
+				pm.makePersistent(user);
 				resp.getOutputStream().write(user.toJSON().toString().getBytes("UTF-8"));
 			}
 		} catch (ImmopolyException e) {

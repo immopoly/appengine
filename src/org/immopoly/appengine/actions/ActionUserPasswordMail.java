@@ -1,4 +1,4 @@
-package org.immopoly.appengine;
+package org.immopoly.appengine.actions;
 
 import java.util.Map;
 import java.util.Properties;
@@ -12,6 +12,9 @@ import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.immopoly.appengine.DBManager;
+import org.immopoly.appengine.PMF;
+import org.immopoly.appengine.User;
 import org.immopoly.common.ImmopolyException;
 
 /*
