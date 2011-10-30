@@ -90,6 +90,9 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					pm.makePersistent(user);
 					if (null != otherUser)
 						pm.makePersistent(otherUser);
+					//#47
+					expose.addOvertake();
+					pm.makePersistent(expose);
 				}
 			} else {
 				URL url = new URL(OAuthData.SERVER + OAuthData.SEARCH_PREFIX + "expose/" + exposeId + ".json");

@@ -78,6 +78,16 @@ public class Expose implements JSONable {
 	// this.rent = rent;
 	// }
 
+	public int getOvertakestries() {
+		return overtakestries;
+	}
+
+	public void addOvertake() {
+		if (overtakestries == null)
+			overtakestries = 0;
+		this.overtakestries++;
+	}
+
 	public Expose(long userId, JSONObject obj) throws JSONException {
 		this.userId = userId;
 		this.time = System.currentTimeMillis();
@@ -108,6 +118,7 @@ public class Expose implements JSONable {
 		realEstate.put("title", name);
 		realEstate.put("@id", exposeId);
 		realEstate.put("baseRent", rent);
+		realEstate.put("overtakeTries", overtakestries);
 
 		o.put("realEstate", realEstate);
 		resp.put("expose.expose", o);
