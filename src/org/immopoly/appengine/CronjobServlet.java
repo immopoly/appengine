@@ -76,6 +76,10 @@ public class CronjobServlet extends HttpServlet {
 				LOG.info(" User " + user.getUserName() + " Exposes #" + exposes.size());
 
 				for (Expose expose : exposes) {
+					if (expose.getDeleted() != null) {
+						LOG.log(Level.SEVERE, "Expose " + expose.getExposeId() + " already deleted on " + expose.getDeleted());
+						continue;
+					}
 					resp.getWriter().write(expose.getExposeId() + " <br>");
 					LOG.info(count + " " + expose.getExposeId());
 

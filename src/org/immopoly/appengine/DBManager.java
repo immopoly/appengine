@@ -97,7 +97,7 @@ public class DBManager {
 	public static List<Expose> getExposes(PersistenceManager pm, long userId) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE userId == " + userId + " && deleted == null");
+		jdoql.append(" WHERE userId == " + userId);
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 

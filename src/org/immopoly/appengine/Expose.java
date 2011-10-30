@@ -57,6 +57,14 @@ public class Expose implements JSONable {
 	@Persistent
 	private Long deleted = null;
 
+	public Long getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Long deleted) {
+		this.deleted = deleted;
+	}
+
 	@Persistent
 	private Integer overtakestries = 0;
 
@@ -204,8 +212,5 @@ public class Expose implements JSONable {
 		this.time = time;
 	}
 
-	public void setDeleted(long currentTimeMillis) {
-		this.deleted = currentTimeMillis;
-	}
 
 }
