@@ -9,6 +9,4 @@ target
 .settings/
 
 #keys
-src/org/immopoly/appengine/OAuthData.java
-
 /src/org/immopoly/appengine/Secrets.java
