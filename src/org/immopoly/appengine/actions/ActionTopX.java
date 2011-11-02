@@ -11,8 +11,7 @@ import org.immopoly.appengine.DBManager;
 import org.immopoly.appengine.PMF;
 import org.immopoly.appengine.User;
 import org.immopoly.common.ImmopolyException;
-
-import com.google.appengine.repackaged.org.json.JSONArray;
+import org.json.JSONArray;
 /*
 This is the server side Google App Engine component of Immopoly
 http://immopoly.appspot.com

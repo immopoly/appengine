@@ -52,10 +52,10 @@ public class User extends org.immopoly.common.User implements JSONable {
 
 	@Persistent
 	private String email;
-	
+
 	@Persistent
 	private String twitter;
-	
+
 	@Persistent
 	private double balance;
 
@@ -138,7 +138,7 @@ public class User extends org.immopoly.common.User implements JSONable {
 		}
 		return resp;
 	}
-	
+
 	private JSONObject getInfo(boolean pub) throws JSONException {
 		JSONObject info = new JSONObject();
 		info.put("balance", balance);
@@ -150,8 +150,11 @@ public class User extends org.immopoly.common.User implements JSONable {
 			info.put("lastProvision", lastProvision);
 		else
 			info.put("lastProvision", 0);
-		PersistenceManager pm = PMF.get().getPersistenceManager();
 
+		if (pub)
+			return info;
+
+		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			// last 10 history
 			JSONArray historyList = new JSONArray();
@@ -161,26 +164,25 @@ public class User extends org.immopoly.common.User implements JSONable {
 			}
 			info.put("historyList", historyList);
 
-			if(!pub){
-				// expose
-				JSONObject resultlist = new JSONObject();
-				JSONArray resultlistEntries = new JSONArray();
-				JSONArray resultlistEntry = new JSONArray();
-				// alle exposes des users holen
-	
-				List<Expose> exposes = DBManager.getExposes(pm, id);
-				for (Expose expose : exposes) {
-					if (expose.getDeleted() != null) {
-						// TODO schtief remove to JDOQL
-						LOG.log(Level.SEVERE, "Expose " + expose.getExposeId() + " already deleted on " + expose.getDeleted());
-						continue;
-					}
-					resultlistEntry.put(expose.toJSON());
+			// expose
+			JSONObject resultlist = new JSONObject();
+			JSONArray resultlistEntries = new JSONArray();
+			JSONArray resultlistEntry = new JSONArray();
+			// alle exposes des users holen
+
+			List<Expose> exposes = DBManager.getExposes(pm, id);
+			for (Expose expose : exposes) {
+				if (expose.getDeleted() != null) {
+					// TODO schtief remove to JDOQL
+					LOG.log(Level.SEVERE, "Expose " + expose.getExposeId() + " already deleted on " + expose.getDeleted());
+					continue;
 				}
-				resultlistEntries.put(resultlistEntry);
-				resultlist.put("resultlistEntries", resultlistEntries);
-				info.put("resultlist.resultlist", resultlist);
+				resultlistEntry.put(expose.toJSON());
 			}
+			resultlistEntries.put(resultlistEntry);
+			resultlist.put("resultlistEntries", resultlistEntries);
+			info.put("resultlist.resultlist", resultlist);
+
 		} catch (Exception e) {
 			LOG.log(Level.SEVERE, " getInfo ", e);
 			e.printStackTrace();
@@ -213,11 +215,12 @@ public class User extends org.immopoly.common.User implements JSONable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	@Override
 	public void setTwitter(String twitter) {
 		this.twitter = twitter;
 	}
+
 	// @Override
 	// public void setPassword(String password) {
 	// this.password = password;

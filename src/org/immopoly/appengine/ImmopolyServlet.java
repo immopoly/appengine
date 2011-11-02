@@ -16,6 +16,7 @@ import org.immopoly.appengine.actions.ActionExposeRemove;
 import org.immopoly.appengine.actions.ActionPublicUserInfo;
 import org.immopoly.appengine.actions.ActionTopX;
 import org.immopoly.appengine.actions.ActionUserC2DMRegister;
+import org.immopoly.appengine.actions.ActionUserHistory;
 import org.immopoly.appengine.actions.ActionUserInfo;
 import org.immopoly.appengine.actions.ActionUserLogin;
 import org.immopoly.appengine.actions.ActionUserPassword;
@@ -53,6 +54,7 @@ public class ImmopolyServlet extends HttpServlet {
 		new ActionUserRegister(actions);
 		new ActionUserPassword(actions);
 		new ActionUserPasswordMail(actions);
+		new ActionUserHistory(actions);
 		new ActionExposeAdd(actions);
 		new ActionExposeRemove(actions);
 		new ActionPublicUserInfo(actions);
