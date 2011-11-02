@@ -89,7 +89,7 @@ public class IndexServlet extends HttpServlet {
 	}
 
 	private String generatetop5(PersistenceManager pm, String html) {
-		List<User> top5 = DBManager.getTopUser(pm, 20);
+		List<User> top5 = DBManager.getTopUser(pm, 0, 100);
 		StringBuffer t5 = new StringBuffer("");
 		int i = 1;
 		for (User u : top5) {

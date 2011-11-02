@@ -31,6 +31,8 @@ public interface Action {
 	public final String EMAIL = "email";
 	public final String TWITTER = "twitter";
 	public final String C2DMREGISTRATIONID = "c2dmregistrationid";
+	public final String TOPXSTART = "start";
+	public final String TOPXEND = "end";
 
 	String getURI();
 

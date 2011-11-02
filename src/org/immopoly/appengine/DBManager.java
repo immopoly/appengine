@@ -133,11 +133,13 @@ public class DBManager {
 			return result.get(0);
 	}
 
-	public static List<History> getHistory(PersistenceManager pm, long userId, int i) {
+	public static List<History> getHistory(PersistenceManager pm, Long userId, int start, int end) {
 		try {
 			StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 			jdoql.append(History.class.getName());
-			jdoql.append(" WHERE userId == " + userId + " ORDER BY time DESC RANGE 0,"+i);
+			if (null != userId)
+				jdoql.append(" WHERE userId == ").append(userId);
+			jdoql.append(" ORDER BY time DESC RANGE " + start + "," + end);
 			return (List<History>) pm.newQuery(jdoql.toString()).execute();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -157,12 +159,11 @@ public class DBManager {
 		}
 	}
 
-	public static List<User> getTopUser(PersistenceManager pm, int i) {
+	public static List<User> getTopUser(PersistenceManager pm, int start, int end) {
 		try {
 			StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 			jdoql.append(User.class.getName());
-			jdoql.append(" ORDER by balance DESC RANGE 0," + i);
-
+			jdoql.append(" ORDER by balance DESC RANGE " + start + "," + end);
 			return (List<User>) pm.newQuery(jdoql.toString()).execute();
 		} catch (Exception e) {
 			e.printStackTrace();
