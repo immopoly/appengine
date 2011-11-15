@@ -55,7 +55,7 @@ public class Expose implements JSONable {
 	private Long time;
 
 	@Persistent
-	private Long deleted = null;
+	private Long deleted = Long.MAX_VALUE;
 
 	public Long getDeleted() {
 		return deleted;

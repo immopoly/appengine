@@ -97,14 +97,14 @@ public class DBManager {
 	public static List<Expose> getExposes(PersistenceManager pm, long userId) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE userId == " + userId);
+		jdoql.append(" WHERE userId == " + userId+" && deleted > "+System.currentTimeMillis());
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 
 	public static List<Expose> getLastExposes(PersistenceManager pm, long userId, long minTime) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE userId == " + userId + " && time > " + minTime);
+		jdoql.append(" WHERE userId == " + userId + " && time > " + minTime+" && deleted > "+System.currentTimeMillis());
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 	

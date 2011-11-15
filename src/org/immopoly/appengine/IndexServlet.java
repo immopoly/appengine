@@ -51,7 +51,7 @@ public class IndexServlet extends HttpServlet {
 			throws IOException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			//filldummydb(pm);
+//			filldummydb(pm);
 			String html = getBase();
 			// top5
 			html = generatetop5(pm, html);
@@ -89,7 +89,7 @@ public class IndexServlet extends HttpServlet {
 	}
 
 	private String generatetop5(PersistenceManager pm, String html) {
-		List<User> top5 = DBManager.getTopUser(pm, 0, 100);
+		List<User> top5 = DBManager.getTopUser(pm, 0, 20);
 		StringBuffer t5 = new StringBuffer("");
 		int i = 1;
 		for (User u : top5) {
@@ -111,16 +111,23 @@ public class IndexServlet extends HttpServlet {
 		
 	}
 
-	private void filldummydb(PersistenceManager pm) {
-		User u = new User("wwaoname", "2password", "email@email.de", "twitter");
-		u.setBalance(2149127);
-		pm.makePersistent(u);
-
-		History h = new History(History.TYPE_EXPOSE_ADDED, u.getId(), System.currentTimeMillis(),
-				"jemand hat versucht mit einer Kettensaege in die wohnung einzubrechen und sich dabei den fuss verstaucht", 42, (long) -42);
-		pm.makePersistent(h);
-
-	}
+//	private void filldummydb(PersistenceManager pm) {
+//		List<Expose> exposes = DBManager.getExposes(pm);
+//		for (Expose expose : exposes) {
+//			if(expose.getDeleted()==null){
+//				expose.setDeleted(Long.MAX_VALUE);
+//				pm.makePersistent(expose);
+//			}
+//		}
+//		//		User u = new User("wwaoname", "2password", "email@email.de", "twitter");
+////		u.setBalance(2149127);
+////		pm.makePersistent(u);
+////
+////		History h = new History(History.TYPE_EXPOSE_ADDED, u.getId(), System.currentTimeMillis(),
+////				"jemand hat versucht mit einer Kettensaege in die wohnung einzubrechen und sich dabei den fuss verstaucht", 42, (long) -42);
+////		pm.makePersistent(h);
+//
+//	}
 
 	private String getBase() {
 		return readFileAsString("Immopoly.html");
