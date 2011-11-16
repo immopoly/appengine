@@ -106,9 +106,7 @@ public class IndexServlet extends HttpServlet {
 		}
 
 		html = html.replace("_TOP5_", t5.toString());
-		return html;
-// TODO Auto-generated method stub
-		
+		return html;		
 	}
 
 //	private void filldummydb(PersistenceManager pm) {

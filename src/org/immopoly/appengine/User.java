@@ -172,7 +172,7 @@ public class User extends org.immopoly.common.User implements JSONable {
 
 			List<Expose> exposes = DBManager.getExposes(pm, id);
 			for (Expose expose : exposes) {
-				if (expose.getDeleted() != null) {
+				if (expose.getDeleted()!=null && expose.getDeleted()<System.currentTimeMillis()) {
 					// TODO schtief remove to JDOQL
 					LOG.log(Level.SEVERE, "Expose " + expose.getExposeId() + " already deleted on " + expose.getDeleted());
 					continue;

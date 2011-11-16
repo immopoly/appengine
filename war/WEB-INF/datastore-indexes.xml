@@ -16,4 +16,8 @@
 		<property name="userId" direction="desc" />
 		<property name="time" direction="desc" />
 	</datastore-index>	
+	 <datastore-index kind="Expose" ancestor="false" source="manual">
+       <property name="userId" direction="asc"/>
+       <property name="deleted" direction="asc"/>
+   </datastore-index>
 </datastore-indexes>
