@@ -54,7 +54,7 @@ public class IndexServlet extends HttpServlet {
 			throws IOException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			filldummydb(pm);
+			// filldummydb(pm);
 			String html = getBase();
 			// top5
 			html = generatetop5(pm, html);
