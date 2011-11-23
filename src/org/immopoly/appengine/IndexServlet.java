@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+import com.google.appengine.api.memcache.Stats;
+
 /*
  This is the server side Google App Engine component of Immopoly
  http://immopoly.appspot.com
@@ -51,13 +54,16 @@ public class IndexServlet extends HttpServlet {
 			throws IOException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-//			filldummydb(pm);
+			filldummydb(pm);
 			String html = getBase();
 			// top5
 			html = generatetop5(pm, html);
 			// history
 			html = generateHistory(pm, html);
 			resp.getOutputStream().write(html.getBytes("utf-8"));
+			// memcache stats
+			Stats stats = MemcacheServiceFactory.getMemcacheService().getStatistics();
+			System.out.println(stats.toString());
 		} finally {
 			pm.close();
 		}
@@ -70,6 +76,11 @@ public class IndexServlet extends HttpServlet {
 		for (History h : histories) {
 			try {
 				User u = DBManager.getUser(pm, h.getUserId());
+				if (u == null) {
+					// TODO schtief dunno why its a local problem
+					LOG.log(Level.WARNING, "user null " + h.getUserId());
+					continue;
+				}
 				// history.append("<p class='c'><span>");
 				history.append("<tr><td><a href='/user/profile/").append(
 						u.getUserName()).append("'>").append(
@@ -109,7 +120,7 @@ public class IndexServlet extends HttpServlet {
 		return html;		
 	}
 
-//	private void filldummydb(PersistenceManager pm) {
+	private void filldummydb(PersistenceManager pm) {
 //		List<Expose> exposes = DBManager.getExposes(pm);
 //		for (Expose expose : exposes) {
 //			if(expose.getDeleted()==null){
@@ -117,15 +128,15 @@ public class IndexServlet extends HttpServlet {
 //				pm.makePersistent(expose);
 //			}
 //		}
-//		//		User u = new User("wwaoname", "2password", "email@email.de", "twitter");
-////		u.setBalance(2149127);
-////		pm.makePersistent(u);
-////
-////		History h = new History(History.TYPE_EXPOSE_ADDED, u.getId(), System.currentTimeMillis(),
-////				"jemand hat versucht mit einer Kettensaege in die wohnung einzubrechen und sich dabei den fuss verstaucht", 42, (long) -42);
-////		pm.makePersistent(h);
-//
-//	}
+		User u = new User("wwaoname", "2password", "email@email.de", "twitter");
+		u.setBalance(2149127);
+		pm.makePersistent(u);
+
+		History h = new History(History.TYPE_EXPOSE_ADDED, u.getId(), System.currentTimeMillis(),
+				"jemand hat versucht mit einer Kettensaege in die wohnung einzubrechen und sich dabei den fuss verstaucht", 42, (long) -42);
+		pm.makePersistent(h);
+
+	}
 
 	private String getBase() {
 		return readFileAsString("Immopoly.html");

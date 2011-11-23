@@ -1,5 +1,6 @@
 package org.immopoly.appengine;
 
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +32,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class History extends org.immopoly.common.History implements JSONable {
+public class History extends org.immopoly.common.History implements JSONable, Serializable {
 	static Logger LOG = Logger.getLogger(History.class.getName());
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

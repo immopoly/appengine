@@ -1,5 +1,7 @@
 package org.immopoly.appengine;
 
+import java.io.Serializable;
+
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -28,7 +30,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class Expose implements JSONable {
+public class Expose implements JSONable, Serializable {
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;

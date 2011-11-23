@@ -1,5 +1,6 @@
 package org.immopoly.appengine;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -38,7 +39,7 @@ import org.json.JSONObject;
  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class User extends org.immopoly.common.User implements JSONable {
+public class User extends org.immopoly.common.User implements JSONable, Serializable {
 	static Logger LOG = Logger.getLogger(User.class.getName());
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
