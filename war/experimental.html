@@ -1,79 +1,6 @@
 <html>
 <head>
-
-    <script type="text/javascript">
-    	var token="";
-    	
-    	function getTokenFromUrl(){
-    		if(document.location.search!=undefined){
-    			token = document.location.search.substr(7);
-    			document.forms[2].token.value=token;
-			}
-		}
-    	function passwordmail(){
-			username=document.forms[0].username.value;
-			email=document.forms[0].email.value;
-
-			alert('try sending passwordmail for '+username+' '+email);
-				$.ajax({
-                   url: "http://immopoly.appspot.com/user/sendpasswordmail",
-                   context: document.body,
-                   data:{'username':username,'email':email},
-                   dataType:"json",
-                   success: function(data){
-                     alert('passwordmail response '+JSON.stringify(data));
-                   },
-                     error: function(){
-                     alert('error ');
-                   }
-                 });		
-    	}
-    	
-    	function login(){
-			username=document.forms[1].username.value;
-			password=document.forms[1].password.value;
-			document.forms[2].token.value=token;
-			alert('Hello Immopoly '+username+' '+password);
-				$.ajax({
-                   url: "http://immopoly.appspot.com/user/login",
-                   context: document.body,
-                   data:{'username':username,'password':password},
-                   dataType:"json",
-                   success: function(data){
-                     alert('login response '+JSON.stringify(data) );
-                     token=data["org.immopoly.common.User"].token;
-                     document.forms[2].token.value=token;
-                   },
-                     error: function(){
-                     alert('error ');
-                   }
-                 });		
-    	}
-    	
-    	function changePassword(){
-			username=document.forms[2].username.value;
-			password=document.forms[2].password.value;
-			token=document.forms[2].token.value;
-			email=document.forms[2].email.value;
-
-			alert('Change Password '+username+' '+password);
-				$.ajax({
-                   url: "http://immopoly.appspot.com/user/password",
-                   context: document.body,
-                   data:{'username':username,'password':password,'token':token,'email':email},
-                   dataType:"json",
-                   success: function(data){
-                     alert('changed password response '+JSON.stringify(data));
-                   },
-                     error: function(){
-                     alert('error');
-                   }
-                 });		
-    	}
-    	
-    	
-    </script>
-    	<script src="jquery-1.6.2.min.js" ></script>
+	<title>Secret experiments</title>
 </head>
 <body onload="getTokenFromUrl()">
 <h1>Hello Immopoly</h1>
@@ -83,5 +10,10 @@ Login:
 <form>username:<input type="text" name="username">password:<input type="password" name="password"><input value="Login" type="submit" onClick="javascript:login();return false;"></form>
 Change Password:
 <form>username:<input type="text" name="username">token:<input type="text" name="token">password:<input type="password" name="password">optional set email:<input type="text" name="email"><input value="Change Password" type="submit" onClick="javascript:changePassword();return false;"></form> 
+
+<script src="js/jquery-1.7.min.js" type="text/javascript" defer></script>
+<script type="text/javascript">	var token="";</script>
+<script src="js/immopoly.js" type="text/javascript" defer></script>
+
 </body>
 </html>
