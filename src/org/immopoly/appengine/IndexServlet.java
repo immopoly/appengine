@@ -63,7 +63,7 @@ public class IndexServlet extends HttpServlet {
 			resp.getOutputStream().write(html.getBytes("utf-8"));
 			// memcache stats
 			Stats stats = MemcacheServiceFactory.getMemcacheService().getStatistics();
-			System.out.println(stats.toString());
+			LOG.log(Level.INFO,stats.toString());
 		} finally {
 			pm.close();
 		}

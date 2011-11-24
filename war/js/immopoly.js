@@ -75,7 +75,7 @@
  */ 
 
     //working without network traffic
-    var localmode = true;
+    var localmode = false;
     //activates debug output
     var debugmode = true;	
     
