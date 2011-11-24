@@ -48,10 +48,10 @@ public class ActionUserInfo extends AbstractAction {
 				throw new ImmopolyException("missing token", 61);
 
 			User user = DBManager.getUserByToken(pm, token);
-			LOG.info("Info " + user.getUserName() + " " + user.toJSON().toString());
 			if (null == user) {
 				throw new ImmopolyException("token not found " + token, 62);
 			} else {
+				LOG.info("Info " + user.getUserName() + " " + user.toJSON().toString());
 				resp.getOutputStream().write(user.toJSON().toString().getBytes("UTF-8"));
 			}
 		} catch (ImmopolyException e) {

@@ -3,6 +3,7 @@ package org.immopoly.appengine;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServlet;
@@ -69,9 +70,8 @@ public class ImmopolyServlet extends HttpServlet {
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("text/plain");
 			String requestUri = req.getRequestURI();
-			
-//			if(requestUri.endsWith(".json"))
-				
+			LOG.log(Level.FINEST,req.getRequestURI());
+
 			for (Map.Entry<String, Action> a : actions.entrySet()) {
 				if (requestUri.contains(a.getKey())) {
 					a.getValue().execute(req, resp);
@@ -79,6 +79,7 @@ public class ImmopolyServlet extends HttpServlet {
 				}
 			}
 		} catch (ImmopolyException e) {
+			LOG.log(Level.SEVERE,"ImmopolyException "+req.getRequestURI(),e);
 			resp.getOutputStream().write(e.toJSON().toString().getBytes("UTF-8"));
 		}
 	}
