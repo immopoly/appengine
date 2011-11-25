@@ -47,13 +47,13 @@ public class ActionUserC2DMRegister extends AbstractAction {
 			String c2dmRegistrationId = req.getParameter(C2DMREGISTRATIONID);
 
 			if (null == token || token.length() == 0)
-				throw new ImmopolyException("missing token", 61);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_TOKEN,"missing token");
 			if (null == c2dmRegistrationId || c2dmRegistrationId.length() == 0)
-				throw new ImmopolyException("missing " + C2DMREGISTRATIONID, 69);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_C2DM_ID,"missing " + C2DMREGISTRATIONID);
 
 			User user = DBManager.getUserByToken(pm, token);
 			if (null == user) {
-				throw new ImmopolyException("token not found " + token, 62);
+				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND,"token not found " + token);
 			}
 
 			LOG.info("Register C2DMREGISTRANIONID for" + user.getUserName()
@@ -65,7 +65,7 @@ public class ActionUserC2DMRegister extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not change password", 108, e);
+			throw new ImmopolyException(ImmopolyException.C2DM_REGISTER_FAILED,"could not change password", e);
 		} finally {
 			pm.close();
 		}

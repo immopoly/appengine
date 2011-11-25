@@ -53,11 +53,11 @@ public class ActionTopX extends AbstractAction {
 				start = Integer.parseInt(startS);
 				end = Integer.parseInt(endS);
 			} catch (NumberFormatException nfe) {
-				throw new ImmopolyException("start end not Integers" + startS + "," + endS, 93);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_START_END,"start end not Integers" + startS + "," + endS);
 			}
 			List<User> users = DBManager.getTopUser(pm, start, end);
 			if (0 == users.size()) {
-				throw new ImmopolyException("no more users ", 94);
+				throw new ImmopolyException(ImmopolyException.NO_MORE_DATA,"no more users ");
 			} else {
 				JSONArray topx = new JSONArray();
 				for (User user : users) {
@@ -68,7 +68,7 @@ public class ActionTopX extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not return topX", 94, e);
+			throw new ImmopolyException(ImmopolyException.TOPX_FAILED, "could not return topX "+e.getMessage(), e);
 		} finally {
 			pm.close();
 		}

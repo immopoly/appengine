@@ -77,6 +77,8 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 		JSONObject o = new JSONObject();
 		try {
 			o.put("time", time);
+			o.put("userId", userId);
+			o.put("username", userId);
 			o.put("text", text);
 			o.put("type", getType());
 			o.put("type2", getType2());

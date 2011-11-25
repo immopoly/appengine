@@ -49,14 +49,14 @@ public class ActionUserRegister extends AbstractAction {
 			String twitter = req.getParameter(TWITTER);
 
 			if (null == username || username.length() == 0)
-				throw new ImmopolyException("missing username", 43);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME,"missing username");
 			if (null == password || password.length() == 0)
-				throw new ImmopolyException("missing password", 44);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_PASSWORD,"missing password");
 
 			// LOG.info("Register  "+username);
 			User user = DBManager.getUser(pm, username);
 			if (null != user) {
-				throw new ImmopolyException("username already taken " + username, 45);
+				throw new ImmopolyException(ImmopolyException.REGISTER_USERNAME_ALREADY_TAKEN,"username already taken " + username);
 			} else {
 				// kein user da? anlegen
 				user = new User(username, password,email,twitter);
@@ -66,7 +66,7 @@ public class ActionUserRegister extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not register user", 101, e);
+			throw new ImmopolyException(ImmopolyException.REGISTER_FAILED,"could not register user",  e);
 		} finally {
 			pm.close();
 		}

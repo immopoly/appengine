@@ -7,6 +7,7 @@ import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import javax.persistence.Transient;
 
 import org.immopoly.common.JSONable;
 import org.json.JSONException;
@@ -31,6 +32,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Expose implements JSONable, Serializable {
+
+	//TODO schtief fuck we need make use of a Key and exposeId
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Long id;
@@ -58,6 +61,13 @@ public class Expose implements JSONable, Serializable {
 
 	@Persistent
 	private Long deleted = Long.MAX_VALUE;
+
+	@Transient
+	private Boolean courtage=false;
+	
+	public boolean isCourtage() {
+		return null!=courtage && courtage;
+	}
 
 	public Long getDeleted() {
 		return deleted;
@@ -96,13 +106,13 @@ public class Expose implements JSONable, Serializable {
 		fromJSON(obj);
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+//	public Long getId() {
+//		return id;
+//	}
+//
+//	public void setId(Long id) {
+//		this.id = id;
+//	}
 
 	public JSONObject toJSON() throws JSONException {
 		JSONObject resp = new JSONObject();
@@ -191,6 +201,13 @@ public class Expose implements JSONable, Serializable {
 		}
 		if (objRealEstate.has("baseRent"))
 			rent = objRealEstate.getDouble("baseRent");
+
+		if (objRealEstate.has("courtage"))
+		{
+			String hasCourtage = objRealEstate.getJSONObject("courtage").optString("hasCourtage");
+			if(null!=hasCourtage && hasCourtage.equalsIgnoreCase("YES"))
+				courtage=true;
+		}
 	}
 
 	public long getUserId() {

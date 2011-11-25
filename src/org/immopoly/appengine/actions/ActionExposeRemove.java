@@ -55,11 +55,11 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 			String exposeId = req.getParameter(EXPOSE);
 
 			if (null == token || token.length() == 0)
-				throw new ImmopolyException("missing token", 61);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME, "missing token");
 
 			User user = DBManager.getUserByToken(pm, token);
 			if (null == user)
-				throw new ImmopolyException("token not found " + token, 62);
+				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND,"token not found " + token);
 
 			History history = null;
 			// first check if already owned
@@ -77,23 +77,24 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 										.getExposeId());
 						pm.deletePersistent(expose);
 						user.setBalance(user.getBalance() - fine);
+						user.addExpose(-1);
 						pm.makePersistent(user);
 						pm.makePersistent(history);
 					} else if (obj.toString().contains("ERROR_RESOURCE_NOT_FOUND")) {
-						throw new ImmopolyException("expose jibs nich mehr, eventuell heute schon vermietet", 302);
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,"expose jibs nich mehr, eventuell heute schon vermietet");
 					}
 				} else {
-					throw new ImmopolyException("gehört nem anderen penner", 202);
+					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_OWNED, "gehört nem anderen penner");
 				}
 			} else {
-				throw new ImmopolyException("expose jehört dir nich", 203);
+				throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,"expose jehört dir nich");
 			}
 			// history eintrag
 			resp.getOutputStream().write(history.toJSON().toString().getBytes("UTF-8"));
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not add expose ", 101, e);
+			throw new ImmopolyException(ImmopolyException.EXPOSE_REMOVE_FAILED,"could not add expose "+e.getMessage(), e);
 		} finally {
 			pm.close();
 		}

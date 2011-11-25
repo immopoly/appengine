@@ -47,13 +47,13 @@ public class ActionUserLogin extends AbstractAction {
 			String password = req.getParameter(PASSWORD);
 
 			if (null == username || username.length() == 0)
-				throw new ImmopolyException("missing username", 43);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME,"missing username");
 			if (null == password || password.length() == 0)
-				throw new ImmopolyException("missing password", 44);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_PASSWORD,"missing password");
 
 			User user = DBManager.getUser(pm, username, password);
 			if (null == user) {
-				throw new ImmopolyException("username or password not found " + username, 51);
+				throw new ImmopolyException(ImmopolyException.USER_LOGIN_FAILED,"username or password not found " + username);
 			} else {
 				// LOG.info("login  "+username);
 				// generate new token
@@ -64,7 +64,7 @@ public class ActionUserLogin extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not login user", 101, e);
+			throw new ImmopolyException(ImmopolyException.USER_LOGIN_FAILED,"could not login user", e);
 		} finally {
 			pm.close();
 		}

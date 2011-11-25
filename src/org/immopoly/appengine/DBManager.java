@@ -83,15 +83,16 @@ public class DBManager {
 			return result.get(0);
 	}
 	public static User getUser(PersistenceManager pm, long userId) {
-		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
-		jdoql.append(User.class.getName());
-		jdoql.append(" WHERE id == ").append(userId).append(" RANGE 0,1");
-
-		List<User> result = (List<User>) pm.newQuery(jdoql.toString()).execute();
-		if (null == result || result.size() == 0)
-			return null;
-		else
-			return result.get(0);
+		return pm.getObjectById(User.class, userId);
+//		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+//		jdoql.append(User.class.getName());
+//		jdoql.append(" WHERE id == ").append(userId).append(" RANGE 0,1");
+//
+//		List<User> result = (List<User>) pm.newQuery(jdoql.toString()).execute();
+//		if (null == result || result.size() == 0)
+//			return null;
+//		else
+//			return result.get(0);
 	}
 
 	public static List<Expose> getExposes(PersistenceManager pm, long userId) {
@@ -108,11 +109,11 @@ public class DBManager {
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 	
-	public static List<Expose> getExposes(PersistenceManager pm) {
-		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
-		jdoql.append(Expose.class.getName());
-		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
-	}
+//	public static List<Expose> getExposes(PersistenceManager pm) {
+//		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+//		jdoql.append(Expose.class.getName());
+//		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
+//	}
 
 	public static List<User> getUsers(PersistenceManager pm, long lastcalculation) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
