@@ -104,11 +104,15 @@ a.back2top{
 	margin: 5px 0;
 }
 
-#wrapper{
+#container {
+		width: 100%;
+}
+
+#wrapper {
 	width: 600px;
 
 	padding: 10px 40px;
-	margin: 10px auto;
+	margin: 0px auto;
 
 	-moz-border-radius: 10px;  
 	-webkit-border-radius: 10px;
@@ -119,9 +123,14 @@ a.back2top{
 	-webkit-box-shadow: 5px 5px 2px #646464;
 	
 	background: #FFFFFF;
-	
 }
 
+#social-media {
+		position: absolute;
+		left: 1010px;	
+		float: right;
+		top: 80%; 
+}
 
 nav ul{
 	clear: both;
@@ -189,6 +198,7 @@ header h2{
 	width:	180px;
 	padding: 5px;
 }
+
 
 footer{
 	padding: 20px 0;
