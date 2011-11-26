@@ -21,192 +21,236 @@
 		<!-- Replace favicon.ico & apple-touch-icon.png in the root of your domain and delete these references -->
 		<link rel="shortcut icon" href="/favicon.ico" />
 		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-	</head>
+		<!-- G+ page -->
+		<link href="https://plus.google.com/115948347977579800149" rel="publisher" />
+		<script type="text/javascript">
+				(function() 
+				 {var po = document.createElement("script");
+				 po.type = "text/javascript"; po.async = true;po.src = "https://apis.google.com/js/plusone.js";
+				 var s = document.getElementsByTagName("script")[0];
+				 s.parentNode.insertBefore(po, s);
+				 })();
+		 </script>
+ </head>
 
-	<body>
-		<div id="wrapper">
-			<header>
-				<div>
-					<img src="img/immopoly.png" alt="immopoly" />
-					<h1 id="top">immopoly</h1>
-					<h2>a geolocal game using ImmobilienScout24's API</h2>
-				</div>
-			</header>
-			<nav>
-				<ul>
-					<li>
-						<a href="#top">Home</a>
-					</li>
-					<li>
-						<a href="#about">Kurzinfo &amp; Download</a>
-					</li>
-					<li>
-						<a href="#toplist">Die Top Makler</a>
-					</li>
-					<li>
-						<a href="#history">Die letzten Aktionen im Spiel (Gesamthistorie)</a>
-					</li>
-					<li>
-						<a href="#howtoplay">Wie funktioniert immopoly?</a>
-					</li>
-				</ul>
-			</nav>
-			<div id="content">
-				<section>
-					<h3 id="about">Kurzinfo &amp; Download</h3>
-					<div>
-						<p>
-							Immopoly verwendet die neue Immobilienscout24 <a href="http://developer.immobilienscout24.de/wiki/ImmobilienScout24_API">Schnittstelle</a>. Es wurde im Rahmen des <a href="http://developer.immobilienscout24.de/category/android-dev-contest/">Android&trade; dev Contest</a> von Tobias Sasse und Mister Schtief entwickelt und eingereicht.
-							Eine beta version gibt es für <a href="Immopoly.apk">Android</a>.
-							Neuigkeiten erfahrt ihr im <a href="http://immopoly.blogspot.com">Blog</a>.
-							Ihr könnt euch gerne an der <a href="https://github.com/immopoly/immopoly">OpenSource Entwicklung</a> beteiligen und eure Bugs, Wünsche und Ideen <a href="https://github.com/immopoly/immopoly/issues">eintragen</a>.
-								<img src="http://qrcode.kaywa.com/img.php?s=5&d=http%3A%2F%2Fimmopoly.appspot.com%2FImmopoly.apk" alt="qrcode"  />				
-										
-						</p>
-						<a href="#top" class="back2top">nach oben</a>
-					</div>
-				</section>
-				<section>
-					<h3 id="toplist">Die Top-Makler</h3>
-					<div>	
-											
-						<table id="top_list" class="tablesorter"> 
-							<colgroup>
-								<col class="rank"></col>
-							    <col class="name"></col>
-							    <col class="balance"></col>
-							    <col class="costs"></col>
-							    <col class="provision"></col>
-							</colgroup> 
-							<thead> 
-								  <tr> 
-								      <th>Platz</th> 
-								      <th>Name</th> 
-								      <th>Saldo</th>
-								      <th>Kosten</th>
-								      <th>Provision</th>
-								  </tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td colspan="5" class="center">
-										<img src="img/ajax-loader.gif" alt="Lade..."/>
-										<p>Lade Daten...</p>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						
-						<a href="#top" class="back2top">nach oben</a>
-					</div>
-				</section>
-				<section>	
-					<h3 id="history">Die letzten Aktionen im Spiel (Gesamthistorie)</h3>
+ <body>
+		 <div id="wrapper">
+				 <header>
+				 <div>
+						 <img src="img/immopoly.png" alt="immopoly" />
+						 <h1 id="top">immopoly</h1>
+						 <h2>a geolocal game using ImmobilienScout24's API</h2>
+				 </div>
+				 </header>
+				 <nav>
+				 <ul>
+						 <li>
+						 <a href="#top">Home</a>
+						 </li>
+						 <li>
+						 <a href="#about">Kurzinfo &amp; Download</a>
+						 </li>
+						 <li>
+						 <a href="#toplist">Die Top Makler</a>
+						 </li>
+						 <li>
+						 <a href="#history">Die letzten Aktionen im Spiel (Gesamthistorie)</a>
+						 </li>
+						 <li>
+						 <a href="#howtoplay">Wie funktioniert immopoly?</a>
+						 </li>
+				 </ul>
+				 </nav>
+				 <div id="social-media" align="right">
+						 <g:plus href="https://plus.google.com/115948347977579800149" size="badge"></g:plus>
+						 <!-- commented, since it looks rather crappy at the moment
+						 <script src="http://widgets.twimg.com/j/2/widget.js"></script>
+						 <script>
+								 new TWTR.Widget({
+								 version: 2,
+								 type: 'profile',
+								 rpp: 4,
+								 interval: 30000,
+								 width: 250,
+								 height: 300,
+								 theme: {
+								 shell: {
+								 background: '#333333',
+								 color: '#ffffff'
+								 },
+								 tweets: {
+								 background: '#000000',
+								 color: '#ffffff',
+								 links: '#4aed05'
+								 }
+								 },
+								 features: {
+								 scrollbar: false,
+								 loop: false,
+								 live: false,
+								 behavior: 'all'
+								 }
+								 }).render().setUser('immopoly').start();
+						 </script>
+						 -->
 
-						<table id="history_list" class="tablesorter history"> 
-							<colgroup>
-								<col class="name"></col>
-							    <col class="date"></col>
-							    <col class="event"></col>
-						    </colgroup>
-							<thead> 
-								  <tr> 
-								      <th>Name</th> 
-								      <th>Datum</th> 
-								      <th>Ereignis</th> 
-								  </tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td colspan="3" class="center">
-										<img src="img/ajax-loader.gif" alt="Lade..."/>
-										<p>Lade Daten...</p>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-						<a href="#top" class="back2top">nach oben</a>
+				 </div>
+				 <div id="content">
+						 <section>
+						 <h3 id="about">Kurzinfo &amp; Download</h3>
+						 <div>
+								 <p>
+								 Immopoly verwendet die neue Immobilienscout24 <a href="http://developer.immobilienscout24.de/wiki/ImmobilienScout24_API">Schnittstelle</a>. Es wurde im Rahmen des <a href="http://developer.immobilienscout24.de/category/android-dev-contest/">Android&trade; dev Contest</a> von Tobias Sasse und Mister Schtief entwickelt und eingereicht.
+								 Eine beta version gibt es für <a href="Immopoly.apk">Android</a>.
+								 Neuigkeiten erfahrt ihr im <a href="http://immopoly.blogspot.com">Blog</a>.
+								 Ihr könnt euch gerne an der <a href="https://github.com/immopoly/immopoly">OpenSource Entwicklung</a> beteiligen und eure Bugs, Wünsche und Ideen <a href="https://github.com/immopoly/immopoly/issues">eintragen</a>.
+								 <img src="http://qrcode.kaywa.com/img.php?s=5&d=http%3A%2F%2Fimmopoly.appspot.com%2FImmopoly.apk" alt="qrcode"  />				
 
-					
-				</section>
-				<section>	
-					<h3 id="howtoplay">Wie funktioniert immopoly?</h3>
-					<div>
-						<p class="c0"><span></span></p><p class="c2"><span class="c1">Wie funktioniert Immopoly</span></p><ol class="c8" start="1"><li class="c3 c2"><span>Sie spielen einen Immobilienmakler mit einem Startkapital von 5000,- &euro;</span></li><li class="c3 c2"><span>Mit der Immopoly Android App suchen Sie sich die Wohnungen in ihrer aktuellen Umgebung heraus, von der Sie denken, dass Sie auf dem echten Wohnungsmarkt bald vermietet werden</span></li><li class="c3 c2"><span>Wenn sie eine Wohnung als Makler &uuml;bernehmen bezahlen sie t&auml;glich die Kaltmiete monatsanteilig</span></li><li class="c3 c2"><span>Wird die Wohnung auf dem echten Wohnungsmarkt vermietet, verschwindet sie aus dem Immobilienscout24 Datenbestand und Sie erhalten eine Provision von 2 Kaltmieten</span></li><li class="c3 c2"><span>M&ouml;chte ein anderer Makler eine Wohnungen &uuml;bernehmen, die Sie bereits in ihrem Portfolio haben, zahlt er als Strafe die doppelte Tageskaltmiete an sie.</span></li></ol><p class="c0"><span></span></p><p class="c2">
-						
-						<span class="c1">Screencast</span></p>
-						<p><iframe src="https://www.youtube.com/embed/04Y2oplILeQ" frameborder="0" width="610" height="487"></iframe></p> 
+								 </p>
+								 <a href="#top" class="back2top">nach oben</a>
+						 </div>
+						 </section>
+						 <section>
+						 <h3 id="toplist">Die Top-Makler</h3>
+						 <div>	
 
-						<div>
-							<img alt="screenshot" class="screenshot" src="images/image00.png">
-							<img alt="screenshot" class="screenshot" src="images/image06.png">
-							<img alt="screenshot" class="screenshot" src="images/image01.png">
-						</div>
-						<p>	
-						Der erste Screenshot zeigt die Kartenansicht. 
-						Das von uns hellblau markiert große Haus stellt den eigenen Standort dar. 
-						Per touch kann man Informationen zu den einzelnen Immobilien abrufen. 
-						Die entsprechende Immobilie wird dann wie grün markiert hervorgehoben. 
-						Erste Informationen erscheinen um unteren Bildschirmrand. 
-						</p>	
-						<p>	
-						Der zweite Screenshot zeigt die Ansicht nach dem Drücken des Lupensymbols. 
-						Dies ist die mobile Webseite von Immobilienscout24. 
-						Mit dem "Übernahme versuchen"-Button am oberen Bildschirmrand kann man versuchen die Wohnung in sein Portfolio zu übernehmen. 
-						Nur der erste Makler erhält dann den Hinweis der im dritten Screenshot zu sehen ist.
-						</p>
-						<div>
-							<img alt="screenshot" class="screenshot" src="images/image03.png">
-							<img alt="screenshot" class="screenshot" src="images/image05.png">
-							<img alt="screenshot" class="screenshot" src="images/image04.png">
-						</div>
-						<p>
-						Der vierte Screenshot zeigt die Portfolioansicht die man immer über das Haussymbol in der linken oberen Ecke erreicht. 
-						Hier werden der aktuelle Kontostand, sowie in einer Liste die übernommenen Immobilien angezeigt. 
-						Der fünfte Screenshot ist die Historienansicht eines anderen Maklers. 						
-						Wie man am ersten Eintrag erkennen kann, hat dieser Makler versucht die "Szenekiez" Wohnung des ersten Maklers zu übernehmen und musste eine Strafe zahlen.
-						Die Immopoly Historie orientiert sich an dem Timelinemodell von Twitter bzw. Facebook. 
-						Für jede Aktion im Spiel gibt es hier einen Eintrag.
-						Der letzte Screenshot zeigt die Historie des ersten Maklers nach einem Tag. 
-						Man sieht, dass jede Nacht die Miete vom Konto abgebucht wird. 
-						Weiter sieht man die Einnahme, die durch die gescheiterte Übernahme des anderen Maklers generiert wurde.
-						</p>
-						<a href="#top" class="back2top">nach oben</a>
-					</div>
-				</section>
-			</div>
+								 <table id="top_list" class="tablesorter"> 
+										 <colgroup>
+												 <col class="rank"></col>
+												 <col class="name"></col>
+												 <col class="balance"></col>
+												 <col class="costs"></col>
+												 <col class="provision"></col>
+										 </colgroup> 
+										 <thead> 
+												 <tr> 
+														 <th>Platz</th> 
+														 <th>Name</th> 
+														 <th>Saldo</th>
+														 <th>Kosten</th>
+														 <th>Provision</th>
+												 </tr>
+										 </thead>
+										 <tbody>
+												 <tr>
+														 <td colspan="5" class="center">
+																 <img src="img/ajax-loader.gif" alt="Lade..."/>
+																 <p>Lade Daten...</p>
+														 </td>
+												 </tr>
+										 </tbody>
+								 </table>
 
-			<footer>
-				<p>
-					&copy; Copyright 2011 by <a href="https://twitter.com/immopoly" title="Twitter: @immopoly ">@immopoly </a> team (
-					<a href="https://twitter.com/mrschtief" title="Twitter: @mrschtief">@mrschtief</a>, 
-					<a href="https://twitter.com/tosa" title="Twitter: @tosa">@tosa</a>, 
-					<a href="https://twitter.com/zwodreivierzwo" title="Twitter: @zwodreivierzwo">@zwodreivierzwo</a>, 
-					<a href="https://twitter.com/stefanhoth" title="Twitter: @stefanhoth">@stefanhoth</a>, 
-					<a href="https://twitter.com/keyboardsurfer" title="Twitter: @keyboardsurfer">@keyboardsurfer</a>,
-					<a href="https://twitter.com/b_urn" title="Twitter: @b_urn">@b_urn</a>) 
-				</p>
-			</footer>
-		</div>
-<!-- 
-<script src="js/modernizr.js" type="text/javascript" defer></script>
- -->
-<script src="js/jquery-1.7.min.js" type="text/javascript" defer></script>
-<script src="js/jquery.tablesorter.min.js" type="text/javascript" defer></script>
-<script src="js/immopoly.js" type="text/javascript" defer></script>
-<script type="text/javascript">
+								 <a href="#top" class="back2top">nach oben</a>
+						 </div>
+						 </section>
+						 <section>	
+						 <h3 id="history">Die letzten Aktionen im Spiel (Gesamthistorie)</h3>
 
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-25033820-1']);
-  _gaq.push(['_trackPageview']);
+						 <table id="history_list" class="tablesorter history"> 
+								 <colgroup>
+										 <col class="name"></col>
+										 <col class="date"></col>
+										 <col class="event"></col>
+								 </colgroup>
+								 <thead> 
+										 <tr> 
+												 <th>Name</th> 
+												 <th>Datum</th> 
+												 <th>Ereignis</th> 
+										 </tr>
+								 </thead>
+								 <tbody>
+										 <tr>
+												 <td colspan="3" class="center">
+														 <img src="img/ajax-loader.gif" alt="Lade..."/>
+														 <p>Lade Daten...</p>
+												 </td>
+										 </tr>
+								 </tbody>
+						 </table>
+						 <a href="#top" class="back2top">nach oben</a>
 
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
 
-</script>
+						 </section>
+						 <section>	
+						 <h3 id="howtoplay">Wie funktioniert immopoly?</h3>
+						 <div>
+								 <p class="c0"><span></span></p><p class="c2"><span class="c1">Wie funktioniert Immopoly</span></p><ol class="c8" start="1"><li class="c3 c2"><span>Sie spielen einen Immobilienmakler mit einem Startkapital von 5000,- &euro;</span></li><li class="c3 c2"><span>Mit der Immopoly Android App suchen Sie sich die Wohnungen in ihrer aktuellen Umgebung heraus, von der Sie denken, dass Sie auf dem echten Wohnungsmarkt bald vermietet werden</span></li><li class="c3 c2"><span>Wenn sie eine Wohnung als Makler &uuml;bernehmen bezahlen sie t&auml;glich die Kaltmiete monatsanteilig</span></li><li class="c3 c2"><span>Wird die Wohnung auf dem echten Wohnungsmarkt vermietet, verschwindet sie aus dem Immobilienscout24 Datenbestand und Sie erhalten eine Provision von 2 Kaltmieten</span></li><li class="c3 c2"><span>M&ouml;chte ein anderer Makler eine Wohnungen &uuml;bernehmen, die Sie bereits in ihrem Portfolio haben, zahlt er als Strafe die doppelte Tageskaltmiete an sie.</span></li></ol><p class="c0"><span></span></p><p class="c2">
 
-	</body>
+								 <span class="c1">Screencast</span></p>
+								 <p><iframe src="https://www.youtube.com/embed/04Y2oplILeQ" frameborder="0" width="610" height="487"></iframe></p> 
+
+								 <div>
+										 <img alt="screenshot" class="screenshot" src="images/image00.png">
+										 <img alt="screenshot" class="screenshot" src="images/image06.png">
+										 <img alt="screenshot" class="screenshot" src="images/image01.png">
+								 </div>
+								 <p>	
+								 Der erste Screenshot zeigt die Kartenansicht. 
+								 Das von uns hellblau markiert große Haus stellt den eigenen Standort dar. 
+								 Per touch kann man Informationen zu den einzelnen Immobilien abrufen. 
+								 Die entsprechende Immobilie wird dann wie grün markiert hervorgehoben. 
+								 Erste Informationen erscheinen um unteren Bildschirmrand. 
+								 </p>	
+								 <p>	
+								 Der zweite Screenshot zeigt die Ansicht nach dem Drücken des Lupensymbols. 
+								 Dies ist die mobile Webseite von Immobilienscout24. 
+								 Mit dem "Übernahme versuchen"-Button am oberen Bildschirmrand kann man versuchen die Wohnung in sein Portfolio zu übernehmen. 
+								 Nur der erste Makler erhält dann den Hinweis der im dritten Screenshot zu sehen ist.
+								 </p>
+								 <div>
+										 <img alt="screenshot" class="screenshot" src="images/image03.png">
+										 <img alt="screenshot" class="screenshot" src="images/image05.png">
+										 <img alt="screenshot" class="screenshot" src="images/image04.png">
+								 </div>
+								 <p>
+								 Der vierte Screenshot zeigt die Portfolioansicht die man immer über das Haussymbol in der linken oberen Ecke erreicht. 
+								 Hier werden der aktuelle Kontostand, sowie in einer Liste die übernommenen Immobilien angezeigt. 
+								 Der fünfte Screenshot ist die Historienansicht eines anderen Maklers. 						
+								 Wie man am ersten Eintrag erkennen kann, hat dieser Makler versucht die "Szenekiez" Wohnung des ersten Maklers zu übernehmen und musste eine Strafe zahlen.
+								 Die Immopoly Historie orientiert sich an dem Timelinemodell von Twitter bzw. Facebook. 
+								 Für jede Aktion im Spiel gibt es hier einen Eintrag.
+								 Der letzte Screenshot zeigt die Historie des ersten Maklers nach einem Tag. 
+								 Man sieht, dass jede Nacht die Miete vom Konto abgebucht wird. 
+								 Weiter sieht man die Einnahme, die durch die gescheiterte Übernahme des anderen Maklers generiert wurde.
+								 </p>
+								 <a href="#top" class="back2top">nach oben</a>
+						 </div>
+						 </section>
+				 </div>
+
+				 <footer>
+				 <p>
+				 &copy; Copyright 2011 by <a href="https://twitter.com/immopoly" title="Twitter: @immopoly ">@immopoly </a> team (
+				 <a href="https://twitter.com/mrschtief" title="Twitter: @mrschtief">@mrschtief</a>, 
+				 <a href="https://twitter.com/tosa" title="Twitter: @tosa">@tosa</a>, 
+				 <a href="https://twitter.com/zwodreivierzwo" title="Twitter: @zwodreivierzwo">@zwodreivierzwo</a>, 
+				 <a href="https://twitter.com/stefanhoth" title="Twitter: @stefanhoth">@stefanhoth</a>, 
+				 <a href="https://twitter.com/keyboardsurfer" title="Twitter: @keyboardsurfer">@keyboardsurfer</a>,
+				 <a href="https://twitter.com/b_urn" title="Twitter: @b_urn">@b_urn</a>) 
+				 </p>
+				 </footer>
+		 </div>
+		 <!-- 
+		 <script src="js/modernizr.js" type="text/javascript" defer></script>
+		 -->
+		 <script src="js/jquery-1.7.min.js" type="text/javascript" defer></script>
+		 <script src="js/jquery.tablesorter.min.js" type="text/javascript" defer></script>
+		 <script src="js/immopoly.js" type="text/javascript" defer></script>
+		 <script type="text/javascript">
+
+				 var _gaq = _gaq || [];
+				 _gaq.push(['_setAccount', 'UA-25033820-1']);
+				 _gaq.push(['_trackPageview']);
+
+				 (function() {
+				  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+				  })();
+
+		  </script>
+
+  </body>
 </html>
