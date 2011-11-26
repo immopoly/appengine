@@ -54,11 +54,11 @@ public class ActionPublicUserInfo extends AbstractAction {
 			}
 			LOG.info("username "+username);
 			if (null == username || username.length() == 0)
-				throw new ImmopolyException("missing username", 61);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME,"missing username");
 
 			User user = DBManager.getUserByUsername(pm, username);
 			if (null == user) {
-				throw new ImmopolyException("username not found " + username, 62);
+				throw new ImmopolyException(ImmopolyException.USERNAME_NOT_FOUND,"username not found ");
 			} else {
 				LOG.info("Profile " + user.getUserName());
 				if(mode==RESPONSETYPE.JSON){
@@ -73,7 +73,7 @@ public class ActionPublicUserInfo extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not login user", 101, e);
+			throw new ImmopolyException(ImmopolyException.USER_INFO_FAILED,"could not login user", e);
 		} finally {
 			pm.close();
 		}

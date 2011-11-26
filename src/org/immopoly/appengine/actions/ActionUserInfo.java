@@ -45,19 +45,19 @@ public class ActionUserInfo extends AbstractAction {
 		try {
 			String token = req.getParameter(TOKEN);
 			if (null == token || token.length() == 0)
-				throw new ImmopolyException("missing token", 61);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_TOKEN, "missing token");
 
 			User user = DBManager.getUserByToken(pm, token);
-			LOG.info("Info " + user.getUserName() + " " + user.toJSON().toString());
 			if (null == user) {
-				throw new ImmopolyException("token not found " + token, 62);
+				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND, "token not found " + token);
 			} else {
+				LOG.info("Info " + user.getUserName() + " " + user.toJSON().toString());
 				resp.getOutputStream().write(user.toJSON().toString().getBytes("UTF-8"));
 			}
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not login user", 101, e);
+			throw new ImmopolyException(ImmopolyException.USER_LOGIN_FAILED,"could not login user", e);
 		} finally {
 			pm.close();
 		}

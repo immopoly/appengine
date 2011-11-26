@@ -55,18 +55,18 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 			String exposeId = req.getParameter(EXPOSE);
 
 			if (null == token || token.length() == 0)
-				throw new ImmopolyException("missing token", 61);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_TOKEN, "missing token");
 
 			User user = DBManager.getUserByToken(pm, token);
 			if (null == user)
-				throw new ImmopolyException("token not found " + token, 62);
+				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND,"token not found " + token);
 
 			History history = null;
 			// first check if already owned
 			Expose expose = DBManager.getExpose(pm, exposeId);
 			if (null != expose) {
 				if (expose.getUserId() == user.getId()) {
-					throw new ImmopolyException("gehört dir schon du penner", 201);
+					throw new ImmopolyException(ImmopolyException.EXPOSE_ALREADY_IN_PORTFOLIO, "gehört dir schon du penner");
 				} else {
 					// history eintrag
 					// other user
@@ -98,10 +98,16 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 				URL url = new URL(OAuthData.SERVER + OAuthData.SEARCH_PREFIX + "expose/" + exposeId + ".json");
 				JSONObject obj = WebHelper.getHttpData(url);
 				if (obj.has("expose.expose")) {
+					LOG.info(obj.toString());
 					expose = new Expose(user.getId(), obj);
 					// nur wohnungen mit rent
 					if (expose.getRent() == 0.0)
-						throw new ImmopolyException("Expose hat keinen Wert für Kaltmiete, sie kann nicht übernommen werden", 302);
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_RENT,"Expose hat keinen Wert für Kaltmiete, sie kann nicht übernommen werden");
+					
+					//und nur Provisionspflichtige ;)......
+					if (!expose.isCourtage())
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_RENT/*TODO schtief ImmopolyException.EXPOSE_NO_COURTAGE*/,"Expose ist nicht provisionspflichtig, sie kann nicht übernommen werden");
+					
 					
 					//check distance to last exposes https://github.com/immopoly/immopoly/issues/26
 					// if(!checkDistance(pm,expose))
@@ -112,17 +118,18 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 							+ expose.getName() + "' gemietet für " + History.MONEYFORMAT.format(expose.getRent())
 							+ " im Monat. Übernahmekosten: " + History.MONEYFORMAT.format(fine), fine, expose.getExposeId());
 					user.setBalance(user.getBalance() - fine);
+					user.addExpose(1);
 					pm.makePersistent(user);
 					pm.makePersistent(history);
 				} else if (obj.toString().contains("ERROR_RESOURCE_NOT_FOUND"))
-					throw new ImmopolyException("expose jibs nich", 301);
+					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,"expose jibs nich");
 			}
 			// history eintrag
 			resp.getOutputStream().write(history.toJSON().toString().getBytes("UTF-8"));
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not add expose ", 101, e);
+			throw new ImmopolyException(ImmopolyException.EXPOSE_ADD_FAILED,"could not add expose ", e);
 		} finally {
 			pm.close();
 		}

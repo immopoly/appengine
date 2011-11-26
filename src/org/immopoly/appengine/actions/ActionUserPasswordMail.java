@@ -54,22 +54,20 @@ public class ActionUserPasswordMail extends AbstractAction {
 			String email = req.getParameter(EMAIL);
 
 			if (null == username || username.length() == 0)
-				throw new ImmopolyException("missing username", 43);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME,"missing username");
 			if (null == email || email.length() == 0)
-				throw new ImmopolyException("missing email", 45);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_EMAIL,"missing email");
 
 			User user = DBManager.getUserByUsername(pm, username);
 			if (null == user) {
-				throw new ImmopolyException("User not found " + username, 52);
+				throw new ImmopolyException(ImmopolyException.USERNAME_NOT_FOUND,"User not found " + username);
 			}
 			if (user.getEmail() == null || user.getEmail().length() == 0) {
-				throw new ImmopolyException("Email for username " + username
-						+ " is not set!", 71);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_EMAIL,"Email for username " + username+ " is not set!");
 			}
 
 			if (!email.equals(user.getEmail())) {
-				throw new ImmopolyException("Email for username " + username
-						+ " does not match!", 72);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_EMAIL,"Email for username " + username+ " does not match!");
 			}
 			// send email
 			sendMail(user);
@@ -80,7 +78,7 @@ public class ActionUserPasswordMail extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not send passwordmail", 109, e);
+			throw new ImmopolyException(ImmopolyException.USER_SEND_PASSWORDMAIL_FAILED, "could not send passwordmail"+e.getMessage(), e);
 		} finally {
 			pm.close();
 		}

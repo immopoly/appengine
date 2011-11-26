@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -54,16 +55,30 @@ public class IndexServlet extends HttpServlet {
 			throws IOException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			// filldummydb(pm);
-			String html = getBase();
-			// top5
-			html = generatetop5(pm, html);
-			// history
-			html = generateHistory(pm, html);
-			resp.getOutputStream().write(html.getBytes("utf-8"));
-			// memcache stats
-			Stats stats = MemcacheServiceFactory.getMemcacheService().getStatistics();
-			System.out.println(stats.toString());
+//			List<User> users = DBManager.getUsers(pm, Long.MAX_VALUE);
+//			for (User user : users) {
+//				int numExposes = DBManager.getExposes(pm, user.getId()).size();
+////				if(0==numExposes && user.getBalance()==5000.00)
+////				{
+//////					pm.deletePersistent(user);
+////				}
+////				else
+////				{
+//					user.setNumExposes(numExposes);
+//					pm.makePersistent(user);
+////				}
+//			}
+			 MemcacheServiceFactory.getMemcacheService().clearAll();
+//			// filldummydb(pm);
+//			String html = getBase();
+//			// top5
+//			html = generatetop5(pm, html);
+//			// history
+//			html = generateHistory(pm, html);
+//			resp.getOutputStream().write(html.getBytes("utf-8"));
+//			// memcache stats
+//			Stats stats = MemcacheServiceFactory.getMemcacheService().getStatistics();
+//			LOG.log(Level.INFO,stats.toString());
 		} finally {
 			pm.close();
 		}

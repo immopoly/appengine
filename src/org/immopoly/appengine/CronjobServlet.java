@@ -71,16 +71,14 @@ public class CronjobServlet extends HttpServlet {
 
 				double rent = 0;
 				double provision = 0;
+				int numRemoved = 0;
 				// get all Exposes des users
 				List<Expose> exposes = DBManager.getExposes(pm, user.getId());
+				//count exposes each night
+				user.setNumExposes(exposes.size());
 				LOG.info(" User " + user.getUserName() + " Exposes #" + exposes.size());
 
 				for (Expose expose : exposes) {
-					if (expose.getDeleted()!=null && expose.getDeleted()<System.currentTimeMillis()) {
-						// TODO schtief remove to JDOQL
-						LOG.log(Level.SEVERE, "Expose " + expose.getExposeId() + " already deleted on " + expose.getDeleted());
-						continue;
-					}
 					resp.getWriter().write(expose.getExposeId() + " <br>");
 					LOG.info(count + " " + expose.getExposeId());
 
@@ -98,7 +96,7 @@ public class CronjobServlet extends HttpServlet {
 					} else {
 						// falls nein provision drauf
 						provision += PROVISON_MULTIPLIER * expose.getRent();
-
+						numRemoved++;
 						// Historieneintrag erstellen
 						History history = new History(History.TYPE_EXPOSE_SOLD, user.getId(), System.currentTimeMillis(), "Wohnung '"
 								+ expose.getName() + "' vermietet. Provision überwiesen: "
@@ -120,7 +118,8 @@ public class CronjobServlet extends HttpServlet {
 				user.setBalance(user.getBalance() + (provision - rent));
 				user.setLastProvision(provision);
 				user.setLastRent(rent);
-
+				user.addExpose(-numRemoved);
+				
 				History historyRent = new History(History.TYPE_DAILY_RENT, user.getId(), System.currentTimeMillis(),
 						"Tagesabrechnung Miete: " + MONEYFORMAT.format(rent), rent, null);
 				History historyProvision = new History(History.TYPE_DAILY_PROVISION, user.getId(), System.currentTimeMillis(),

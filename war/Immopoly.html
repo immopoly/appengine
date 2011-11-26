@@ -7,15 +7,11 @@
 		Remove this if you use the .htaccess -->
 
 
-		<title>@immopoly :: a geolocal game using ImmobilienScout24's API</title>
+		<title>Immopoly : a geolocal game using ImmobilienScout24's API</title>
 		<meta name="description" content="a geolocal game using ImmobilienScout24's API" />
 
 		<meta name="viewport" content="width=device-width; initial-scale=1.0" />
 
-		<!-- modernizr -->
-		<script src="js/modernizr.js" type="text/javascript"></script>
-		<script src="http://code.jquery.com/jquery-latest.js" type="text/javascript"></script>
-		<script src="js/jquery.tablesorter.min.js" type="text/javascript"></script>
 		<!-- google webfonts -->		
 		<link href="http://fonts.googleapis.com/css?family=Pacifico:regular&amp;v1" rel="stylesheet" type="text/css" >
 
@@ -61,31 +57,45 @@
 					<div>
 						<p>
 							Immopoly verwendet die neue Immobilienscout24 <a href="http://developer.immobilienscout24.de/wiki/ImmobilienScout24_API">Schnittstelle</a>. Es wurde im Rahmen des <a href="http://developer.immobilienscout24.de/category/android-dev-contest/">Android&trade; dev Contest</a> von Tobias Sasse und Mister Schtief entwickelt und eingereicht.
-							Eine beta version gibt es f&uuml;r <a href="Immopoly.apk">Android</a>.
+							Eine beta version gibt es für <a href="Immopoly.apk">Android</a>.
 							Neuigkeiten erfahrt ihr im <a href="http://immopoly.blogspot.com">Blog</a>.
-							Ihr k&ouml;nnt euch gerne an der <a href="https://github.com/immopoly/immopoly">OpenSource Entwicklung</a> beteiligen und eure Bugs, W&uuml;nsche und Ideen <a href="https://github.com/immopoly/immopoly/issues">eintragen</a>.
-							<img src="http://qrcode.kaywa.com/img.php?s=5&d=http%3A%2F%2Fimmopoly.appspot.com%2FImmopoly.apk" alt="qrcode"  />				
+							Ihr könnt euch gerne an der <a href="https://github.com/immopoly/immopoly">OpenSource Entwicklung</a> beteiligen und eure Bugs, Wünsche und Ideen <a href="https://github.com/immopoly/immopoly/issues">eintragen</a>.
+								<img src="http://qrcode.kaywa.com/img.php?s=5&d=http%3A%2F%2Fimmopoly.appspot.com%2FImmopoly.apk" alt="qrcode"  />				
+										
 						</p>
 						<a href="#top" class="back2top">nach oben</a>
 					</div>
 				</section>
 				<section>
-					<h3 id="toplist">Die Top 5 Makler</h3>
+					<h3 id="toplist">Die Top-Makler</h3>
 					<div>	
 											
-						<table id="top_makler" class="tablesorter"> 
+						<table id="top_list" class="tablesorter"> 
+							<colgroup>
+								<col class="rank"></col>
+							    <col class="name"></col>
+							    <col class="balance"></col>
+							    <col class="costs"></col>
+							    <col class="provision"></col>
+							</colgroup> 
 							<thead> 
 								  <tr> 
-								      <th>Rank</th> 
+								      <th>Platz</th> 
 								      <th>Name</th> 
-								      <th>Balance</th> 
+								      <th>Saldo</th>
+								      <th>Kosten</th>
+								      <th>Provision</th>
 								  </tr>
 							</thead>
 							<tbody>
-								_TOP5_
+								<tr>
+									<td colspan="5" class="center">
+										<img src="img/ajax-loader.gif" alt="Lade..."/>
+										<p>Lade Daten...</p>
+									</td>
+								</tr>
 							</tbody>
 						</table>
-						
 						
 						<a href="#top" class="back2top">nach oben</a>
 					</div>
@@ -93,16 +103,26 @@
 				<section>	
 					<h3 id="history">Die letzten Aktionen im Spiel (Gesamthistorie)</h3>
 
-						<table class="tablesorter history"> 
+						<table id="history_list" class="tablesorter history"> 
+							<colgroup>
+								<col class="name"></col>
+							    <col class="date"></col>
+							    <col class="event"></col>
+						    </colgroup>
 							<thead> 
 								  <tr> 
 								      <th>Name</th> 
-								      <th>Date</th> 
-								      <th>Event</th> 
+								      <th>Datum</th> 
+								      <th>Ereignis</th> 
 								  </tr>
 							</thead>
 							<tbody>
-								_HISTORY_
+								<tr>
+									<td colspan="3" class="center">
+										<img src="img/ajax-loader.gif" alt="Lade..."/>
+										<p>Lade Daten...</p>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 						<a href="#top" class="back2top">nach oben</a>
@@ -116,34 +136,41 @@
 						
 						<span class="c1">Screencast</span></p>
 						<p><iframe src="https://www.youtube.com/embed/04Y2oplILeQ" frameborder="0" width="610" height="487"></iframe></p> 
+
 						<div>
 							<img alt="screenshot" class="screenshot" src="images/image00.png">
 							<img alt="screenshot" class="screenshot" src="images/image06.png">
 							<img alt="screenshot" class="screenshot" src="images/image01.png">
-						</div>	
+						</div>
+						<p>	
 						Der erste Screenshot zeigt die Kartenansicht. 
-						Das von uns hellblau markiert gro&szlig;e Haus stellt den eigenen Standort dar. 
+						Das von uns hellblau markiert große Haus stellt den eigenen Standort dar. 
 						Per touch kann man Informationen zu den einzelnen Immobilien abrufen. 
-						Die entsprechende Immobilie wird dann wie gr&uuml;n markiert hervorgehoben. 
+						Die entsprechende Immobilie wird dann wie grün markiert hervorgehoben. 
 						Erste Informationen erscheinen um unteren Bildschirmrand. 
-						
-						Der zweite Screenshot zeigt die Ansicht nach dem Dr&uuml;cken des Lupensymbols. 
+						</p>	
+						<p>	
+						Der zweite Screenshot zeigt die Ansicht nach dem Drücken des Lupensymbols. 
 						Dies ist die mobile Webseite von Immobilienscout24. 
-						Mit dem &ldquo;&Uuml;bernahme versuchen&rdquo; Button am oberen Bildschirmrand kann man versuchen die Wohnung in sein Portfolio zu &uuml;bernehmen. 
-						Nur der erste Makler erh&auml;lt dann den Hinweis der im dritten Screenshot zu sehen ist.
+						Mit dem "Übernahme versuchen"-Button am oberen Bildschirmrand kann man versuchen die Wohnung in sein Portfolio zu übernehmen. 
+						Nur der erste Makler erhält dann den Hinweis der im dritten Screenshot zu sehen ist.
+						</p>
 						<div>
 							<img alt="screenshot" class="screenshot" src="images/image03.png">
 							<img alt="screenshot" class="screenshot" src="images/image05.png">
 							<img alt="screenshot" class="screenshot" src="images/image04.png">
 						</div>
-						Der vierte Screenshot zeigt die Portfolioansicht die man immer &uuml;ber das Haussymbol in der linken oberen Ecke erreicht. 
-						Hier werden der aktuelle Kontostand, sowie in einer Liste die &uuml;bernommenen Immobilien angezeigt. 
-						Der f&uuml;nfte Screenshot ist die Historienansicht eines anderen Maklers. 						Wie man am ersten Eintrag erkennen kann, hat dieser Makler versucht die &ldquo;Szenekiez&rdquo; Wohnung des ersten Maklers zu &uuml;bernehmen und mu&szlig;te eine Strafe zahlen.
+						<p>
+						Der vierte Screenshot zeigt die Portfolioansicht die man immer über das Haussymbol in der linken oberen Ecke erreicht. 
+						Hier werden der aktuelle Kontostand, sowie in einer Liste die übernommenen Immobilien angezeigt. 
+						Der fünfte Screenshot ist die Historienansicht eines anderen Maklers. 						
+						Wie man am ersten Eintrag erkennen kann, hat dieser Makler versucht die "Szenekiez" Wohnung des ersten Maklers zu übernehmen und musste eine Strafe zahlen.
 						Die Immopoly Historie orientiert sich an dem Timelinemodell von Twitter bzw. Facebook. 
-						F&uuml;r jede Aktion im Spiel gibt es hier einen Eintrag.
+						Für jede Aktion im Spiel gibt es hier einen Eintrag.
 						Der letzte Screenshot zeigt die Historie des ersten Maklers nach einem Tag. 
-						Man sieht, da&szlig; jede Nacht die Miete vom Konto abgebucht wird. 
-						Weiter sieht man die Einnahme, die durch die gescheiterte &Uuml;bernahme des anderen Maklers generiert wurde.
+						Man sieht, dass jede Nacht die Miete vom Konto abgebucht wird. 
+						Weiter sieht man die Einnahme, die durch die gescheiterte Übernahme des anderen Maklers generiert wurde.
+						</p>
 						<a href="#top" class="back2top">nach oben</a>
 					</div>
 				</section>
@@ -151,11 +178,22 @@
 
 			<footer>
 				<p>
-					&copy; Copyright 2011 by <a href="https://twitter.com/immopoly" title="Twitter: @immopoly ">@immopoly </a> team (<a href="https://twitter.com/mrschtief" title="Twitter: @mrschtief">@mrschtief</a>, <a href="https://twitter.com/tosa" title="Twitter: @tosa">@tosa</a>) | Design by <a href="https://twitter.com/stefanhoth" title="Twitter: @stefanhoth">@stefanhoth</a>
+					&copy; Copyright 2011 by <a href="https://twitter.com/immopoly" title="Twitter: @immopoly ">@immopoly </a> team (
+					<a href="https://twitter.com/mrschtief" title="Twitter: @mrschtief">@mrschtief</a>, 
+					<a href="https://twitter.com/tosa" title="Twitter: @tosa">@tosa</a>, 
+					<a href="https://twitter.com/zwodreivierzwo" title="Twitter: @zwodreivierzwo">@zwodreivierzwo</a>, 
+					<a href="https://twitter.com/stefanhoth" title="Twitter: @stefanhoth">@stefanhoth</a>, 
+					<a href="https://twitter.com/keyboardsurfer" title="Twitter: @keyboardsurfer">@keyboardsurfer</a>,
+					<a href="https://twitter.com/b_urn" title="Twitter: @b_urn">@b_urn</a>) 
 				</p>
 			</footer>
 		</div>
-
+<!-- 
+<script src="js/modernizr.js" type="text/javascript" defer></script>
+ -->
+<script src="js/jquery-1.7.min.js" type="text/javascript" defer></script>
+<script src="js/jquery.tablesorter.min.js" type="text/javascript" defer></script>
+<script src="js/immopoly.js" type="text/javascript" defer></script>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
@@ -169,14 +207,6 @@
   })();
 
 </script>
-  <script>
-    $(document).ready(function() 
-      { 
-          $("#top_makler").tablesorter({widgets: ['zebra']}); 
-	  $("table.history").tablesorter({widgets: ['zebra']}); 
-      } 
-    ); 
-    
-  </script>
+
 	</body>
 </html>

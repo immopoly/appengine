@@ -74,6 +74,9 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 	@Persistent
 	private String c2dmRegistrationId;
+	
+	@Persistent 
+	private Integer numExposes;
 
 	public User(String name, String password, String email, String twitter) {
 		this.username = name;
@@ -82,6 +85,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		this.password = digestPassword(password);
 		this.balance = 5000;
 		this.lastcalculation = null;
+		this.numExposes=0;
 		generateToken();
 	}
 
@@ -94,14 +98,6 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			e.printStackTrace();
 		}
 		return "";
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getUserName() {
@@ -143,6 +139,11 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	private JSONObject getInfo(boolean pub) throws JSONException {
 		JSONObject info = new JSONObject();
 		info.put("balance", balance);
+		if (null != numExposes)
+			info.put("numExposes", numExposes);
+		else
+			info.put("numExposes", -1);
+			
 		if (null != lastRent)
 			info.put("lastRent", lastRent);
 		else
@@ -169,15 +170,10 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			JSONObject resultlist = new JSONObject();
 			JSONArray resultlistEntries = new JSONArray();
 			JSONArray resultlistEntry = new JSONArray();
-			// alle exposes des users holen
 
+			// alle exposes des users holen
 			List<Expose> exposes = DBManager.getExposes(pm, id);
 			for (Expose expose : exposes) {
-				if (expose.getDeleted()!=null && expose.getDeleted()<System.currentTimeMillis()) {
-					// TODO schtief remove to JDOQL
-					LOG.log(Level.SEVERE, "Expose " + expose.getExposeId() + " already deleted on " + expose.getDeleted());
-					continue;
-				}
 				resultlistEntry.put(expose.toJSON());
 			}
 			resultlistEntries.put(resultlistEntry);
@@ -295,6 +291,30 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 	public String getC2dmRegistrationId() {
 		return c2dmRegistrationId;
+	}
+
+	public Integer getNumExposes() {
+		if(null==numExposes)
+			numExposes=0;
+		return numExposes;
+	}
+
+	public void setNumExposes(Integer numExposes) {
+		this.numExposes=numExposes;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void addExpose(int i) {
+		if(null==this.numExposes)
+			this.numExposes=0;
+		this.numExposes+=i;
 	}
 
 }

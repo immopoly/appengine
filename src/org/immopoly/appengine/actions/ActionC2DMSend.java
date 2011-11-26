@@ -50,10 +50,10 @@ public class ActionC2DMSend extends AbstractAction {
 
 			User user = DBManager.getUserByUsername(pm, username);
 			if (null == user) {
-				throw new ImmopolyException("user not found " + username, 62);
+				throw new ImmopolyException(ImmopolyException.USERNAME_NOT_FOUND,"user not found " + username);
 			}
 			if (null == user.getC2dmRegistrationId()) {
-				throw new ImmopolyException("no c2dm registration found for " + username, 81);
+				throw new ImmopolyException(ImmopolyException.C2DM_ID_NOT_FOUND,"no c2dm registration found for " + username);
 			}
 			ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
 			Map<String, String[]> params = new HashMap<String, String[]>();
@@ -67,7 +67,7 @@ public class ActionC2DMSend extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not send c2dm", 82, e);
+			throw new ImmopolyException(ImmopolyException.C2DM_FAILED,"could not send c2dm", e);
 		} finally {
 			pm.close();
 		}

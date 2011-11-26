@@ -49,19 +49,19 @@ public class ActionUserPassword extends AbstractAction {
 			String email = req.getParameter(EMAIL);
 
 			if (null == username || username.length() == 0)
-				throw new ImmopolyException("missing username", 43);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME,"missing username");
 			if (null == password || password.length() == 0)
-				throw new ImmopolyException("missing password", 44);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_PASSWORD,"missing password");
 			if (null == token || token.length() == 0)
-				throw new ImmopolyException("missing token", 61);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_TOKEN,"missing token");
 
 			User user = DBManager.getUserByToken(pm, token);
 			if (null == user) {
-				throw new ImmopolyException("token not found " + token, 62);
+				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND,"token not found " + token);
 			}
 			if (!username.equals(user.getUserName())) {
-				throw new ImmopolyException("username does not match token "
-						+ token, 52);
+				throw new ImmopolyException(ImmopolyException.USER_DOES_NOT_MATCH_TOKEN,"username does not match token "
+						+ token);
 			}
 			LOG.info("Change Password " + user.getUserName() + " "
 					+ user.toJSON().toString());
@@ -74,7 +74,7 @@ public class ActionUserPassword extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not change password", 108, e);
+			throw new ImmopolyException(ImmopolyException.USER_PASSWORD_CHANGE_FAILED,"could not change password", e);
 		} finally {
 			pm.close();
 		}

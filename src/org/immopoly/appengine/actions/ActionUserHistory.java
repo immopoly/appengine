@@ -54,7 +54,7 @@ public class ActionUserHistory extends AbstractAction {
 				start = Integer.parseInt(startS);
 				end = Integer.parseInt(endS);
 			} catch (NumberFormatException nfe) {
-				throw new ImmopolyException("start end not Integers" + startS + "," + endS, 93);
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_START_END,"start end not Integers" + startS + "," + endS);
 			}
 
 			String token = req.getParameter(TOKEN);
@@ -64,7 +64,7 @@ public class ActionUserHistory extends AbstractAction {
 				user = DBManager.getUserByToken(pm, token);
 				LOG.info("History " + user.getUserName());
 				if (null == user)
-					throw new ImmopolyException("user by token not found " + token, 62);
+					throw new ImmopolyException(ImmopolyException.NO_MORE_DATA,"user by token not found " + token);
 			}
 
 			JSONArray historyList = new JSONArray();
@@ -76,7 +76,7 @@ public class ActionUserHistory extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException("could not login user", 101, e);
+			throw new ImmopolyException(ImmopolyException.HISTORY_FAILED,"could not show history", e);
 		} finally {
 			pm.close();
 		}
