@@ -1,6 +1,7 @@
 package org.immopoly.appengine.actions;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import org.immopoly.appengine.Const;
 import org.immopoly.appengine.DBManager;
 import org.immopoly.appengine.Expose;
 import org.immopoly.appengine.History;
+import org.immopoly.appengine.ImmopolyC2DMMessaging;
 import org.immopoly.appengine.OAuthData;
 import org.immopoly.appengine.PMF;
 import org.immopoly.appengine.User;
@@ -85,6 +87,17 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' übernehmen: Belohung "
 								+ History.MONEYFORMAT.format(fine), fine, expose.getExposeId());
 						pm.makePersistent(otherHistory);
+						// c2dm
+						if (null != otherUser.getC2dmRegistrationId() && otherUser.getC2dmRegistrationId().length() > 0) {
+							ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+							Map<String, String[]> params = new HashMap<String, String[]>();
+							// type message title
+							params.put("data.type", new String[] { "1" });
+							params.put("data.message", new String[] { otherHistory.getText() });
+							params.put("data.title", new String[] { "Immopoly" });
+							c2dm.sendNoRetry(otherUser.getC2dmRegistrationId(), "mycollapse", params, true);
+							LOG.info("Send c2dm message to" + otherUser.getUserName() + " " + history.getText());
+						}
 					}
 					pm.makePersistent(history);
 					pm.makePersistent(user);
@@ -106,7 +119,8 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					
 					//und nur Provisionspflichtige ;)......
 					if (!expose.isCourtage())
-						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_RENT/*TODO schtief ImmopolyException.EXPOSE_NO_COURTAGE*/,"Expose ist nicht provisionspflichtig, sie kann nicht übernommen werden");
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_COURTAGE,
+								"Expose ist nicht provisionspflichtig, sie kann nicht übernommen werden");
 					
 					
 					//check distance to last exposes https://github.com/immopoly/immopoly/issues/26
