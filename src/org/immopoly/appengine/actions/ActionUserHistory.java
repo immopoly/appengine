@@ -56,6 +56,9 @@ public class ActionUserHistory extends AbstractAction {
 			} catch (NumberFormatException nfe) {
 				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_START_END,"start end not Integers" + startS + "," + endS);
 			}
+			
+			if(end-start > 50)
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_START_END,"end - start > 50 " + startS + "," + endS);
 
 			String token = req.getParameter(TOKEN);
 			List<History> history;

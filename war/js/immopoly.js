@@ -163,7 +163,10 @@
 			
 			entryData.push(history.username);
 			entryData.push(dateString);
-			entryData.push(history.text);
+			text = history.text;
+			if(history.exposeId)
+				text=text+" <a href='http://www.immobilienscout24.de/expose/"+history.exposeId+"' target='_new'>Expose "+history.exposeId+"</a>"
+			entryData.push(text);
 
 			break;
 
