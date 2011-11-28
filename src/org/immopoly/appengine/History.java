@@ -4,11 +4,13 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+import javax.persistence.Transient;
 
 import org.immopoly.common.JSONable;
 import org.json.JSONException;
@@ -56,6 +58,9 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 	@Persistent
 	private Long exposeId;
 
+	@Transient
+	private String username=null;
+	
 	public History(int type, long userId, long time, String text, double amount, Long exposeId) {
 		this.userId = userId;
 		this.time = time;
@@ -71,6 +76,12 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 	public void setId(Long id) {
 		this.id = id;
 	}
+	
+	public void loadUsername(PersistenceManager pm){
+		User u = DBManager.getUser(pm, userId);
+		if(u!=null)
+			this.username=u.getUserName();
+	}
 
 	public JSONObject toJSON() {
 		JSONObject resp = new JSONObject();
@@ -78,7 +89,8 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 		try {
 			o.put("time", time);
 			o.put("userId", userId);
-			o.put("username", userId);
+			if(username!=null)
+				o.put("username", username);
 			o.put("text", text);
 			o.put("type", getType());
 			o.put("type2", getType2());

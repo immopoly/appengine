@@ -62,14 +62,15 @@ public class ActionUserHistory extends AbstractAction {
 			User user = null;
 			if (null != token && token.length() > 0) {
 				user = DBManager.getUserByToken(pm, token);
-				LOG.info("History " + user.getUserName());
 				if (null == user)
 					throw new ImmopolyException(ImmopolyException.NO_MORE_DATA,"user by token not found " + token);
+				LOG.info("History " + user.getUserName());
 			}
 
 			JSONArray historyList = new JSONArray();
 			history = DBManager.getHistory(pm, null == user ? null : user.getId(), start, end);
 			for (History h : history) {
+				h.loadUsername(pm);
 				historyList.put(h.toJSON());
 			}
 			resp.getOutputStream().write(historyList.toString().getBytes("UTF-8"));
