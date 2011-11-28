@@ -150,14 +150,20 @@ public class Expose implements JSONable, Serializable {
 		if(null!=livingSpace)
 			realEstate.put("livingSpace",livingSpace);
 		if(null!=titlePicture){
-			JSONObject jtitlePicture = new JSONObject();
-			JSONObject urls = new JSONObject();
-			JSONArray url = new JSONArray();
+			// "urls": [ { "url": {
+
 			JSONObject t = new JSONObject();
 			t.put("@href", titlePicture);
-			url.put(t);
-			urls.put("url", url);
+
+			JSONObject url = new JSONObject();
+			url.put("url", t);
+
+			JSONArray urls = new JSONArray();
+			urls.put(url);
+
+			JSONObject jtitlePicture = new JSONObject();
 			jtitlePicture.put("urls", urls);
+
 			realEstate.put("titlePicture", jtitlePicture);
 		}
 		
