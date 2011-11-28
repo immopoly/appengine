@@ -143,7 +143,8 @@ public class Expose implements JSONable, Serializable {
 		realEstate.put("@id", exposeId);
 		realEstate.put("baseRent", rent);
 		realEstate.put("overtakeTries", overtakestries);
-
+		realEstate.put("overtakeDate",time);
+		
 		if(null!=numberOfRooms)
 			realEstate.put("numberOfRooms",numberOfRooms);
 		if(null!=livingSpace)
