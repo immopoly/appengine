@@ -10,8 +10,10 @@ import javax.jdo.annotations.PrimaryKey;
 import javax.persistence.Transient;
 
 import org.immopoly.common.JSONable;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 /*
 This is the server side Google App Engine component of Immopoly
 http://immopoly.appspot.com
@@ -62,6 +64,16 @@ public class Expose implements JSONable, Serializable {
 	@Persistent
 	private Long deleted = Long.MAX_VALUE;
 
+	@Persistent
+	private Integer numberOfRooms=null;
+	
+	@Persistent
+	private Integer livingSpace=null;
+
+	@Persistent
+	private String titlePicture=null;
+
+	
 	@Transient
 	private Boolean courtage=false;
 	
@@ -132,6 +144,22 @@ public class Expose implements JSONable, Serializable {
 		realEstate.put("baseRent", rent);
 		realEstate.put("overtakeTries", overtakestries);
 
+		if(null!=numberOfRooms)
+			realEstate.put("numberOfRooms",numberOfRooms);
+		if(null!=livingSpace)
+			realEstate.put("livingSpace",livingSpace);
+		if(null!=titlePicture){
+			JSONObject jtitlePicture = new JSONObject();
+			JSONObject urls = new JSONObject();
+			JSONArray url = new JSONArray();
+			JSONObject t = new JSONObject();
+			t.put("@href", titlePicture);
+			url.put(t);
+			urls.put("url", url);
+			jtitlePicture.put("urls", urls);
+			realEstate.put("titlePicture", jtitlePicture);
+		}
+		
 		o.put("realEstate", realEstate);
 		resp.put("expose.expose", o);
 
@@ -208,6 +236,26 @@ public class Expose implements JSONable, Serializable {
 			if(null!=hasCourtage && hasCourtage.equalsIgnoreCase("YES"))
 				courtage=true;
 		}
+		
+		if (objRealEstate.has("numberOfRooms"))
+		{
+			numberOfRooms=objRealEstate.getInt("numberOfRooms");
+		}
+
+		if (objRealEstate.has("livingSpace"))
+		{
+			livingSpace=objRealEstate.getInt("livingSpace");
+		}else if (objRealEstate.has("usableFloorSpace"))
+		{
+			livingSpace=objRealEstate.getInt("usableFloorSpace");
+		}
+			
+		if (objRealEstate.has("titlePicture") && objRealEstate.getJSONObject("titlePicture").has("urls"))
+		{
+			JSONArray url	=	 objRealEstate.getJSONObject("titlePicture").getJSONArray("urls").getJSONObject(0).getJSONArray("url");
+			titlePicture=url.getJSONObject(0).optString("@href");
+		}
+		
 	}
 
 	public long getUserId() {
@@ -240,6 +288,19 @@ public class Expose implements JSONable, Serializable {
 
 	public void setTime(Long time) {
 		this.time = time;
+	}
+
+	public Integer getNumberOfRooms() {
+		return numberOfRooms;
+	}
+
+
+	public String getTitlePicture() {
+		return titlePicture;
+	}
+
+	public void setTitlePicture(String titlePicture) {
+		this.titlePicture = titlePicture;
 	}
 
 

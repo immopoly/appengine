@@ -118,9 +118,9 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_RENT,"Expose hat keinen Wert für Kaltmiete, sie kann nicht übernommen werden");
 					
 					//und nur Provisionspflichtige ;)......
-					if (!expose.isCourtage())
-						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_COURTAGE,
-								"Expose ist nicht provisionspflichtig, sie kann nicht übernommen werden");
+//					if (!expose.isCourtage())
+//						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_COURTAGE,
+//								"Expose ist nicht provisionspflichtig, sie kann nicht übernommen werden");
 					
 					
 					//check distance to last exposes https://github.com/immopoly/immopoly/issues/26
