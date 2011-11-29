@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -173,6 +174,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 			// alle exposes des users holen
 			List<Expose> exposes = DBManager.getExposes(pm, id);
+			Collections.sort(exposes);
 			for (Expose expose : exposes) {
 				resultlistEntry.put(expose.toJSON());
 			}

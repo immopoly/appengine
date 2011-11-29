@@ -33,7 +33,7 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class Expose implements JSONable, Serializable {
+public class Expose implements JSONable, Serializable, Comparable<Expose> {
 
 	//TODO schtief fuck we need make use of a Key and exposeId
 	@PrimaryKey
@@ -308,6 +308,15 @@ public class Expose implements JSONable, Serializable {
 
 	public void setTitlePicture(String titlePicture) {
 		this.titlePicture = titlePicture;
+	}
+
+	@Override
+	public int compareTo(Expose o) {
+		if(o==null)
+			return -1;
+		if(o.time==null || time==null)
+			return (int) (o.exposeId-exposeId);
+		return (int) (o.time-time);
 	}
 
 
