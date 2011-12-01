@@ -84,8 +84,8 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 							+ History.MONEYFORMAT.format(fine), fine, expose.getExposeId());
 					if (null != otherUser) {
 						History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(), System
-								.currentTimeMillis(), "Jemand wollte deine Wohnung '" + expose.getName() + "' übernehmen: Belohung "
-								+ History.MONEYFORMAT.format(fine), fine, expose.getExposeId());
+								.currentTimeMillis(), user.getUserName() + " wollte deine Wohnung '" + expose.getName()
+								+ "' übernehmen: Belohung " + History.MONEYFORMAT.format(fine), fine, expose.getExposeId());
 						pm.makePersistent(otherHistory);
 						// c2dm
 						if (null != otherUser.getC2dmRegistrationId() && otherUser.getC2dmRegistrationId().length() > 0) {
