@@ -2,6 +2,7 @@ package org.immopoly.appengine.actions;
 
 import java.net.URL;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
@@ -82,6 +83,9 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 						pm.makePersistent(history);
 					} else if (obj.toString().contains("ERROR_RESOURCE_NOT_FOUND")) {
 						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,"expose jibs nich mehr, eventuell heute schon vermietet");
+					} else{
+						LOG.log(Level.SEVERE, "merkwürdig, merkwürdig, wo isset hin? " +obj.toString());
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,"merkwürdig, merkwürdig, wo isset hin? ");						
 					}
 				} else {
 					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_OWNED, "gehört nem anderen penner");
@@ -94,7 +98,7 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException(ImmopolyException.EXPOSE_REMOVE_FAILED,"could not add expose "+e.getMessage(), e);
+			throw new ImmopolyException(ImmopolyException.EXPOSE_REMOVE_FAILED,"could not remove expose "+e.getMessage(), e);
 		} finally {
 			pm.close();
 		}
