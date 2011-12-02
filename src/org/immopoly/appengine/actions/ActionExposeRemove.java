@@ -73,7 +73,7 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 						history = new History(History.TYPE_EXPOSE_REMOVED, user.getId(), System.currentTimeMillis(),
 								"Du hast die Wohnung '"
 								+ expose.getName() + "' für " + History.MONEYFORMAT.format(expose.getRent())
-										+ " im Monat zurückgegeben. Strafe: " + History.MONEYFORMAT.format(fine), fine, expose
+										+ " im Monat zurückgegeben. Strafe: " + History.MONEYFORMAT.format(fine), -fine, expose
 										.getExposeId());
 						pm.deletePersistent(expose);
 						user.setBalance(user.getBalance() - fine);

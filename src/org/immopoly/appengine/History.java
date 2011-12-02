@@ -67,6 +67,7 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 		this.text = text;
 		this.type = type;
 		this.exposeId = exposeId;
+		this.amount = amount;
 	}
 
 	public Long getId() {
