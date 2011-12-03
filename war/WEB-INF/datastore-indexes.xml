@@ -20,4 +20,9 @@
        <property name="userId" direction="asc"/>
        <property name="deleted" direction="asc"/>
    </datastore-index>
+   	<datastore-index kind="Badge" ancestor="false"
+		source="auto">
+		<property name="userId" direction="desc" />
+		<property name="time" direction="desc" />
+	</datastore-index>
 </datastore-indexes>

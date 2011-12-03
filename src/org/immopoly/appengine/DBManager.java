@@ -148,17 +148,32 @@ public class DBManager {
 		}
 	}
 
-	public static List<History> getAllHistory(PersistenceManager pm, int count) {
+	public static List<Badge> getBadges(PersistenceManager pm, Long userId, int start, int end) {
 		try {
 			StringBuffer jdoql = new StringBuffer("SELECT FROM ");
-			jdoql.append(History.class.getName());
-			jdoql.append(" ORDER BY time DESC RANGE 0," + count);
-			return (List<History>) pm.newQuery(jdoql.toString()).execute();
+			jdoql.append(Badge.class.getName());
+			if (null != userId)
+				jdoql.append(" WHERE userId == ").append(userId);
+			jdoql.append(" ORDER BY time DESC RANGE " + start + "," + end);
+			return (List<Badge>) pm.newQuery(jdoql.toString()).execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
+
+	// public static List<History> getAllHistory(PersistenceManager pm, int
+	// count) {
+	// try {
+	// StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+	// jdoql.append(History.class.getName());
+	// jdoql.append(" ORDER BY time DESC RANGE 0," + count);
+	// return (List<History>) pm.newQuery(jdoql.toString()).execute();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// throw new RuntimeException(e);
+	// }
+	// }
 
 	public static List<User> getTopUser(PersistenceManager pm, int start, int end) {
 		try {

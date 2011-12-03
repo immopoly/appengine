@@ -5,10 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
@@ -17,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
-import com.google.appengine.api.memcache.Stats;
 
 /*
  This is the server side Google App Engine component of Immopoly
@@ -69,6 +65,7 @@ public class IndexServlet extends HttpServlet {
 ////				}
 //			}
 			 MemcacheServiceFactory.getMemcacheService().clearAll();
+			createDummyBadge(pm);
 //			// filldummydb(pm);
 //			String html = getBase();
 //			// top5
@@ -85,54 +82,60 @@ public class IndexServlet extends HttpServlet {
 
 	}
 
-	private String generateHistory(PersistenceManager pm,String html ) {
-		List<History> histories = DBManager.getAllHistory(pm, 10);
-		StringBuffer history = new StringBuffer("");
-		for (History h : histories) {
-			try {
-				User u = DBManager.getUser(pm, h.getUserId());
-				if (u == null) {
-					// TODO schtief dunno why its a local problem
-					LOG.log(Level.WARNING, "user null " + h.getUserId());
-					continue;
-				}
-				// history.append("<p class='c'><span>");
-				history.append("<tr><td><a href='/user/profile/").append(
-						u.getUserName()).append("'>").append(
-						u.getUserName()).append("</a></td><td> ").append(
-						DATE_FORMAT
-								.format(h.getTime() + 2 * 60 * 60 * 1000))
-						.append(
-								"</td><td>")
-						.append(h.getText()).append("</td></tr>");
-				// history.append("</span></p>");
-			} catch (Exception e) {
-				LOG.log(Level.WARNING, h.getText(), e);
-			}
-		}
-		html = html.replace("_HISTORY_", history.toString());
-		return html;
-	}
+	// private String generateHistory(PersistenceManager pm,String html ) {
+	// List<History> histories = DBManager.getAllHistory(pm, 10);
+	// StringBuffer history = new StringBuffer("");
+	// for (History h : histories) {
+	// try {
+	// User u = DBManager.getUser(pm, h.getUserId());
+	// if (u == null) {
+	// // TODO schtief dunno why its a local problem
+	// LOG.log(Level.WARNING, "user null " + h.getUserId());
+	// continue;
+	// }
+	// // history.append("<p class='c'><span>");
+	// history.append("<tr><td><a href='/user/profile/").append(
+	// u.getUserName()).append("'>").append(
+	// u.getUserName()).append("</a></td><td> ").append(
+	// DATE_FORMAT
+	// .format(h.getTime() + 2 * 60 * 60 * 1000))
+	// .append(
+	// "</td><td>")
+	// .append(h.getText()).append("</td></tr>");
+	// // history.append("</span></p>");
+	// } catch (Exception e) {
+	// LOG.log(Level.WARNING, h.getText(), e);
+	// }
+	// }
+	// html = html.replace("_HISTORY_", history.toString());
+	// return html;
+	// }
+	//
+	// private String generatetop5(PersistenceManager pm, String html) {
+	// List<User> top5 = DBManager.getTopUser(pm, 0, 20);
+	// StringBuffer t5 = new StringBuffer("");
+	// int i = 1;
+	// for (User u : top5) {
+	// try {
+	// t5.append("<trfoo><td>").append(i).append(".</td><td>").append("<a href='/user/profile/");
+	// t5.append(u.getUserName()).append("'>").append(u.getUserName()).append("</a></td>");
+	// t5.append("<td>").append(History.MONEYFORMAT.format(u.getBalance())).append("</td>");
+	// t5.append("</tr>");
+	// i++;
+	// } catch (Exception e) {
+	// LOG.log(Level.WARNING, "lalala ", e);
+	// System.out.println(e.getMessage());
+	// }
+	// }
+	//
+	// html = html.replace("_TOP5_", t5.toString());
+	// return html;
+	// }
 
-	private String generatetop5(PersistenceManager pm, String html) {
-		List<User> top5 = DBManager.getTopUser(pm, 0, 20);
-		StringBuffer t5 = new StringBuffer("");
-		int i = 1;
-		for (User u : top5) {
-			try {
-				t5.append("<trfoo><td>").append(i).append(".</td><td>").append("<a href='/user/profile/");
-				t5.append(u.getUserName()).append("'>").append(u.getUserName()).append("</a></td>");
-				t5.append("<td>").append(History.MONEYFORMAT.format(u.getBalance())).append("</td>");
-				t5.append("</tr>");
-				i++;
-			} catch (Exception e) {
-				LOG.log(Level.WARNING, "lalala ", e);
-				System.out.println(e.getMessage());
-			}
-		}
-
-		html = html.replace("_TOP5_", t5.toString());
-		return html;		
+	private void createDummyBadge(PersistenceManager pm) {
+		User u = DBManager.getUser(pm, "mrschtief");
+		Badge b = new Badge(1, u.getId(), (int) System.currentTimeMillis() / 1000, "text", "url", 42.23, null);
+		pm.makePersistent(b);
 	}
 
 	private void filldummydb(PersistenceManager pm) {

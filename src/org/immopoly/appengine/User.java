@@ -154,9 +154,6 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		else
 			info.put("lastProvision", 0);
 
-		if (pub)
-			return info;
-
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			// last 10 history
@@ -166,6 +163,17 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 				historyList.put(h.toJSON());
 			}
 			info.put("historyList", historyList);
+
+			// last 10 badges
+			JSONArray badgeList = new JSONArray();
+			List<Badge> badges = DBManager.getBadges(pm, id, 0, 9);
+			for (Badge b : badges) {
+				badgeList.put(b.toJSON());
+			}
+			info.put("badgeList", badgeList);
+
+			if (pub)
+				return info;
 
 			// expose
 			JSONObject resultlist = new JSONObject();
