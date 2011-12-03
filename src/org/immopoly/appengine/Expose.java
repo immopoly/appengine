@@ -312,11 +312,13 @@ public class Expose implements JSONable, Serializable, Comparable<Expose> {
 
 	@Override
 	public int compareTo(Expose o) {
-		if(o==null)
-			return -1;
-		if(o.time==null || time==null)
-			return (int) (o.exposeId-exposeId);
-		return (int) (o.time-time);
+		if (o == null)
+			return Integer.MIN_VALUE;
+		if (o.time == null)
+			return Integer.MIN_VALUE;
+		if (time == null)
+			return Integer.MAX_VALUE;
+		return (int) ((o.time / 1000) - (time / 1000));
 	}
 
 
