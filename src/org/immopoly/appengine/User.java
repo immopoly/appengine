@@ -158,7 +158,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		try {
 			// last 10 history
 			JSONArray historyList = new JSONArray();
-			List<History> history = DBManager.getHistory(pm, id, 0, 9);
+			List<History> history = DBManager.getHistory(pm, id, 0, 10);
 			for (History h : history) {
 				historyList.put(h.toJSON());
 			}
@@ -166,7 +166,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 			// last 10 badges
 			JSONArray badgeList = new JSONArray();
-			List<Badge> badges = DBManager.getBadges(pm, id, 0, 9);
+			List<Badge> badges = DBManager.getBadges(pm, id, 0, 10);
 			for (Badge b : badges) {
 				badgeList.put(b.toJSON());
 			}
