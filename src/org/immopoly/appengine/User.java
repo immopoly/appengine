@@ -170,7 +170,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			for (Badge b : badges) {
 				badgeList.put(b.toJSON());
 			}
-			info.put("badgeList", badgeList);
+			info.put("badgesList", badgeList);
 
 			if (pub)
 				return info;
@@ -181,7 +181,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			JSONArray resultlistEntry = new JSONArray();
 
 			// alle exposes des users holen
-			List<Expose> exposes = DBManager.getExposes(pm, id);
+			List<Expose> exposes = DBManager.getExposes(pm, id, null, null);
 			Collections.sort(exposes);
 			for (Expose expose : exposes) {
 				resultlistEntry.put(expose.toJSON());

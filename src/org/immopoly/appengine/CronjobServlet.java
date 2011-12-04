@@ -73,7 +73,7 @@ public class CronjobServlet extends HttpServlet {
 				double provision = 0;
 				int numRemoved = 0;
 				// get all Exposes des users
-				List<Expose> exposes = DBManager.getExposes(pm, user.getId());
+				List<Expose> exposes = DBManager.getExposes(pm, user.getId(), null, null);
 				//count exposes each night
 				user.setNumExposes(exposes.size());
 				LOG.info(" User " + user.getUserName() + " Exposes #" + exposes.size());
