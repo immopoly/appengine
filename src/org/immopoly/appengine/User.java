@@ -252,9 +252,8 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	}
 
 	@Override
-	public org.immopoly.common.History instantiateHistory() {
+	public org.immopoly.common.History instantiateHistory(JSONObject o) {
 		return null;
-		// return new History();
 	}
 
 	public Long getLastcalculation() {

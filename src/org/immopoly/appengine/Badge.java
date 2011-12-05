@@ -15,6 +15,8 @@ import javax.persistence.Transient;
 import org.immopoly.common.JSONable;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.google.appengine.api.datastore.Key;
 /*
 This is the server side Google App Engine component of Immopoly
 http://immopoly.appspot.com
@@ -34,14 +36,14 @@ You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
-public class History extends org.immopoly.common.History implements JSONable, Serializable {
+public class Badge extends org.immopoly.common.Badge implements JSONable, Serializable, Comparable<Badge> {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
-	static Logger LOG = Logger.getLogger(History.class.getName());
+	static Logger LOG = Logger.getLogger(Badge.class.getName());
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-	private Long id;
+	private Key key;
 
 	@Persistent
 	private long userId;
@@ -56,29 +58,26 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 	private int type;
 
 	@Persistent
+	private String url;
+
+	@Persistent
 	private Double amount;
 
 	@Persistent
-	private Long exposeId = null;
+	private Long exposeId;
 
 	@Transient
-	private String username = null;
+	private String username=null;
 	
-	public History(int type, long userId, long time, String text, Double amount, Long exposeId) {
+	public Badge(int type, long userId, int time, String text, String url, Double amount, Long exposeId) {
+		super();
 		this.userId = userId;
 		this.time = time;
 		this.text = text;
+		this.url = url;
 		this.type = type;
 		this.exposeId = exposeId;
 		this.amount = amount;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 	
 	public void loadUsername(PersistenceManager pm){
@@ -93,16 +92,17 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 		try {
 			o.put("time", time);
 			o.put("text", text);
-			o.put("type", type);
+			o.put("type", getType());
+			o.put("url", url);
 
+			if (username != null)
+				o.put("username", username);
 			if (null != amount)
 				o.put("amount", amount);
 			if (null != exposeId)
 				o.put("exposeId", exposeId);
-			if (username != null)
-				o.put("username", username);
 
-			resp.put("org.immopoly.common.History", o);
+			resp.put("Badge", o);
 		} catch (JSONException e) {
 			LOG.log(Level.SEVERE, "toJson failed", e);
 		}
@@ -149,5 +149,15 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 	@Override
 	public void setExposeId(long exposeId) {
 		this.exposeId = exposeId;
+	}
+
+	@Override
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	@Override
+	public int compareTo(Badge o) {
+		return (int) ((o.time / 1000) - (time / 1000));
 	}
 }

@@ -146,13 +146,16 @@ public class IndexServlet extends HttpServlet {
 //				pm.makePersistent(expose);
 //			}
 //		}
-		User u = new User("wwaoname", "2password", "email@email.de", "twitter");
-		u.setBalance(2149127);
-		pm.makePersistent(u);
-
-		History h = new History(History.TYPE_EXPOSE_ADDED, u.getId(), System.currentTimeMillis(),
-				"jemand hat versucht mit einer Kettensaege in die wohnung einzubrechen und sich dabei den fuss verstaucht", 42, (long) -42);
-		pm.makePersistent(h);
+		// User u = new User("wwaoname", "2password", "email@email.de",
+		// "twitter");
+		// u.setBalance(2149127);
+		// pm.makePersistent(u);
+		//
+		// History h = new History(History.TYPE_EXPOSE_ADDED, u.getId(),
+		// System.currentTimeMillis(),
+		// "jemand hat versucht mit einer Kettensaege in die wohnung einzubrechen und sich dabei den fuss verstaucht",
+		// 42, (long) -42);
+		// pm.makePersistent(h);
 
 	}
 
