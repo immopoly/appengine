@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
@@ -65,7 +66,7 @@ public class IndexServlet extends HttpServlet {
 ////				}
 //			}
 			 MemcacheServiceFactory.getMemcacheService().clearAll();
-			createDummyBadge(pm);
+			// createDummyBadge(pm);
 //			// filldummydb(pm);
 //			String html = getBase();
 //			// top5
@@ -133,9 +134,13 @@ public class IndexServlet extends HttpServlet {
 	// }
 
 	private void createDummyBadge(PersistenceManager pm) {
-		User u = DBManager.getUser(pm, "mrschtief");
-		Badge b = new Badge(1, u.getId(), (int) System.currentTimeMillis() / 1000, "text", "url", 42.23, null);
-		pm.makePersistent(b);
+		List<User> users = DBManager.getUsers(pm, Long.MAX_VALUE);
+		for (User u : users) {
+			Badge b = new Badge(1, u.getId(), System.currentTimeMillis(), "Du wars schon dabei als Immopoly noch nicht cool war!",
+					"http://immopoly.appspot.com/img/immopoly.png", 0.0,
+					null);
+			pm.makePersistent(b);
+		}
 	}
 
 	private void filldummydb(PersistenceManager pm) {

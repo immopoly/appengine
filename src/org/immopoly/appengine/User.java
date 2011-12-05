@@ -139,20 +139,22 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 	private JSONObject getInfo(boolean pub) throws JSONException {
 		JSONObject info = new JSONObject();
-		info.put("balance", balance);
+		info.put(KEY_BALANCE, balance);
 		if (null != numExposes)
-			info.put("numExposes", numExposes);
+			info.put(KEY_NUM_EXPOSES, numExposes);
 		else
-			info.put("numExposes", -1);
-			
+			info.put(KEY_NUM_EXPOSES, -1);
+
+		info.put(KEY_MAX_EXPOSES, 30);
+
 		if (null != lastRent)
-			info.put("lastRent", lastRent);
+			info.put(KEY_LAST_RENT, lastRent);
 		else
-			info.put("lastRent", 0);
+			info.put(KEY_LAST_RENT, 0);
 		if (null != lastProvision)
-			info.put("lastProvision", lastProvision);
+			info.put(KEY_LAST_PROVISION, lastProvision);
 		else
-			info.put("lastProvision", 0);
+			info.put(KEY_LAST_PROVISION, 0);
 
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
@@ -162,7 +164,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			for (History h : history) {
 				historyList.put(h.toJSON());
 			}
-			info.put("historyList", historyList);
+			info.put(KEY_HISTORY_LIST, historyList);
 
 			// last 10 badges
 			JSONArray badgeList = new JSONArray();
@@ -170,7 +172,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			for (Badge b : badges) {
 				badgeList.put(b.toJSON());
 			}
-			info.put("badgesList", badgeList);
+			info.put(KEY_BADGES_LIST, badgeList);
 
 			if (pub)
 				return info;
@@ -227,11 +229,6 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	public void setTwitter(String twitter) {
 		this.twitter = twitter;
 	}
-
-	// @Override
-	// public void setPassword(String password) {
-	// this.password = password;
-	// }
 
 	@Override
 	public void setBalance(double balance) {
@@ -324,6 +321,23 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		if(null==this.numExposes)
 			this.numExposes=0;
 		this.numExposes+=i;
+	}
+
+	@Override
+	public org.immopoly.common.Badge instantiateBadge(JSONObject jsonObject) {
+		return null;
+	}
+
+	@Override
+	public void setBadges(List<org.immopoly.common.Badge> badges) {
+	}
+
+	@Override
+	public void setMaxExposes(int maxExposes) {
+	}
+
+	@Override
+	public void setNumExposes(int numExposes) {
 	}
 
 }

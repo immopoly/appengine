@@ -69,7 +69,7 @@ public class Badge extends org.immopoly.common.Badge implements JSONable, Serial
 	@Transient
 	private String username=null;
 	
-	public Badge(int type, long userId, int time, String text, String url, Double amount, Long exposeId) {
+	public Badge(int type, long userId, long time, String text, String url, Double amount, Long exposeId) {
 		super();
 		this.userId = userId;
 		this.time = time;
