@@ -6,13 +6,13 @@ body {
 		linear,
 		left bottom,
 		left top,
-		color-stop(0.17, rgb(232,232,232)),
-		color-stop(0.91, rgb(241,166,15))
+		color-stop(0.17, rgb(0,51,102)),
+		color-stop(0.91, rgb(255,117,0))
 	);
 	background-image: -moz-linear-gradient(
 		center bottom,
-		rgb(232,232,232) 17%,
-		rgb(241,166,15) 91%
+		rgb(0,51,102) 17%,
+		rgb(255,117,0) 91%
 	);
 }
 h1 {
@@ -158,7 +158,7 @@ header img{
 
 header h1,
 #content h3{
-	font-family: 'Pacifico', serif;
+	font-family: 'Righteous', cursive;
 	font-style: normal;
 	font-weight: 400;
 	text-shadow: none;

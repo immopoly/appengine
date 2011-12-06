@@ -66,7 +66,8 @@ public class IndexServlet extends HttpServlet {
 ////				}
 //			}
 			 MemcacheServiceFactory.getMemcacheService().clearAll();
-			// createDummyBadge(pm);
+//				createDummyBadge(pm);
+				createDummyBadge2(pm);
 //			// filldummydb(pm);
 //			String html = getBase();
 //			// top5
@@ -133,16 +134,34 @@ public class IndexServlet extends HttpServlet {
 	// return html;
 	// }
 
-	private void createDummyBadge(PersistenceManager pm) {
-		List<User> users = DBManager.getUsers(pm, Long.MAX_VALUE);
-		for (User u : users) {
-			Badge b = new Badge(1, u.getId(), System.currentTimeMillis(), "Du wars schon dabei als Immopoly noch nicht cool war!",
-					"http://immopoly.appspot.com/img/immopoly.png", 0.0,
-					null);
-			pm.makePersistent(b);
+//	private void createDummyBadge(PersistenceManager pm) {
+//		List<User> users = DBManager.getUsers(pm, Long.MAX_VALUE);
+//		for (User u : users) {
+//			Badge b = new Badge(1, u.getId(), System.currentTimeMillis(), "Du wars schon dabei als Immopoly noch nicht cool war!",
+//					"http://immopoly.appspot.com/img/immopoly.png", 0.0,
+//					null);
+//			pm.makePersistent(b);
+//		}
+//	}
+
+	private void createDummyBadge2(PersistenceManager pm) {
+		{User  u = DBManager.getUser(pm, "mrschtief");
+		Badge b = new Badge(2, u.getId(), System.currentTimeMillis(), "Du bist der Fuchs der das goldene Ticket '#32 notification by übernahmeversuch' programmiert hat!!!",
+				"http://immopoly.appspot.com/img/c2dm.png", 0.0,null);
+		pm.makePersistent(b);
+		}
+		{User  u = DBManager.getUser(pm, "@tosa");
+		Badge b = new Badge(2, u.getId(), System.currentTimeMillis(), "Du bist der Fuchs der das goldene Ticket '#32 notification by übernahmeversuch' programmiert hat!!!",
+				"http://immopoly.appspot.com/img/c2dm.png", 0.0,null);
+		pm.makePersistent(b);
+		}
+		{User  u = DBManager.getUser(pm, "keyboardsurfer");
+		Badge b = new Badge(2, u.getId(), System.currentTimeMillis(), "Du bist der Fuchs der das goldene Ticket '#32 notification by übernahmeversuch' programmiert hat!!!",
+				"http://immopoly.appspot.com/img/c2dm.png", 0.0,null);
+		pm.makePersistent(b);
 		}
 	}
-
+	
 	private void filldummydb(PersistenceManager pm) {
 //		List<Expose> exposes = DBManager.getExposes(pm);
 //		for (Expose expose : exposes) {

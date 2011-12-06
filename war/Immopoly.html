@@ -14,7 +14,8 @@
 
 				<!-- google webfonts -->		
 				<link href="http://fonts.googleapis.com/css?family=Pacifico:regular&amp;v1" rel="stylesheet" type="text/css" >
-
+				<link href='http://fonts.googleapis.com/css?family=Righteous' rel='stylesheet' type='text/css'>
+				
 				<link rel="stylesheet" media="all" type="text/css" href="css/styles.css" />
 
 
@@ -40,14 +41,11 @@
 								 <div>
 										 <img src="img/immopoly.png" alt="immopoly" />
 										 <h1 id="top">immopoly</h1>
-										 <h2>a geolocal game using ImmobilienScout24's API</h2>
+										 <h2>Ein Makler-Spiel mit IS24 Echtdaten</h2>
 								 </div>
 								 </header>
 								 <nav>
 								 <ul>
-										 <li>
-										 <a href="#top">Home</a>
-										 </li>
 										 <li>
 										 <a href="#about">Kurzinfo &amp; Download</a>
 										 </li>
@@ -67,11 +65,20 @@
 										 <h3 id="about">Kurzinfo &amp; Download</h3>
 										 <div>
 												 <p>
-												 Immopoly verwendet die neue Immobilienscout24 <a href="http://developer.immobilienscout24.de/wiki/ImmobilienScout24_API">Schnittstelle</a>. Es wurde im Rahmen des <a href="http://developer.immobilienscout24.de/category/android-dev-contest/">Android&trade; dev Contest</a> von Tobias Sasse und Mister Schtief entwickelt und eingereicht.
-												 Eine beta version gibt es für <a href="Immopoly.apk">Android</a>.
-												 Neuigkeiten erfahrt ihr im <a href="http://immopoly.blogspot.com">Blog</a>.
+												 Immopoly ist ein Makler-Spiel, bei dem es darum geht Wohnungen in deiner Umgebung zu finden, die auf dem 
+												 richtigen Wohnungsmarkt schnell vermietet werden. Übernimmst du eine Wohnung bezahlst du so lange virtuell die Miete,
+												 bis sie wirklich vermietet wurde. Dann erhälst du die Provision dafür.
+												 </p>
+												 <div style="float:left;margin:3px"> <img src="http://qrcode.kaywa.com/img.php?s=5&d=http%3A%2F%2Fimmopoly.appspot.com%2FImmopoly.apk" alt="qrcode"  /></div>
+												 <div><br/>Die <b>neueste</b> beta version für Android: <a href="http://immopoly.appspot.com/Immopoly.apk">http://immopoly.appspot.com/Immopoly.apk</a><br/><br/>
+												 Neuigkeiten erfahrt ihr im Blog unter: <a href="http://immopoly.blogspot.com">http://immopoly.blogspot.com</a><br/><br/>
 												 Ihr könnt euch gerne an der <a href="https://github.com/immopoly/immopoly">OpenSource Entwicklung</a> beteiligen und eure Bugs, Wünsche und Ideen <a href="https://github.com/immopoly/immopoly/issues">eintragen</a>.
-												 <img src="http://qrcode.kaywa.com/img.php?s=5&d=http%3A%2F%2Fimmopoly.appspot.com%2FImmopoly.apk" alt="qrcode"  />				
+												 </div>
+												 <br/>
+												 <br/>
+												 <p>
+												 Immopoly verwendet die neue Immobilienscout24 <a href="http://developer.immobilienscout24.de/wiki/ImmobilienScout24_API">Schnittstelle</a>. Es wurde im Rahmen des <a href="http://developer.immobilienscout24.de/category/android-dev-contest/">Android&trade; dev Contest</a> von Tobias Sasse und Mister Schtief entwickelt und eingereicht.
+													</p>		
 
 												 </p>
 												 <a href="#top" class="back2top">nach oben</a>
@@ -143,10 +150,15 @@
 										 <section>	
 										 <h3 id="howtoplay">Wie funktioniert immopoly?</h3>
 										 <div>
-												 <p class="c0"><span></span></p><p class="c2"><span class="c1">Wie funktioniert Immopoly</span></p><ol class="c8" start="1"><li class="c3 c2"><span>Sie spielen einen Immobilienmakler mit einem Startkapital von 5000,- &euro;</span></li><li class="c3 c2"><span>Mit der Immopoly Android App suchen Sie sich die Wohnungen in ihrer aktuellen Umgebung heraus, von der Sie denken, dass Sie auf dem echten Wohnungsmarkt bald vermietet werden</span></li><li class="c3 c2"><span>Wenn sie eine Wohnung als Makler &uuml;bernehmen bezahlen sie t&auml;glich die Kaltmiete monatsanteilig</span></li><li class="c3 c2"><span>Wird die Wohnung auf dem echten Wohnungsmarkt vermietet, verschwindet sie aus dem Immobilienscout24 Datenbestand und Sie erhalten eine Provision von 2 Kaltmieten</span></li><li class="c3 c2"><span>M&ouml;chte ein anderer Makler eine Wohnungen &uuml;bernehmen, die Sie bereits in ihrem Portfolio haben, zahlt er als Strafe die doppelte Tageskaltmiete an sie.</span></li></ol><p class="c0"><span></span></p><p class="c2">
-
-												 <span class="c1">Screencast</span></p>
-												 <p><iframe src="https://www.youtube.com/embed/04Y2oplILeQ" frameborder="0" width="610" height="487"></iframe></p> 
+												<ul>
+												 <li>Sie spielen einen Immobilienmakler mit einem Startkapital von 5000,- &euro;</li>
+												 <li>Mit der Immopoly Android App suchen Sie sich die Wohnungen in ihrer aktuellen Umgebung heraus, von der Sie denken, dass Sie auf dem echten Wohnungsmarkt bald vermietet werden</li>
+												 <li>Wenn sie eine Wohnung als Makler &uuml;bernehmen bezahlen sie t&auml;glich die Kaltmiete monatsanteilig</li>
+												 <li><span>Wird die Wohnung auf dem echten Wohnungsmarkt vermietet, verschwindet sie aus dem Immobilienscout24 Datenbestand und Sie erhalten eine Provision von 2 Kaltmieten</li>
+												 <li><span>M&ouml;chte ein anderer Makler eine Wohnungen &uuml;bernehmen, die Sie bereits in ihrem Portfolio haben, zahlt er als Strafe die doppelte Tageskaltmiete an sie.</li>
+												</ul>
+<br/>
+												<p><iframe src="https://www.youtube.com/embed/04Y2oplILeQ" frameborder="0" width="610" height="487"></iframe></p> 
 
 												 <div>
 														 <img alt="screenshot" class="screenshot" src="images/image00.png">
