@@ -120,8 +120,12 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					//und nur Provisionspflichtige ;)......
 //					if (!expose.isCourtage())
 //						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_COURTAGE,
-//								"Expose ist nicht provisionspflichtig, sie kann nicht übernommen werden");
+//								"Wohnung ist nicht provisionspflichtig, du willst doch was verdienen oder?");
 					
+					//check for maxExposes 30
+					if(user.getNumExposes()!=null && user.getNumExposes()>=30)
+						throw new ImmopolyException(ImmopolyException.EXPOSE_MAX_NUM,
+						"Du hast schon 30 Wohnungen in deinem Portfolio, du solltest es lieber optimieren!");
 					
 					//check distance to last exposes https://github.com/immopoly/immopoly/issues/26
 					// if(!checkDistance(pm,expose))
