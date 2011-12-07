@@ -126,10 +126,9 @@ a.back2top{
 }
 
 #social-media {
-		position: absolute;
-		left: 1010px;	
+		position: fixed;
 		float: right;
-		top: 80%; 
+		top: 10%; 
 }
 
 nav ul{
