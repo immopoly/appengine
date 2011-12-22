@@ -151,8 +151,8 @@
 			entryData.push( intIndex+1 ); //Rank is index+1
 			entryData.push( user.username );
 			entryData.push( formatMoney(user.info.balance) );
-			entryData.push( formatMoney(user.info.lastProvision) );
 			entryData.push( formatMoney(user.info.lastRent) );
+			entryData.push( formatMoney(user.info.lastProvision) );
 			
 			break;
 		case "history":
