@@ -194,7 +194,7 @@
 			history = jsonData["org.immopoly.common.History"];
 			
 			date = new Date(history.time);
-			dateString =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + "&nbsp;" + date.getHours() + ":" + date.getMinutes();
+			dateString =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + "&nbsp;" + date.getHours() + ":" + pad(date.getMinutes(),2);
 			
 			logger(history);
 			logger(history.username);
@@ -250,6 +250,23 @@
   		}
 
   		return parseFloat(number).toFixed(2)+ " " + currency;
+  	}
+  	  	
+  	/**
+  	 * adds a leading zeros to number
+  	 * @param number
+  	 * @param length
+  	 * @returns {String}
+  	 */
+  	function pad(number, length) {
+  	   
+  	    var str = '' + number;
+  	    while (str.length < length) {
+  	        str = '0' + str;
+  	    }
+  	   
+  	    return str;
+
   	}
   	
   	/**
