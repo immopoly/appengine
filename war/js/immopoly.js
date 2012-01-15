@@ -76,6 +76,11 @@
 
     //working without network traffic
     var localmode = false;
+
+    if(window.location.hostname == "immopoly.local"){
+    	localmode = true;
+    }
+    
     //activates debug output
     var debugmode = false;	
     
@@ -111,18 +116,44 @@
   		$.getJSON(url, function(jsonData){
   			
   			logger(jsonData);
+  			runtimeError = false;
+
+  			//test data before disable the loader
+  			$(jsonData).each(function(intIndex){
+  				entry = objectToArrayVar(callType, jsonData[intIndex], intIndex);
+  				
+  				if(entry == null){
+  					runtimeError = true;
+  				}
+  				return;  				
+  			});
+  			
+  			if(runtimeError){
+  				return;
+  			}
+  			
   			//delete ajax indicator
   			$("#"+ callType +"_list tbody").html("");
   			
   			//add the entries
   			$(jsonData).each(function(intIndex){
-  				logger(jsonData[intIndex]);
+
   				entry = objectToArrayVar(callType, jsonData[intIndex], intIndex);
-  				logger(entry);
+  				
+  				if(entry == null){
+  					runtimeError = true;
+  					return;
+  				}
+  				
   				row = buildTableRow(entry)
   				logger(row);
   				$("#"+ callType +"_list tbody").append(row);
   			});
+  			
+  			//do nothing more on parse errors
+  			if(runtimeError){
+  				return;
+  			}
   			
   			//attach the tablesorter
   			$("#"+ callType +"_list").tablesorter({widgets: ['zebra']}); 
@@ -160,6 +191,13 @@
 			
 			date = new Date(history.time);
 			dateString =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + "&nbsp;" + date.getHours() + ":" + date.getMinutes();
+			
+			logger(history);
+			logger(history.username);
+			
+			if(typeof history == "undefined" || typeof history.username == "undefined"){
+				return null;
+			}
 			
 			entryData.push(history.username);
 			entryData.push(dateString);
