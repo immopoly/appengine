@@ -77,7 +77,7 @@
     //working without network traffic
     var localmode = false;
     //activates debug output
-    var debugmode = true;	
+    var debugmode = false;	
     
     /**
      * loads the data for the calltype via JSON-request and updates the given table-id with the data, if parseable
