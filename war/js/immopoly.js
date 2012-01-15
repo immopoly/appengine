@@ -113,9 +113,13 @@
   			url = "user/"+callType+"?start="+startVal+"&end="+endVal;
   		}
   		
+  		alert("Loading data from '"+url+"'");
+  		
   		$.getJSON(url, function(jsonData){
   			
   			logger(jsonData);
+  			alert(jsonData);
+  			
   			runtimeError = false;
 
   			//test data before disable the loader
