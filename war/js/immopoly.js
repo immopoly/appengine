@@ -194,7 +194,7 @@
 			history = jsonData["org.immopoly.common.History"];
 			
 			date = new Date(history.time);
-			dateString =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + "&nbsp;" + date.getHours() + ":" + pad(date.getMinutes(),2);
+			dateString =  date.getDate() + "." + pad((date.getMonth() + 1),2) + "." + date.getFullYear() + "&nbsp;" + date.getHours() + ":" + pad(date.getMinutes(),2);
 			
 			logger(history);
 			logger(history.username);
