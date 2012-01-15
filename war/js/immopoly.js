@@ -75,7 +75,7 @@
  */ 
 
     //working without network traffic
-    var localmode = false;
+    var localmode = true;
     //activates debug output
     var debugmode = true;	
     
@@ -159,7 +159,7 @@
 			history = jsonData["org.immopoly.common.History"];
 			
 			date = new Date(history.time);
-			dateString =  date.getDay() + "." + date.getMonth() + "." + date.getFullYear() + "&nbsp;" + date.getHours() + ":" + date.getMinutes();
+			dateString =  date.getDate() + "." + (date.getMonth() + 1) + "." + date.getFullYear() + "&nbsp;" + date.getHours() + ":" + date.getMinutes();
 			
 			entryData.push(history.username);
 			entryData.push(dateString);
