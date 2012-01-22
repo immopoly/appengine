@@ -145,7 +145,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		else
 			info.put(KEY_NUM_EXPOSES, -1);
 
-		info.put(KEY_MAX_EXPOSES, 30);
+		info.put(KEY_MAX_EXPOSES, 50);
 
 		if (null != lastRent)
 			info.put(KEY_LAST_RENT, lastRent);

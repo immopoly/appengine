@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
@@ -65,10 +66,12 @@ public class IndexServlet extends HttpServlet {
 //					pm.makePersistent(user);
 ////				}
 //			}
-			 MemcacheServiceFactory.getMemcacheService().clearAll();
+			MemcacheServiceFactory.getMemcacheService().clearAll();
 //				createDummyBadge(pm);
-				createDummyBadge2(pm);
-//			// filldummydb(pm);
+			// createDummyBadge2(pm);
+			// filldummydb(pm);
+			// updateDB(pm, Long.parseLong(req.getParameter("start")),
+			// Long.parseLong(req.getParameter("end")));
 //			String html = getBase();
 //			// top5
 //			html = generatetop5(pm, html);
@@ -78,6 +81,8 @@ public class IndexServlet extends HttpServlet {
 //			// memcache stats
 //			Stats stats = MemcacheServiceFactory.getMemcacheService().getStatistics();
 //			LOG.log(Level.INFO,stats.toString());
+		} catch (Exception e) {
+			LOG.log(Level.SEVERE, "", e);
 		} finally {
 			pm.close();
 		}
@@ -161,15 +166,16 @@ public class IndexServlet extends HttpServlet {
 		pm.makePersistent(b);
 		}
 	}
-	
-	private void filldummydb(PersistenceManager pm) {
-//		List<Expose> exposes = DBManager.getExposes(pm);
-//		for (Expose expose : exposes) {
-//			if(expose.getDeleted()==null){
-//				expose.setDeleted(Long.MAX_VALUE);
-//				pm.makePersistent(expose);
-//			}
-//		}
+
+	private void updateDB(PersistenceManager pm, long start, long end) {
+		List<Expose> exposes = DBManager.getExposes(pm, start, end);
+		LOG.info("updateDB " + start + " - " + end + " number of entries: " + exposes.size());
+		for (Expose expose : exposes) {
+			if (expose.getLastcalculation() == null) {
+				expose.setLastcalculation(1);
+				pm.makePersistent(expose);
+			}
+		}
 		// User u = new User("wwaoname", "2password", "email@email.de",
 		// "twitter");
 		// u.setBalance(2149127);

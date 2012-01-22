@@ -83,7 +83,7 @@ public class ImmopolyServlet extends HttpServlet {
 				}
 			}
 		} catch (ImmopolyException e) {
-			LOG.log(Level.SEVERE,"ImmopolyException "+req.getRequestURI(),e);
+			LOG.log(e.getLogLevel(), "ImmopolyException " + req.getRequestURI(), e);
 			resp.getOutputStream().write(e.toJSON().toString().getBytes("UTF-8"));
 		}
 	}

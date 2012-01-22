@@ -73,6 +73,8 @@ public class Expose implements JSONable, Serializable, Comparable<Expose> {
 	@Persistent
 	private String titlePicture=null;
 
+	@Persistent
+	private Long lastcalculation = null;
 	
 	@Transient
 	private Boolean courtage=false;
@@ -115,6 +117,7 @@ public class Expose implements JSONable, Serializable, Comparable<Expose> {
 	public Expose(long userId, JSONObject obj) throws JSONException {
 		this.userId = userId;
 		this.time = System.currentTimeMillis();
+		this.lastcalculation = this.time;
 		fromJSON(obj);
 	}
 
@@ -321,5 +324,12 @@ public class Expose implements JSONable, Serializable, Comparable<Expose> {
 		return (int) ((o.time / 1000) - (time / 1000));
 	}
 
+	public void setLastcalculation(long timestamp) {
+		this.lastcalculation = timestamp;
+	}
+
+	public Long getLastcalculation() {
+		return lastcalculation;
+	}
 
 }
