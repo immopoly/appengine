@@ -8,6 +8,12 @@
   </cron>
 -->
   <cron>
+    <url>/cron/user</url>
+    <description>User und Mietberechnung</description>
+    <schedule>every 2 minutes from 22:00 to 00:59</schedule>
+  </cron>
+  
+  <cron>
     <url>/cron/expose</url>
     <description>Check Exposes</description>
     <schedule>every 2 minutes</schedule>

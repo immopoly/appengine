@@ -18,6 +18,10 @@
 		<property name="userId" direction="asc" />
 		<property name="deleted" direction="asc" />
 	</datastore-index>
+	 <datastore-index kind="Expose" ancestor="false" source="manual">
+        <property name="userId" direction="asc"/>
+        <property name="lastcalculation" direction="asc"/>
+    </datastore-index>
 	<datastore-index kind="Expose" ancestor="false" source="manual">
 		<property name="deleted" direction="asc" />
 		<property name="time" direction="asc" />

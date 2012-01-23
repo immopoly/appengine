@@ -41,7 +41,6 @@ public class ExposeCronjobServlet extends HttpServlet {
 	static Logger LOG = Logger.getLogger(ExposeCronjobServlet.class.getName());
 	// 23h
 	private static final long TIME_CALC_DIFF = 24 * 60 * 60 * 1000;
-	private static final double DAILY_RENT_FRACTION = 30.0;
 	private static final double PROVISON_MULTIPLIER = 2.0;
 
 	// format fuer Waehrung in der Historie
@@ -51,13 +50,14 @@ public class ExposeCronjobServlet extends HttpServlet {
 
 		// logHeaders(req);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-//		int count = 1;
+		// int count = 1;
 		try {
 
 			// pro Minute X Exposes holen deren lastChecked Datum mindestens 24h
 			// zurückliegt.
 			List<Expose> exposes = DBManager.getExposesToCheck(pm, System.currentTimeMillis() - (TIME_CALC_DIFF), 50);
-//			LOG.info("checke exposes #" + exposes.size());
+			if(exposes.size()>0)
+				LOG.info("checke exposes #" + exposes.size());
 			// TODO schtief wenn lastcalculation null ist dann anders holen
 			for (Expose expose : exposes) {
 				// TODO schtief check deleted before
@@ -74,7 +74,7 @@ public class ExposeCronjobServlet extends HttpServlet {
 					expose.setLastcalculation(System.currentTimeMillis());
 					// Wenn verfügbar, lastChecked Datum setzen
 					if (obj.has("expose.expose")) {
-//						LOG.info("ExposeId " + expose.getExposeId() + " OK");
+						// LOG.info("ExposeId " + expose.getExposeId() + " OK");
 						resp.getWriter().write("ExposeId " + expose.getExposeId() + " OK" + " <br>");
 					} else {
 						LOG.log(Level.FINE, "Expose " + obj.toString());
@@ -93,14 +93,14 @@ public class ExposeCronjobServlet extends HttpServlet {
 									expose.getExposeId());
 
 							resp.getWriter().write(history.getText() + "<br>");
-//							LOG.info(history.getText());
+							// LOG.info(history.getText());
 							pm.makePersistent(history);
-							
-							//add provision to user
+
+							// add provision to user
 							user.setBalance(user.getBalance() + PROVISON_MULTIPLIER * expose.getRent());
 							user.addExpose(-1);
 							pm.makePersistent(user);
-							
+
 							// notification
 							// https://github.com/immopoly/appengine/issues/9
 							// c2dm
@@ -130,7 +130,7 @@ public class ExposeCronjobServlet extends HttpServlet {
 			e.printStackTrace(resp.getWriter());
 		} finally {
 			pm.close();
-			LOG.info("finally");
+			// LOG.info("finally");
 		}
 	}
 
