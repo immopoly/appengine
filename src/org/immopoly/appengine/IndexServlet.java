@@ -69,7 +69,7 @@ public class IndexServlet extends HttpServlet {
 			MemcacheServiceFactory.getMemcacheService().clearAll();
 //				createDummyBadge(pm);
 			// createDummyBadge2(pm);
-			// filldummydb(pm);
+//			 updateDB(pm, 0,0);
 			// updateDB(pm, Long.parseLong(req.getParameter("start")),
 			// Long.parseLong(req.getParameter("end")));
 //			String html = getBase();
@@ -168,13 +168,13 @@ public class IndexServlet extends HttpServlet {
 	}
 
 	private void updateDB(PersistenceManager pm, long start, long end) {
-		List<Expose> exposes = DBManager.getExposes(pm, start, end);
+		List<Expose> exposes = DBManager.getExposes(pm);
 		LOG.info("updateDB " + start + " - " + end + " number of entries: " + exposes.size());
 		for (Expose expose : exposes) {
-			if (expose.getLastcalculation() == null) {
+//			if (expose.getLastcalculation() == null) {
 				expose.setLastcalculation(1);
 				pm.makePersistent(expose);
-			}
+//			}
 		}
 		// User u = new User("wwaoname", "2password", "email@email.de",
 		// "twitter");

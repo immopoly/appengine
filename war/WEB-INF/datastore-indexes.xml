@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <datastore-indexes autoGenerate="true">
-	 
+
 	<datastore-index kind="History" ancestor="false"
 		source="auto">
 		<property name="userId" direction="desc" />
 		<property name="time" direction="desc" />
 	</datastore-index>
-	<datastore-index kind="User" ancestor="false"
-		source="auto">
+	<datastore-index kind="User" ancestor="false" source="auto">
 		<property name="userId" direction="desc" />
 		<property name="balance" direction="desc" />
-	</datastore-index>	
-	<datastore-index kind="Expose" ancestor="false"
-		source="auto">
+	</datastore-index>
+	<datastore-index kind="Expose" ancestor="false" source="auto">
 		<property name="userId" direction="desc" />
 		<property name="time" direction="desc" />
-	</datastore-index>	
-	 <datastore-index kind="Expose" ancestor="false" source="manual">
-       <property name="userId" direction="asc"/>
-       <property name="deleted" direction="asc"/>
-   </datastore-index>
-   	<datastore-index kind="Badge" ancestor="false"
-		source="auto">
+	</datastore-index>
+	<datastore-index kind="Expose" ancestor="false" source="manual">
+		<property name="userId" direction="asc" />
+		<property name="deleted" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="Expose" ancestor="false" source="manual">
+		<property name="deleted" direction="asc" />
+		<property name="time" direction="asc" />
+	</datastore-index>
+	<datastore-index kind="Badge" ancestor="false" source="auto">
 		<property name="userId" direction="desc" />
 		<property name="time" direction="desc" />
 	</datastore-index>

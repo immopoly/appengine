@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
+<!-- 
   <cron>
     <url>/cron/nightlycalculations</url>
     <description>Mietberechnung</description>
     <schedule>every 1 minutes from 22:00 to 00:59</schedule>
+  </cron>
+-->
+  <cron>
+    <url>/cron/expose</url>
+    <description>Check Exposes</description>
+    <schedule>every 2 minutes</schedule>
   </cron>
 </cronentries>

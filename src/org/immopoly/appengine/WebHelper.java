@@ -35,17 +35,17 @@ public class WebHelper {
 	public static JSONObject getHttpData(URL url) throws JSONException {
 		HttpURLConnection request;
 		try {
-			LOG.log(Level.FINE, "open Connection " + url.toString());
+//			LOG.log(Level.FINE, "open Connection " + url.toString());
 			request = (HttpURLConnection) url.openConnection();
-			LOG.log(Level.FINE, "sign Request ");
+//			LOG.log(Level.FINE, "sign Request ");
 			OAuthData.consumer.sign(request);
-			LOG.log(Level.FINE, "connect");
+//			LOG.log(Level.FINE, "connect");
 			request.connect();
 			// String message = request.getResponseMessage();
 			// InputStream in = new
 			// BufferedInputStream(request.getInputStream());
 			// String s = readInputStream(in);
-			LOG.log(Level.FINE, "parse");
+//			LOG.log(Level.FINE, "parse");
 			JSONTokener tokener = new JSONTokener(request.getInputStream(), "UTF-8");// s);
 			JSONObject obj = new JSONObject(tokener);
 			return obj;
