@@ -63,7 +63,7 @@ public class UserCronjobServlet extends HttpServlet {
 					LOG.log(Level.SEVERE, "user is null");
 					continue;
 				}
-				if (user.getLastcalculation()>System.currentTimeMillis() - TIME_CALC_DIFF) {
+				if (user.getLastcalculation()!=null && user.getLastcalculation()>System.currentTimeMillis() - TIME_CALC_DIFF) {
 					LOG.log(Level.SEVERE, "user is already calculated in last timeframe");
 					continue;
 				}
