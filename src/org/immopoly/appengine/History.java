@@ -63,14 +63,19 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 
 	@Transient
 	private String username = null;
+
+	@Persistent
+	private String otherUsername = null;
+
 	
-	public History(int type, long userId, long time, String text, Double amount, Long exposeId) {
+	public History(int type, long userId, long time, String text, Double amount, Long exposeId, String otherUsername) {
 		this.userId = userId;
 		this.time = time;
 		this.text = text;
 		this.type = type;
 		this.exposeId = exposeId;
 		this.amount = amount;
+		this.otherUsername=otherUsername;
 	}
 
 	public Long getId() {
@@ -101,7 +106,9 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 				o.put("exposeId", exposeId);
 			if (username != null)
 				o.put("username", username);
-
+			if (otherUsername != null)
+				o.put("otherUsername", otherUsername);
+			
 			resp.put("org.immopoly.common.History", o);
 		} catch (JSONException e) {
 			LOG.log(Level.SEVERE, "toJson failed", e);

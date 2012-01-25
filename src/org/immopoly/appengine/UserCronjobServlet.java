@@ -141,7 +141,7 @@ public class UserCronjobServlet extends HttpServlet {
 				if(numRent!=0)
 				{
 					History historyRent = new History(History.TYPE_DAILY_RENT, user.getId(), System.currentTimeMillis(),
-							"Tagesabrechnung Miete für " + user.getNumExposes() + " Wohnungen : " + MONEYFORMAT.format(rent), rent, null);
+							"Tagesabrechnung Miete für " + user.getNumExposes() + " Wohnungen : " + MONEYFORMAT.format(rent), rent, null,null);
 					// History historyProvision = new
 					// History(History.TYPE_DAILY_PROVISION, user.getId(),
 					// System.currentTimeMillis(),

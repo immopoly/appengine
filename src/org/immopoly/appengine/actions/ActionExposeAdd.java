@@ -20,24 +20,25 @@ import org.immopoly.appengine.User;
 import org.immopoly.appengine.WebHelper;
 import org.immopoly.common.ImmopolyException;
 import org.json.JSONObject;
+
 /*
-This is the server side Google App Engine component of Immopoly
-http://immopoly.appspot.com
-Copyright (C) 2011 Mister Schtief
+ This is the server side Google App Engine component of Immopoly
+ http://immopoly.appspot.com
+ Copyright (C) 2011 Mister Schtief
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 public class ActionExposeAdd extends AbstractAction implements Action {
 
 	public ActionExposeAdd(Map<String, Action> actions) {
@@ -61,7 +62,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 
 			User user = DBManager.getUserByToken(pm, token);
 			if (null == user)
-				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND,"token not found " + token);
+				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND, "token not found " + token);
 
 			History history = null;
 			// first check if already owned
@@ -73,37 +74,40 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					// history eintrag
 					// other user
 					User otherUser = DBManager.getUser(pm, expose.getUserId());
+					if (null == otherUser) {
+						throw new ImmopolyException(ImmopolyException.USERNAME_NOT_FOUND,
+								"user of other expose is null!!! gebe verrückten Fehler zurück");
+					}
 					// minus 30tel
 					double fine = 2 * expose.getRent() / 30.0;
 					user.setBalance(user.getBalance() - fine);
-					if (null != otherUser)
-						otherUser.setBalance(otherUser.getBalance() + fine);
+
+					otherUser.setBalance(otherUser.getBalance() + fine);
 
 					history = new History(History.TYPE_EXPOSE_MONOPOLY_NEGATIVE, user.getId(), System.currentTimeMillis(), "Die Wohnung '"
 							+ expose.getName() + "' gehört schon '" + otherUser.getUserName() + "' Strafe "
-							+ History.MONEYFORMAT.format(fine), -fine, expose.getExposeId());
-					if (null != otherUser) {
-						History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(), System
-								.currentTimeMillis(), user.getUserName() + " wollte deine Wohnung '" + expose.getName()
-								+ "' übernehmen: Belohung " + History.MONEYFORMAT.format(fine), fine, expose.getExposeId());
-						pm.makePersistent(otherHistory);
-						// c2dm
-						if (null != otherUser.getC2dmRegistrationId() && otherUser.getC2dmRegistrationId().length() > 0) {
-							ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
-							Map<String, String[]> params = new HashMap<String, String[]>();
-							// type message title
-							params.put("data.type", new String[] { "1" });
-							params.put("data.message", new String[] { otherHistory.getText() });
-							params.put("data.title", new String[] { "Immopoly" });
-							c2dm.sendNoRetry(otherUser.getC2dmRegistrationId(), "mycollapse", params, true);
-							LOG.info("Send c2dm message to" + otherUser.getUserName() + " " + history.getText());
-						}
+							+ History.MONEYFORMAT.format(fine), -fine, expose.getExposeId(), otherUser.getUserName());
+					History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(),
+							System.currentTimeMillis(), user.getUserName() + " wollte deine Wohnung '" + expose.getName()
+									+ "' übernehmen: Belohung " + History.MONEYFORMAT.format(fine), fine, expose.getExposeId(),
+							user.getUserName());
+					pm.makePersistent(otherHistory);
+					// c2dm
+					if (null != otherUser.getC2dmRegistrationId() && otherUser.getC2dmRegistrationId().length() > 0) {
+						ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+						Map<String, String[]> params = new HashMap<String, String[]>();
+						// type message title
+						params.put("data.type", new String[] { "1" });
+						params.put("data.message", new String[] { otherHistory.getText() });
+						params.put("data.title", new String[] { "Immopoly" });
+						c2dm.sendNoRetry(otherUser.getC2dmRegistrationId(), "mycollapse", params, true);
+						LOG.info("Send c2dm message to" + otherUser.getUserName() + " " + history.getText());
 					}
 					pm.makePersistent(history);
 					pm.makePersistent(user);
 					if (null != otherUser)
 						pm.makePersistent(otherUser);
-					//#47
+					// #47
 					expose.addOvertake();
 					pm.makePersistent(expose);
 				}
@@ -115,72 +119,78 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					expose = new Expose(user.getId(), obj);
 					// nur wohnungen mit rent
 					if (expose.getRent() == 0.0)
-						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_RENT,"Expose hat keinen Wert für Kaltmiete, sie kann nicht übernommen werden");
-					
-					//und nur Provisionspflichtige ;)......
-//					if (!expose.isCourtage())
-//						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_COURTAGE,
-//								"Wohnung ist nicht provisionspflichtig, du willst doch was verdienen oder?");
-					
-					//check for maxExposes 30
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NO_RENT,
+								"Expose hat keinen Wert für Kaltmiete, sie kann nicht übernommen werden");
+
+					// und nur Provisionspflichtige ;)......
+					// if (!expose.isCourtage())
+					// throw new
+					// ImmopolyException(ImmopolyException.EXPOSE_NO_COURTAGE,
+					// "Wohnung ist nicht provisionspflichtig, du willst doch was verdienen oder?");
+
+					// check for maxExposes 30
 					if (user.getNumExposes() != null && user.getNumExposes() >= 50)
 						throw new ImmopolyException(ImmopolyException.EXPOSE_MAX_NUM,
 								"Du hast schon 50 Wohnungen in deinem Portfolio, du solltest es lieber optimieren!");
-					
-					//check distance to last exposes https://github.com/immopoly/immopoly/issues/26
+
+					// check distance to last exposes
+					// https://github.com/immopoly/immopoly/issues/26
 					// if(!checkDistance(pm,expose))
 					// throw new ImmopolyException("SPOOFING ALERT", 441);
 					pm.makePersistent(expose);
 					double fine = 2 * expose.getRent() / 30.0;
 					history = new History(History.TYPE_EXPOSE_ADDED, user.getId(), System.currentTimeMillis(), "Du hast die Wohnung '"
 							+ expose.getName() + "' gemietet für " + History.MONEYFORMAT.format(expose.getRent())
-							+ " im Monat. Übernahmekosten: " + History.MONEYFORMAT.format(fine), -fine, expose.getExposeId());
+							+ " im Monat. Übernahmekosten: " + History.MONEYFORMAT.format(fine), -fine, expose.getExposeId(), null);
 					user.setBalance(user.getBalance() - fine);
 					user.addExpose(1);
 					pm.makePersistent(user);
 					pm.makePersistent(history);
 				} else if (obj.toString().contains("ERROR_RESOURCE_NOT_FOUND"))
-					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,"expose jibs nich");
+					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND, "expose jibs nich");
 			}
 			// history eintrag
 			resp.getOutputStream().write(history.toJSON().toString().getBytes("UTF-8"));
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException(ImmopolyException.EXPOSE_ADD_FAILED,"could not add expose ", e);
+			throw new ImmopolyException(ImmopolyException.EXPOSE_ADD_FAILED, "could not add expose ", e);
 		} finally {
 			pm.close();
 		}
 	}
 
 	private boolean checkDistance(PersistenceManager pm, Expose expose) {
-		//get last x entries
-		List<Expose> lastExposes	= DBManager.getLastExposes(pm, expose.getUserId(),System.currentTimeMillis()-(60*60*1000));
-		LOG.info("lastExposes "+lastExposes.size() + " userId: " +expose.getUserId()+" "+(System.currentTimeMillis()-(60*60*1000)));
+		// get last x entries
+		List<Expose> lastExposes = DBManager.getLastExposes(pm, expose.getUserId(), System.currentTimeMillis() - (60 * 60 * 1000));
+		LOG.info("lastExposes " + lastExposes.size() + " userId: " + expose.getUserId() + " "
+				+ (System.currentTimeMillis() - (60 * 60 * 1000)));
 		for (Expose e : lastExposes) {
-			//wenn e weiter weg ist als MAX_SPOOFING_METER_PER_SECOND per return false
-			double distance = calcDistance(expose.getLatitude(),expose.getLongitude(),e.getLatitude(),e.getLongitude());
-			double distancePerSecond=distance/((System.currentTimeMillis()-e.getTime())/1000);
-			LOG.info("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
-			if(distancePerSecond>Const.MAX_SPOOFING_DISTANCE_PER_SECOND){
-				LOG.severe("distance "+distance+" distancePerSecond "+distancePerSecond+" max "+Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
+			// wenn e weiter weg ist als MAX_SPOOFING_METER_PER_SECOND per
+			// return false
+			double distance = calcDistance(expose.getLatitude(), expose.getLongitude(), e.getLatitude(), e.getLongitude());
+			double distancePerSecond = distance / ((System.currentTimeMillis() - e.getTime()) / 1000);
+			LOG.info("distance " + distance + " distancePerSecond " + distancePerSecond + " max " + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
+			if (distancePerSecond > Const.MAX_SPOOFING_DISTANCE_PER_SECOND) {
+				LOG.severe("distance " + distance + " distancePerSecond " + distancePerSecond + " max "
+						+ Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
 				return false;
 			}
 		}
 		return true;
 	}
-	 public static double calcDistance(double lat1, double lng1, double lat2, double lng2) {
-		    double earthRadius = 3958.75;
-		    double dLat = Math.toRadians(lat2-lat1);
-		    double dLng = Math.toRadians(lng2-lng1);
-		    double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-		               Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
-		               Math.sin(dLng/2) * Math.sin(dLng/2);
-		    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-		    double dist = earthRadius * c;
 
-		    int meterConversion = 1609;
+	public static double calcDistance(double lat1, double lng1, double lat2, double lng2) {
+		double earthRadius = 3958.75;
+		double dLat = Math.toRadians(lat2 - lat1);
+		double dLng = Math.toRadians(lng2 - lng1);
+		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+				* Math.sin(dLng / 2) * Math.sin(dLng / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		double dist = earthRadius * c;
 
-		    return new Double(dist * meterConversion).doubleValue();
- }
+		int meterConversion = 1609;
+
+		return new Double(dist * meterConversion).doubleValue();
+	}
 }

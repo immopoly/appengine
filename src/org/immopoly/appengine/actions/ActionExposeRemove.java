@@ -60,7 +60,7 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 
 			User user = DBManager.getUserByToken(pm, token);
 			if (null == user)
-				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND,"token not found " + token);
+				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND, "token not found " + token);
 
 			History history = null;
 			// first check if already owned
@@ -72,33 +72,33 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 					if (obj.has("expose.expose")) {
 						double fine = Const.FINE_REMOVED * expose.getRent();
 						history = new History(History.TYPE_EXPOSE_REMOVED, user.getId(), System.currentTimeMillis(),
-								"Du hast die Wohnung '"
-								+ expose.getName() + "' für " + History.MONEYFORMAT.format(expose.getRent())
-										+ " im Monat zurückgegeben. Strafe: " + History.MONEYFORMAT.format(fine), -fine, expose
-										.getExposeId());
+								"Du hast die Wohnung '" + expose.getName() + "' für " + History.MONEYFORMAT.format(expose.getRent())
+										+ " im Monat zurückgegeben. Strafe: " + History.MONEYFORMAT.format(fine), -fine,
+								expose.getExposeId(), null);
 						pm.deletePersistent(expose);
 						user.setBalance(user.getBalance() - fine);
 						user.addExpose(-1);
 						pm.makePersistent(user);
 						pm.makePersistent(history);
 					} else if (obj.toString().contains("ERROR_RESOURCE_NOT_FOUND")) {
-						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,"expose jibs nich mehr, eventuell heute schon vermietet");
-					} else{
-						LOG.log(Level.SEVERE, "merkwürdig, merkwürdig, wo isset hin? " +obj.toString());
-						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,"merkwürdig, merkwürdig, wo isset hin? ");						
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,
+								"expose jibs nich mehr, eventuell heute schon vermietet");
+					} else {
+						LOG.log(Level.SEVERE, "merkwürdig, merkwürdig, wo isset hin? " + obj.toString());
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND, "merkwürdig, merkwürdig, wo isset hin? ");
 					}
 				} else {
 					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_OWNED, "gehört nem anderen penner");
 				}
 			} else {
-				throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,"expose jehört dir nich");
+				throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND, "expose jehört dir nich");
 			}
 			// history eintrag
 			resp.getOutputStream().write(history.toJSON().toString().getBytes("UTF-8"));
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException(ImmopolyException.EXPOSE_REMOVE_FAILED,"could not remove expose "+e.getMessage(), e);
+			throw new ImmopolyException(ImmopolyException.EXPOSE_REMOVE_FAILED, "could not remove expose " + e.getMessage(), e);
 		} finally {
 			pm.close();
 		}

@@ -90,7 +90,7 @@ public class ExposeCronjobServlet extends HttpServlet {
 							History history = new History(History.TYPE_EXPOSE_SOLD, user.getId(), System.currentTimeMillis(), "Wohnung '"
 									+ expose.getName() + "' vermietet. Provision überwiesen: "
 									+ MONEYFORMAT.format(PROVISON_MULTIPLIER * expose.getRent()), PROVISON_MULTIPLIER * expose.getRent(),
-									expose.getExposeId());
+									expose.getExposeId(),null);
 
 							resp.getWriter().write(history.getText() + "<br>");
 							// LOG.info(history.getText());

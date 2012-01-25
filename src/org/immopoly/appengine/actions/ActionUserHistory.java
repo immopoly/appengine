@@ -44,7 +44,9 @@ public class ActionUserHistory extends AbstractActionUser {
 		JSONArray array = new JSONArray();
 		List<History> history = DBManager.getHistory(pm, null == user ? null : user.getId(), start, end);
 		if (history.size() == 0)
-			throw new ImmopolyException(ImmopolyException.NO_MORE_DATA, "Keine Daten mehr von " + start + " bis " + end);
+			return array;
+		//TODO schtief https://github.com/immopoly/appengine/issues/11
+		//throw new ImmopolyException(ImmopolyException.NO_MORE_DATA, "Keine Daten mehr von " + start + " bis " + end);
 
 		for (History h : history) {
 			if (null == user)
