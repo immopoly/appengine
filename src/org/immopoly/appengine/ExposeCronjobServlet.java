@@ -105,22 +105,26 @@ public class ExposeCronjobServlet extends HttpServlet {
 							// https://github.com/immopoly/appengine/issues/9
 							// c2dm
 							if (null != user.getC2dmRegistrationId() && user.getC2dmRegistrationId().length() > 0) {
-								ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
-								Map<String, String[]> params = new HashMap<String, String[]>();
-								// type message title
-								params.put("data.type", new String[] { "1" });
-								params.put("data.message", new String[] { history.getText() });
-								params.put("data.title", new String[] { "Immopoly" });
-								c2dm.sendNoRetry(user.getC2dmRegistrationId(), "mycollapse", params, true);
-								LOG.info("Send c2dm message to" + user.getUserName() + " " + history.getText());
-								resp.getWriter().write("Send c2dm message to" + user.getUserName() + " " + history.getText());
+								try{
+									ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+									Map<String, String[]> params = new HashMap<String, String[]>();
+									// type message title
+									params.put("data.type", new String[] { "1" });
+									params.put("data.message", new String[] { history.getText() });
+									params.put("data.title", new String[] { "Immopoly" });
+									c2dm.sendNoRetry(user.getC2dmRegistrationId(), "mycollapse", params, true);
+									LOG.info("Send c2dm message to" + user.getUserName() + " " + history.getText());
+									resp.getWriter().write("Send c2dm message to" + user.getUserName() + " " + history.getText());
+								}catch(Exception e){
+									LOG.log(Level.SEVERE,"Send c2dm message to" + user.getUserName() + " FAILED ",e);									
+								}
 							}
 							// nicht mehr loeschen sondern nur noch markieren
 							expose.setDeleted(expose.getLastcalculation());
 						}
 					}
-					pm.makePersistent(expose);
 				}
+				pm.makePersistent(expose);
 			}
 
 			resp.getWriter().flush();

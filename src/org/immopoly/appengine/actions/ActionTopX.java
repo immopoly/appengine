@@ -45,7 +45,7 @@ public class ActionTopX extends AbstractAction {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ImmopolyException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			LOG.info("TopX " + req.getRequestURI());
+//			LOG.info("TopX " + req.getRequestURI());
 			String startS = req.getParameter(TOPXSTART);
 			String endS = req.getParameter(TOPXEND);
 			int start, end = 0;
