@@ -324,7 +324,7 @@ public class Expose implements JSONable, Serializable, Comparable<Expose> {
 		return (int) ((o.time / 1000) - (time / 1000));
 	}
 
-	public void setLastcalculation(long timestamp) {
+	public void setLastcalculation(Long timestamp) {
 		this.lastcalculation = timestamp;
 	}
 

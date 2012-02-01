@@ -3,6 +3,8 @@ package org.immopoly.appengine;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,8 +55,10 @@ public class UserCronjobServlet extends HttpServlet {
 			// alle benutzer die seit TIME_CALC_DIFF millisekunden nicht
 			// berechnet worden sind
 			long lastCalculation =System.currentTimeMillis() - TIME_CALC_DIFF;
-			List<User> users = DBManager.getUsersToCheck(pm, lastCalculation, 10);
-//			LOG.log(Level.INFO, System.currentTimeMillis()+" users to check since "+lastCalculation);
+//			List<User> users = DBManager.getUsersToCheck(pm, lastCalculation, 10);
+			List<User> users= new ArrayList<User>();
+			users.add(DBManager.getUser(pm, 9002));
+			//			LOG.log(Level.INFO, System.currentTimeMillis()+" users to check since "+lastCalculation);
 
 			// List<User> users =new ArrayList<User>();
 			// users.add(DBManager.getUser(pm, "mrschtief"));
@@ -128,6 +132,7 @@ public class UserCronjobServlet extends HttpServlet {
 				// check miete mit num wohnungen
 				if (user.getNumExposes() != numRent) {
 					LOG.log(Level.SEVERE, "NumExposes " + user.getNumExposes() + "!= numRent " + numRent);
+					user.setNumExposes(numRent);
 				}
 
 				LOG.info("update User");
@@ -138,6 +143,12 @@ public class UserCronjobServlet extends HttpServlet {
 				user.setLastProvision(provision);
 				user.setLastRent(rent);
 
+				//monthly balance
+				//delete on first of month
+				if(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)==1)
+					user.setBalanceMonth(0);
+				user.setBalanceMonth(user.getBalanceMonth() - rent+provision);
+				
 				if(numRent!=0)
 				{
 					History historyRent = new History(History.TYPE_DAILY_RENT, user.getId(), System.currentTimeMillis(),

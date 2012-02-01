@@ -62,6 +62,9 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	private double balance;
 
 	@Persistent
+	private Double balanceMonth;
+	
+	@Persistent
 	private String token;
 
 	@Persistent
@@ -338,6 +341,16 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 	@Override
 	public void setNumExposes(int numExposes) {
+	}
+
+	public double getBalanceMonth() {
+		if(null==balanceMonth)
+			return 0;
+		return balanceMonth;
+	}
+
+	public void setBalanceMonth(double balanceMonth) {
+		this.balanceMonth = balanceMonth;
 	}
 
 }
