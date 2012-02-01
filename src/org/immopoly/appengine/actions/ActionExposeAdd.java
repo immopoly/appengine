@@ -2,14 +2,12 @@ package org.immopoly.appengine.actions;
 
 import java.net.URL;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.immopoly.appengine.Const;
 import org.immopoly.appengine.DBManager;
 import org.immopoly.appengine.Expose;
 import org.immopoly.appengine.History;
@@ -160,25 +158,31 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 		}
 	}
 
-	private boolean checkDistance(PersistenceManager pm, Expose expose) {
-		// get last x entries
-		List<Expose> lastExposes = DBManager.getLastExposes(pm, expose.getUserId(), System.currentTimeMillis() - (60 * 60 * 1000));
-		LOG.info("lastExposes " + lastExposes.size() + " userId: " + expose.getUserId() + " "
-				+ (System.currentTimeMillis() - (60 * 60 * 1000)));
-		for (Expose e : lastExposes) {
-			// wenn e weiter weg ist als MAX_SPOOFING_METER_PER_SECOND per
-			// return false
-			double distance = calcDistance(expose.getLatitude(), expose.getLongitude(), e.getLatitude(), e.getLongitude());
-			double distancePerSecond = distance / ((System.currentTimeMillis() - e.getTime()) / 1000);
-			LOG.info("distance " + distance + " distancePerSecond " + distancePerSecond + " max " + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
-			if (distancePerSecond > Const.MAX_SPOOFING_DISTANCE_PER_SECOND) {
-				LOG.severe("distance " + distance + " distancePerSecond " + distancePerSecond + " max "
-						+ Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
-				return false;
-			}
-		}
-		return true;
-	}
+	// private boolean checkDistance(PersistenceManager pm, Expose expose) {
+	// // get last x entries
+	// List<Expose> lastExposes = DBManager.getLastExposes(pm,
+	// expose.getUserId(), System.currentTimeMillis() - (60 * 60 * 1000));
+	// LOG.info("lastExposes " + lastExposes.size() + " userId: " +
+	// expose.getUserId() + " "
+	// + (System.currentTimeMillis() - (60 * 60 * 1000)));
+	// for (Expose e : lastExposes) {
+	// // wenn e weiter weg ist als MAX_SPOOFING_METER_PER_SECOND per
+	// // return false
+	// double distance = calcDistance(expose.getLatitude(),
+	// expose.getLongitude(), e.getLatitude(), e.getLongitude());
+	// double distancePerSecond = distance / ((System.currentTimeMillis() -
+	// e.getTime()) / 1000);
+	// LOG.info("distance " + distance + " distancePerSecond " +
+	// distancePerSecond + " max " + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
+	// if (distancePerSecond > Const.MAX_SPOOFING_DISTANCE_PER_SECOND) {
+	// LOG.severe("distance " + distance + " distancePerSecond " +
+	// distancePerSecond + " max "
+	// + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
+	// return false;
+	// }
+	// }
+	// return true;
+	// }
 
 	public static double calcDistance(double lat1, double lng1, double lat2, double lng2) {
 		double earthRadius = 3958.75;

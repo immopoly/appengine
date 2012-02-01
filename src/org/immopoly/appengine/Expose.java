@@ -62,7 +62,7 @@ public class Expose implements JSONable, Serializable, Comparable<Expose> {
 	private Long time;
 
 	@Persistent
-	private Long deleted = Long.MAX_VALUE;
+	private Long deleted = null;
 
 	@Persistent
 	private Integer numberOfRooms=null;

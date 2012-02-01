@@ -61,8 +61,10 @@ public class ExposeCronjobServlet extends HttpServlet {
 			// TODO schtief wenn lastcalculation null ist dann anders holen
 			for (Expose expose : exposes) {
 				// TODO schtief check deleted before
-				if (expose.getDeleted() != Long.MAX_VALUE) {
-					expose.setLastcalculation(null);
+				if (expose.getDeleted() != null) {
+					LOG.log(Level.SEVERE, "there shouldnt be an expose with deleted != null here" + expose.getExposeId() + " deleted "
+							+ expose.getDeleted() + " lastcalculated" + expose.getLastcalculation());
+					// expose.setLastcalculation(null);
 				} else {
 					// Verfügbarkeit bei is24 checken.
 					URL url = new URL(OAuthData.SERVER + OAuthData.SEARCH_PREFIX + "expose/" + expose.getExposeId() + ".json");

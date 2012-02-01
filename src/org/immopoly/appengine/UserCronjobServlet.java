@@ -1,9 +1,7 @@
 package org.immopoly.appengine;
 
 import java.io.IOException;
-import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.List;
@@ -14,8 +12,6 @@ import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.json.JSONObject;
 
 /*
  This is the server side Google App Engine component of Immopoly
@@ -55,9 +51,9 @@ public class UserCronjobServlet extends HttpServlet {
 			// alle benutzer die seit TIME_CALC_DIFF millisekunden nicht
 			// berechnet worden sind
 			long lastCalculation =System.currentTimeMillis() - TIME_CALC_DIFF;
-//			List<User> users = DBManager.getUsersToCheck(pm, lastCalculation, 10);
-			List<User> users= new ArrayList<User>();
-			users.add(DBManager.getUser(pm, 9002));
+			List<User> users = DBManager.getUsersToCheck(pm, lastCalculation, 10);
+			// List<User> users= new ArrayList<User>();
+			// users.add(DBManager.getUser(pm, 9002));
 			//			LOG.log(Level.INFO, System.currentTimeMillis()+" users to check since "+lastCalculation);
 
 			// List<User> users =new ArrayList<User>();
@@ -67,7 +63,7 @@ public class UserCronjobServlet extends HttpServlet {
 					LOG.log(Level.SEVERE, "user is null");
 					continue;
 				}
-				if (user.getLastcalculation()!=null && user.getLastcalculation()>System.currentTimeMillis() - TIME_CALC_DIFF) {
+				if (user.getLastcalculation() != null && user.getLastcalculation() > System.currentTimeMillis() - TIME_CALC_DIFF) {
 					LOG.log(Level.SEVERE, "user is already calculated in last timeframe");
 					continue;
 				}
@@ -86,14 +82,13 @@ public class UserCronjobServlet extends HttpServlet {
 				List<Expose> exposes = DBManager.getExposesForUserToCheck(pm, user.getId(), System.currentTimeMillis() - (TIME_CALC_DIFF));
 				// TODO schtief count exposes each night brauchen wir noch?
 				// user.setNumExposes(exposes.size());
-				LOG.info(" User " + user.getUserName() + " Exposes #" + exposes.size());
+				LOG.info("User " + user.getUserName() + " Exposes #" + exposes.size());
 				resp.getWriter().write(" User " + user.getUserName() + " Exposes #" + exposes.size()+"<br>");
 
 				for (Expose expose : exposes) {
 					// schauen ob es noch da ist
-					// es ist noch da, wenn deleted == Long.Max ist (und
-					// eigentlich genau das lastcalculation date hat)
-					if (expose.getDeleted() == Long.MAX_VALUE) {
+					// es ist noch da, wenn deleted == null ist
+					if (expose.getDeleted() == null) {
 						// falls noch da, dann die Miete berechnen
 						rent += expose.getRent() / DAILY_RENT_FRACTION;
 						numRent++;
@@ -126,13 +121,16 @@ public class UserCronjobServlet extends HttpServlet {
 						// pm.makePersistent(expose);
 						resp.getWriter().write(expose.getExposeId()+" Sold! <br>");
 						LOG.info(expose.getExposeId()+" Sold!");
-
+						// jetzt lastcalculation auf null setzen damit es nicht
+						// wieder geholt wird
+						expose.setLastcalculation(null);
+						pm.makePersistent(expose);
 					}
 				}
 				// check miete mit num wohnungen
 				if (user.getNumExposes() != numRent) {
 					LOG.log(Level.SEVERE, "NumExposes " + user.getNumExposes() + "!= numRent " + numRent);
-					user.setNumExposes(numRent);
+					// user.setNumExposes(numRent);
 				}
 
 				LOG.info("update User");

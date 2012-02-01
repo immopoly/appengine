@@ -159,6 +159,11 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		else
 			info.put(KEY_LAST_PROVISION, 0);
 
+		if (null != balanceMonth)
+			info.put(KEY_MONTH_BALANCE, balanceMonth);
+		else
+			info.put(KEY_LAST_PROVISION, 0);
+
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			// last 10 history

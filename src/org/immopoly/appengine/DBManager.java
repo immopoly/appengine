@@ -98,7 +98,7 @@ public class DBManager {
 	public static List<Expose> getExposes(PersistenceManager pm, long userId, Integer start, Integer end) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE userId == " + userId+" && deleted > "+System.currentTimeMillis()/*+" ORDER BY time DESC"*/);
+		jdoql.append(" WHERE userId == " + userId + " && deleted == null ");// +System.currentTimeMillis()/*+" ORDER BY time DESC"*/);
 		if (null != start && null != end)
 			jdoql.append(" RANGE " + start + "," + end);
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
@@ -111,25 +111,29 @@ public class DBManager {
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 	
-	public static List<Expose> getLastExposes(PersistenceManager pm, long userId, long minTime) {
-		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
-		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE userId == " + userId + " && time > " + minTime+" && deleted > "+System.currentTimeMillis());
-		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
-	}
+
+	// public static List<Expose> getLastExposes(PersistenceManager pm, long
+	// userId, long minTime) {
+	// StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+	// jdoql.append(Expose.class.getName());
+	// jdoql.append(" WHERE userId == " + userId + " && time > " +
+	// minTime+" && deleted > "+System.currentTimeMillis());
+	// return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
+	// }
 
 	public static List<Expose> getExposesToCheck(PersistenceManager pm, long lastchecked, int count) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE lastcalculation < " + lastchecked);
+		jdoql.append(" WHERE lastcalculation < " + lastchecked + " && lastcalculation != null ");
 //		jdoql.append(" WHERE deleted != 9223372036854775807 && lastcalculation < " + lastchecked);
 		jdoql.append(" RANGE 0," + count);
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 
+	// for testing stuff and dbupdate
 	public static List<Expose> getExposes(PersistenceManager pm) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
-		jdoql.append(Expose.class.getName()).append(" WHERE lastcalculation!=1");
+		jdoql.append(Expose.class.getName()).append(" WHERE deleted == " + Long.MAX_VALUE + " RANGE 0,500");
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 
@@ -213,7 +217,7 @@ public class DBManager {
 		try {
 			StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 			jdoql.append(User.class.getName());
-			jdoql.append(" ORDER by balance DESC RANGE " + start + "," + end);
+			jdoql.append(" ORDER by balanceMonth DESC RANGE " + start + "," + end);
 			return (List<User>) pm.newQuery(jdoql.toString()).execute();
 		} catch (Exception e) {
 			e.printStackTrace();

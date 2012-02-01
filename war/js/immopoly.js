@@ -108,13 +108,11 @@
   		
   		if(localmode){
   			//load static files instead of connecting to the live server
-  			url = "/"+callType+".json";
+  			url = "http://immopoly.appspot.com/"+callType+".json";
   		}else{
-  			url = "user/"+callType+"?start="+startVal+"&end="+endVal;
+  			url = "http://immopoly.appspot.com/user/"+callType+"?start="+startVal+"&end="+endVal;
   		}
-  		
-  		//alert("Loading data from '"+url+"'");
-  		
+  		  		
   		$.getJSON(url, function(jsonData){
   			
   			logger(jsonData);
@@ -186,8 +184,9 @@
 			entryData.push( intIndex+1 ); //Rank is index+1
 			entryData.push( user.username );
 			entryData.push( formatMoney(user.info.balance) );
-			entryData.push( formatMoney(user.info.lastRent) );
-			entryData.push( formatMoney(user.info.lastProvision) );
+			entryData.push( formatMoney(user.info.monthBalance) );
+			//entryData.push( formatMoney(user.info.lastRent) );
+			//entryData.push( formatMoney(user.info.lastProvision) );
 			
 			break;
 		case "history":

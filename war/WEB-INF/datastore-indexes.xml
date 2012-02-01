@@ -26,6 +26,10 @@
 		<property name="deleted" direction="asc" />
 		<property name="time" direction="asc" />
 	</datastore-index>
+	<datastore-index kind="Expose" ancestor="false" source="manual">
+		<property name="deleted" direction="asc" />
+		<property name="lastcalculation" direction="asc" />
+	</datastore-index>
 	<datastore-index kind="Badge" ancestor="false" source="auto">
 		<property name="userId" direction="desc" />
 		<property name="time" direction="desc" />
