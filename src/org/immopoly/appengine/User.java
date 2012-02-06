@@ -82,6 +82,9 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	@Persistent 
 	private Integer numExposes;
 
+	@Persistent 
+	private Integer numExposesSold;
+
 	public User(String name, String password, String email, String twitter) {
 		this.username = name;
 		this.email = email;
@@ -90,6 +93,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		this.balance = 5000;
 		this.lastcalculation = null;
 		this.numExposes=0;
+		this.numExposesSold=0;
 		generateToken();
 	}
 
@@ -162,7 +166,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		if (null != balanceMonth)
 			info.put(KEY_MONTH_BALANCE, balanceMonth);
 		else
-			info.put(KEY_LAST_PROVISION, 0);
+			info.put(KEY_MONTH_BALANCE, 0);
 
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
@@ -356,6 +360,16 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 	public void setBalanceMonth(double balanceMonth) {
 		this.balanceMonth = balanceMonth;
+	}
+
+	public Integer getNumExposesSold() {
+		if(null==numExposesSold)
+			return 0;		
+		return numExposesSold;
+	}
+
+	public void setNumExposesSold(Integer numExposesSold) {
+		this.numExposesSold = numExposesSold;
 	}
 
 }

@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,12 +76,18 @@ public class UserCronjobServlet extends HttpServlet {
 				user.setLastcalculation(System.currentTimeMillis());
 				pm.makePersistent(user);
 
+				//count all sold
+				countAllSold(pm,user);
+				
+				//give numexposesoldbadge
+				giveNumberExposesSoldBadge(pm, user);
+				
 				double rent = 0;
 				double provision = 0;
 				// int numRemoved = 0;
 				int numRent = 0;
 				// get all Exposes des users
-				List<Expose> exposes = DBManager.getExposesForUserToCheck(pm, user.getId(), System.currentTimeMillis() - (TIME_CALC_DIFF));
+				List<Expose> exposes = DBManager.getExposesForUserToCheck(pm, user.getId()/*, System.currentTimeMillis() - (TIME_CALC_DIFF)*/);
 				// TODO schtief count exposes each night brauchen wir noch?
 				// user.setNumExposes(exposes.size());
 				LOG.info("User " + user.getUserName() + " Exposes #" + exposes.size());
@@ -130,7 +138,7 @@ public class UserCronjobServlet extends HttpServlet {
 				// check miete mit num wohnungen
 				if (user.getNumExposes() != numRent) {
 					LOG.log(Level.SEVERE, "NumExposes " + user.getNumExposes() + "!= numRent " + numRent);
-					// user.setNumExposes(numRent);
+					user.setNumExposes(numRent);
 				}
 
 				LOG.info("update User");
@@ -180,6 +188,47 @@ public class UserCronjobServlet extends HttpServlet {
 			pm.close();
 			// LOG.info("finally");
 		}
+	}
+
+	private void giveNumberExposesSoldBadge(PersistenceManager pm,User user) {
+		if(user.getNumExposesSold()>=10)
+			giveNumberExposesSoldBadge(pm, user,10);
+		if(user.getNumExposesSold()>=30)
+			giveNumberExposesSoldBadge(pm, user,30);
+		if(user.getNumExposesSold()>=60)
+			giveNumberExposesSoldBadge(pm, user,60);
+		if(user.getNumExposesSold()>=80)
+			giveNumberExposesSoldBadge(pm, user,80);
+		if(user.getNumExposesSold()>=100)
+			giveNumberExposesSoldBadge(pm, user,100);
+	}
+
+	private void giveNumberExposesSoldBadge(PersistenceManager pm, User user, int num) {
+		//TODO check if Badge already given
+		Badge b = new Badge(100000+num, user.getId(), System.currentTimeMillis(), "Du hast "+num+" Wohnungen vermietet!",
+				"http://immopoly.org/img/badges/"+num+".png", 0.0,	null);
+		pm.makePersistent(b);
+		try{
+			if (null != user.getC2dmRegistrationId() && user.getC2dmRegistrationId().length() > 0) {
+				ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+				Map<String, String[]> params = new HashMap<String, String[]>();
+				// type message title
+				params.put("data.type", new String[] { "1" });
+				params.put("data.message", new String[] { b.getText() });
+				params.put("data.title", new String[] { "Immopoly" });
+				c2dm.sendNoRetry(user.getC2dmRegistrationId(), "mycollapse", params, true);
+				LOG.info("Send c2dm message to" + user.getUserName() + " " + b.getText());
+			}
+		}catch(Exception e){
+			LOG.log(Level.SEVERE,"Send c2dm message to" + user.getUserName() + " FAILED ",e);									
+		}
+		}
+
+	private void countAllSold(PersistenceManager pm, User user) {
+		// get all expose deleted > 0
+		List<Expose> sold = DBManager.getSoldExposes(pm, user.getId());
+		user.setNumExposesSold(sold.size());
+		LOG.info("User "+user.getUserName()+" sold Expose : "+user.getNumExposesSold());
 	}
 
 	private void logHeaders(HttpServletRequest req) {

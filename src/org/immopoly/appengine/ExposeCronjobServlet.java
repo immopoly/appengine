@@ -62,8 +62,8 @@ public class ExposeCronjobServlet extends HttpServlet {
 			for (Expose expose : exposes) {
 				// TODO schtief check deleted before
 				if (expose.getDeleted() != null) {
-					LOG.log(Level.SEVERE, "there shouldnt be an expose with deleted != null here" + expose.getExposeId() + " deleted "
-							+ expose.getDeleted() + " lastcalculated" + expose.getLastcalculation());
+//					LOG.log(Level.SEVERE, "there shouldnt be an expose with deleted != null here" + expose.getExposeId() + " deleted "
+//							+ expose.getDeleted() + " lastcalculated" + expose.getLastcalculation());
 					// expose.setLastcalculation(null);
 				} else {
 					// Verfügbarkeit bei is24 checken.
@@ -89,9 +89,9 @@ public class ExposeCronjobServlet extends HttpServlet {
 							LOG.info("ExposeId " + expose.getExposeId() + " SOLD!");
 							resp.getWriter().write("ExposeId " + expose.getExposeId() + " SOLD!" + " <br>");
 							// Historieneintrag erstellen
-							History history = new History(History.TYPE_EXPOSE_SOLD, user.getId(), System.currentTimeMillis(), "Wohnung '"
-									+ expose.getName() + "' vermietet. Provision überwiesen: "
-									+ MONEYFORMAT.format(PROVISON_MULTIPLIER * expose.getRent()), PROVISON_MULTIPLIER * expose.getRent(),
+							History history = new History(History.TYPE_EXPOSE_SOLD, user.getId(), System.currentTimeMillis(), "Provision: "
+									+ MONEYFORMAT.format(PROVISON_MULTIPLIER * expose.getRent())+" überwiesen. Wohnung '"
+									+ expose.getName() + "' vermietet.", PROVISON_MULTIPLIER * expose.getRent(),
 									expose.getExposeId(),null);
 
 							resp.getWriter().write(history.getText() + "<br>");
@@ -101,6 +101,8 @@ public class ExposeCronjobServlet extends HttpServlet {
 							// add provision to user
 							user.setBalance(user.getBalance() + PROVISON_MULTIPLIER * expose.getRent());
 							user.addExpose(-1);
+							//add one sold overall
+							user.setNumExposesSold(user.getNumExposesSold()+1);
 							pm.makePersistent(user);
 
 							// notification
@@ -125,8 +127,8 @@ public class ExposeCronjobServlet extends HttpServlet {
 							expose.setDeleted(expose.getLastcalculation());
 						}
 					}
+					pm.makePersistent(expose);
 				}
-				pm.makePersistent(expose);
 			}
 
 			resp.getWriter().flush();

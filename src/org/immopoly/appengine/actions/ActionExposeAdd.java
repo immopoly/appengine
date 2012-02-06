@@ -3,6 +3,7 @@ package org.immopoly.appengine.actions;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
@@ -91,16 +92,21 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 							user.getUserName());
 					pm.makePersistent(otherHistory);
 					// c2dm
-					if (null != otherUser.getC2dmRegistrationId() && otherUser.getC2dmRegistrationId().length() > 0) {
-						ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
-						Map<String, String[]> params = new HashMap<String, String[]>();
-						// type message title
-						params.put("data.type", new String[] { "1" });
-						params.put("data.message", new String[] { otherHistory.getText() });
-						params.put("data.title", new String[] { "Immopoly" });
-						c2dm.sendNoRetry(otherUser.getC2dmRegistrationId(), "mycollapse", params, true);
-						LOG.info("Send c2dm message to" + otherUser.getUserName() + " " + history.getText());
+					try{
+						if (null != otherUser.getC2dmRegistrationId() && otherUser.getC2dmRegistrationId().length() > 0) {
+							ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+							Map<String, String[]> params = new HashMap<String, String[]>();
+							// type message title
+							params.put("data.type", new String[] { "1" });
+							params.put("data.message", new String[] { otherHistory.getText() });
+							params.put("data.title", new String[] { "Immopoly" });
+							c2dm.sendNoRetry(otherUser.getC2dmRegistrationId(), "mycollapse", params, true);
+							LOG.info("Send c2dm message to" + otherUser.getUserName() + " " + history.getText());
+						}
+					}catch(Exception e){
+						LOG.log(Level.SEVERE,"Send c2dm message to" + otherUser.getUserName() + " FAILED ",e);									
 					}
+					
 					pm.makePersistent(history);
 					pm.makePersistent(user);
 					if (null != otherUser)

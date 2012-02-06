@@ -89,7 +89,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	
 	
 	<welcome-file-list>
-		<welcome-file>Immopoly.html</welcome-file>
+		<welcome-file>redirect.html</welcome-file>
 	</welcome-file-list>
 	
 </web-app>

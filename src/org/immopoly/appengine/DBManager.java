@@ -104,10 +104,17 @@ public class DBManager {
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 
-	public static List<Expose> getExposesForUserToCheck(PersistenceManager pm, long userId, long lastcalculation) {
+	public static List<Expose> getSoldExposes(PersistenceManager pm, long userId) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE userId == " + userId+" && lastcalculation > "+lastcalculation/*+" ORDER BY time DESC"*/);
+		jdoql.append(" WHERE userId == " + userId + " && deleted != null ");
+		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
+	}
+	
+	public static List<Expose> getExposesForUserToCheck(PersistenceManager pm, long userId/*, long lastcalculation*/) {
+		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+		jdoql.append(Expose.class.getName());
+		jdoql.append(" WHERE userId == " + userId+" && lastcalculation != null ");//+lastcalculation/*+" ORDER BY time DESC"*/);
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 	
