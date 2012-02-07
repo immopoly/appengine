@@ -42,7 +42,7 @@ public class ActionUserBadges extends AbstractActionUser {
 
 	JSONArray getArray(PersistenceManager pm, User user, int start, int end) throws ImmopolyException {
 		JSONArray array = new JSONArray();
-		List<Badge> badges = DBManager.getBadges(pm, null == user ? null : user.getId(), start, end);
+		List<Badge> badges = DBManager.getBadges(pm, null == user ? null : user.getId(),null, start, end);
 		if (badges.size() == 0)
 			throw new ImmopolyException(ImmopolyException.NO_MORE_DATA, "Keine Badges mehr von " + start + " bis " + end);
 

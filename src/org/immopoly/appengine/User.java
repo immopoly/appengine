@@ -180,7 +180,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 			// last 10 badges
 			JSONArray badgeList = new JSONArray();
-			List<Badge> badges = DBManager.getBadges(pm, id, 0, 10);
+			List<Badge> badges = DBManager.getBadges(pm, id,null, 0, 10);
 			for (Badge b : badges) {
 				badgeList.put(b.toJSON());
 			}

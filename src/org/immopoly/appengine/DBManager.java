@@ -193,12 +193,23 @@ public class DBManager {
 		}
 	}
 
-	public static List<Badge> getBadges(PersistenceManager pm, Long userId, int start, int end) {
+	public static List<Badge> getBadges(PersistenceManager pm, Long userId, Integer type, int start, int end) {
 		try {
 			StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 			jdoql.append(Badge.class.getName());
+			
+			if(null!=userId || null!=type)
+				jdoql.append(" WHERE ");
+			
 			if (null != userId)
-				jdoql.append(" WHERE userId == ").append(userId);
+				jdoql.append(" userId == ").append(userId);
+			
+			if(null!=type && null!=userId)
+				jdoql.append(" && ");
+			
+			if(null!=type)
+				jdoql.append(" type == ").append(type);
+				
 			jdoql.append(" ORDER BY time DESC RANGE " + start + "," + end);
 			return (List<Badge>) pm.newQuery(jdoql.toString()).execute();
 		} catch (Exception e) {

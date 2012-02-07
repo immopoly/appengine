@@ -2,6 +2,7 @@ package org.immopoly.appengine;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -53,9 +54,16 @@ public class UserCronjobServlet extends HttpServlet {
 			// alle benutzer die seit TIME_CALC_DIFF millisekunden nicht
 			// berechnet worden sind
 			long lastCalculation =System.currentTimeMillis() - TIME_CALC_DIFF;
-			List<User> users = DBManager.getUsersToCheck(pm, lastCalculation, 10);
-			// List<User> users= new ArrayList<User>();
-			// users.add(DBManager.getUser(pm, 9002));
+			List<User> users;
+			boolean debug=false;
+			
+			if(null!=req.getParameter("username")){
+				debug=true;
+				users= new ArrayList<User>();
+				users.add(DBManager.getUser(pm, req.getParameter("username")));
+			}
+			else
+				users	= DBManager.getUsersToCheck(pm, lastCalculation, 10);
 			//			LOG.log(Level.INFO, System.currentTimeMillis()+" users to check since "+lastCalculation);
 
 			// List<User> users =new ArrayList<User>();
@@ -65,7 +73,7 @@ public class UserCronjobServlet extends HttpServlet {
 					LOG.log(Level.SEVERE, "user is null");
 					continue;
 				}
-				if (user.getLastcalculation() != null && user.getLastcalculation() > System.currentTimeMillis() - TIME_CALC_DIFF) {
+				if (!debug && user.getLastcalculation() != null && user.getLastcalculation() > System.currentTimeMillis() - TIME_CALC_DIFF) {
 					LOG.log(Level.SEVERE, "user is already calculated in last timeframe");
 					continue;
 				}
@@ -77,7 +85,7 @@ public class UserCronjobServlet extends HttpServlet {
 				pm.makePersistent(user);
 
 				//count all sold
-				countAllSold(pm,user);
+				//only once countAllSold(pm,user);
 				
 				//give numexposesoldbadge
 				giveNumberExposesSoldBadge(pm, user);
@@ -204,7 +212,12 @@ public class UserCronjobServlet extends HttpServlet {
 	}
 
 	private void giveNumberExposesSoldBadge(PersistenceManager pm, User user, int num) {
-		//TODO check if Badge already given
+		//check if Badge already given
+		List<Badge> badges = DBManager.getBadges(pm, user.getId(),100000+num, 0, 1);
+		if(null!=badges && badges.size()>0){
+			LOG.info("Badge already given "+100000+num);
+			return;
+		}
 		Badge b = new Badge(100000+num, user.getId(), System.currentTimeMillis(), "Du hast "+num+" Wohnungen vermietet!",
 				"http://immopoly.org/img/badges/"+num+".png", 0.0,	null);
 		pm.makePersistent(b);
