@@ -33,6 +33,7 @@ public interface Action {
 	public final String C2DMREGISTRATIONID = "c2dmregistrationid";
 	public final String TOPXSTART = "start";
 	public final String TOPXEND = "end";
+	public final String RANKTYPE = "ranktype";
 
 	String getURI();
 

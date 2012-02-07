@@ -220,11 +220,11 @@ public class DBManager {
 	// }
 	// }
 
-	public static List<User> getTopUser(PersistenceManager pm, int start, int end) {
+	public static List<User> getTopUser(PersistenceManager pm, int start, int end, String rankRowAndDirection) {
 		try {
 			StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 			jdoql.append(User.class.getName());
-			jdoql.append(" ORDER by balanceMonth DESC RANGE " + start + "," + end);
+			jdoql.append(" ORDER by "+rankRowAndDirection+" RANGE " + start + "," + end);
 			return (List<User>) pm.newQuery(jdoql.toString()).execute();
 		} catch (Exception e) {
 			e.printStackTrace();

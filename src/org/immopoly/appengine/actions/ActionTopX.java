@@ -32,6 +32,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 public class ActionTopX extends AbstractAction {
 
+	public static String RANKTYPE_BALANCE_ALL = "balance";
+	public static String RANKTYPE_BALANCE_MONTH = "balanceMonth";
+	
 	public ActionTopX(Map<String, Action> actions) {
 		super(actions);
 	}
@@ -55,7 +58,17 @@ public class ActionTopX extends AbstractAction {
 			} catch (NumberFormatException nfe) {
 				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_START_END,"start end not Integers" + startS + "," + endS);
 			}
-			List<User> users = DBManager.getTopUser(pm, start, end);
+			//https://github.com/immopoly/appengine/issues/14
+			String rankRowAndDirection;
+			String rankType = req.getParameter(RANKTYPE);
+			if(null!=rankType && RANKTYPE_BALANCE_ALL.equals(rankType))
+			{
+				rankRowAndDirection="balance DESC";
+			}else{
+				rankRowAndDirection="balanceMonth DESC";
+			}
+			
+			List<User> users = DBManager.getTopUser(pm, start, end, rankRowAndDirection);
 			if (0 == users.size()) {
 				throw new ImmopolyException(ImmopolyException.NO_MORE_DATA,"no more users ");
 			} else {
