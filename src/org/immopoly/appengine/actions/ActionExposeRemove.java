@@ -71,9 +71,9 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 					JSONObject obj = WebHelper.getHttpData(url);
 					if (obj.has("expose.expose")) {
 						double fine = Const.FINE_REMOVED * expose.getRent();
-						history = new History(History.TYPE_EXPOSE_REMOVED, user.getId(), System.currentTimeMillis(),
-								"Du hast die Wohnung '" + expose.getName() + "' für " + History.MONEYFORMAT.format(expose.getRent())
-										+ " im Monat zurückgegeben. Strafe: " + History.MONEYFORMAT.format(fine), -fine,
+						history = new History(History.TYPE_EXPOSE_REMOVED, user.getId(), System.currentTimeMillis(), "Strafe: "
+								+ History.MONEYFORMAT.format(fine) + " Du hast die Wohnung '" + expose.getName() + "' für "
+								+ History.MONEYFORMAT.format(expose.getRent()) + " im Monat zurückgegeben.", -fine,
 								expose.getExposeId(), null);
 						pm.deletePersistent(expose);
 						user.setBalance(user.getBalance() - fine);

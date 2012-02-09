@@ -15,6 +15,7 @@ import org.immopoly.appengine.actions.ActionC2DMSend;
 import org.immopoly.appengine.actions.ActionExposeAdd;
 import org.immopoly.appengine.actions.ActionExposeRemove;
 import org.immopoly.appengine.actions.ActionPublicUserInfo;
+import org.immopoly.appengine.actions.ActionStatisticHeatmap;
 import org.immopoly.appengine.actions.ActionTopX;
 import org.immopoly.appengine.actions.ActionUserBadges;
 import org.immopoly.appengine.actions.ActionUserC2DMRegister;
@@ -66,6 +67,7 @@ public class ImmopolyServlet extends HttpServlet {
 		new ActionUserC2DMRegister(actions);
 		new ActionC2DMSend(actions);
 		new ActionTopX(actions);
+		new ActionStatisticHeatmap(actions);
 	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {

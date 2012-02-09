@@ -2,7 +2,6 @@ package org.immopoly.appengine;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -42,9 +41,6 @@ public class ExposeCronjobServlet extends HttpServlet {
 	// 23h
 	private static final long TIME_CALC_DIFF = 24 * 60 * 60 * 1000;
 	private static final double PROVISON_MULTIPLIER = 2.0;
-
-	// format fuer Waehrung in der Historie
-	private static DecimalFormat MONEYFORMAT = new DecimalFormat("0.00 Eur");
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
@@ -90,7 +86,7 @@ public class ExposeCronjobServlet extends HttpServlet {
 							resp.getWriter().write("ExposeId " + expose.getExposeId() + " SOLD!" + " <br>");
 							// Historieneintrag erstellen
 							History history = new History(History.TYPE_EXPOSE_SOLD, user.getId(), System.currentTimeMillis(), "Provision: "
-									+ MONEYFORMAT.format(PROVISON_MULTIPLIER * expose.getRent())+" überwiesen. Wohnung '"
+									+ History.MONEYFORMAT.format(PROVISON_MULTIPLIER * expose.getRent()) + " überwiesen. Wohnung '"
 									+ expose.getName() + "' vermietet.", PROVISON_MULTIPLIER * expose.getRent(),
 									expose.getExposeId(),null);
 

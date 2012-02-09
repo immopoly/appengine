@@ -242,4 +242,10 @@ public class DBManager {
 			throw new RuntimeException(e);
 		}
 	}
+
+	public static List<Expose> getExposeForHeatmap(PersistenceManager pm, String sortRow, int lastExposeCount) {
+		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+		jdoql.append(Expose.class.getName()).append(" ORDER BY " + sortRow + " DESC RANGE 0," + lastExposeCount);
+		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
+	}
 }

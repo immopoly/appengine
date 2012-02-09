@@ -1,6 +1,7 @@
 package org.immopoly.appengine;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,6 +38,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 public class History extends org.immopoly.common.History implements JSONable, Serializable {
 
 	private static final long serialVersionUID = 1L;
+	// format fuer Waehrung in der Historie
+	public static DecimalFormat MONEYFORMAT = new DecimalFormat("0.00 Eur");
 
 	static Logger LOG = Logger.getLogger(History.class.getName());
 	@PrimaryKey
@@ -67,7 +70,6 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 	@Persistent
 	private String otherUsername = null;
 
-	
 	public History(int type, long userId, long time, String text, Double amount, Long exposeId, String otherUsername) {
 		this.userId = userId;
 		this.time = time;

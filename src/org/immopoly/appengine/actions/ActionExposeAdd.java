@@ -83,12 +83,12 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 
 					otherUser.setBalance(otherUser.getBalance() + fine);
 
-					history = new History(History.TYPE_EXPOSE_MONOPOLY_NEGATIVE, user.getId(), System.currentTimeMillis(), "Die Wohnung '"
-							+ expose.getName() + "' gehört schon '" + otherUser.getUserName() + "' Strafe "
-							+ History.MONEYFORMAT.format(fine), -fine, expose.getExposeId(), otherUser.getUserName());
+					history = new History(History.TYPE_EXPOSE_MONOPOLY_NEGATIVE, user.getId(), System.currentTimeMillis(), "Strafe: "
+							+ History.MONEYFORMAT.format(fine) + " Die Wohnung '" + expose.getName() + "' gehört schon '"
+							+ otherUser.getUserName() + "'", -fine, expose.getExposeId(), otherUser.getUserName());
 					History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(),
-							System.currentTimeMillis(), user.getUserName() + " wollte deine Wohnung '" + expose.getName()
-									+ "' übernehmen: Belohung " + History.MONEYFORMAT.format(fine), fine, expose.getExposeId(),
+							System.currentTimeMillis(), "Belohnung: " + History.MONEYFORMAT.format(fine) + " " + user.getUserName()
+									+ " wollte deine Wohnung '" + expose.getName() + "' übernehmen", fine, expose.getExposeId(),
 							user.getUserName());
 					pm.makePersistent(otherHistory);
 					// c2dm
@@ -143,9 +143,9 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					// throw new ImmopolyException("SPOOFING ALERT", 441);
 					pm.makePersistent(expose);
 					double fine = 2 * expose.getRent() / 30.0;
-					history = new History(History.TYPE_EXPOSE_ADDED, user.getId(), System.currentTimeMillis(), "Du hast die Wohnung '"
-							+ expose.getName() + "' gemietet für " + History.MONEYFORMAT.format(expose.getRent())
-							+ " im Monat. Übernahmekosten: " + History.MONEYFORMAT.format(fine), -fine, expose.getExposeId(), null);
+					history = new History(History.TYPE_EXPOSE_ADDED, user.getId(), System.currentTimeMillis(), "Übernahmekosten: "
+							+ History.MONEYFORMAT.format(fine) + " Du hast die Wohnung '" + expose.getName() + "' gemietet für "
+							+ History.MONEYFORMAT.format(expose.getRent()) + " im Monat", -fine, expose.getExposeId(), null);
 					user.setBalance(user.getBalance() - fine);
 					user.addExpose(1);
 					pm.makePersistent(user);

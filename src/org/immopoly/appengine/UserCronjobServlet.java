@@ -1,7 +1,6 @@
 package org.immopoly.appengine;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
@@ -42,9 +41,6 @@ public class UserCronjobServlet extends HttpServlet {
 	private static final long TIME_CALC_DIFF = 24 * 60 * 60 * 1000;
 	private static final double DAILY_RENT_FRACTION = 30.0;
 	private static final double PROVISON_MULTIPLIER = 2.0;
-
-	// format fuer Waehrung in der Historie
-	private static DecimalFormat MONEYFORMAT = new DecimalFormat("0.00 Eur");
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		// logHeaders(req);
@@ -165,8 +161,10 @@ public class UserCronjobServlet extends HttpServlet {
 				
 				if(numRent!=0)
 				{
-					History historyRent = new History(History.TYPE_DAILY_RENT, user.getId(), System.currentTimeMillis(),
-							"Tagesabrechnung Miete für " + user.getNumExposes() + " Wohnungen : " + MONEYFORMAT.format(rent), rent, null,null);
+					History historyRent = new History(History.TYPE_DAILY_RENT, user.getId(), System.currentTimeMillis(), "Miete: "
+							+ History.MONEYFORMAT.format(rent) + " Tagesabrechnung Miete für " + user.getNumExposes() + " Wohnungen", rent,
+							null,
+							null);
 					// History historyProvision = new
 					// History(History.TYPE_DAILY_PROVISION, user.getId(),
 					// System.currentTimeMillis(),

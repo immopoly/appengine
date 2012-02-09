@@ -114,7 +114,6 @@ window.onload = function(){
                    data:{'type':'takeover'},
                    dataType:"json",
                    success: function(data){
-			alert('login response '+JSON.stringify(data) );
 			heatmap.setDataSet(data);
                    },
                      error: function(){
