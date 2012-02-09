@@ -40,6 +40,7 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 	private static final long serialVersionUID = 1L;
 	// format fuer Waehrung in der Historie
 	public static DecimalFormat MONEYFORMAT = new DecimalFormat("0.00 Eur");
+	// public static DecimalFormat MONEYFORMAT_2 = new DecimalFormat("0.00");
 
 	static Logger LOG = Logger.getLogger(History.class.getName());
 	@PrimaryKey
