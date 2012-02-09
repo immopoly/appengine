@@ -39,7 +39,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<servlet-name>ImmopolyServlet</servlet-name>
 		<url-pattern>/portfolio/*</url-pattern>
 	</servlet-mapping>
-	
+	<servlet-mapping>
+		<servlet-name>ImmopolyServlet</servlet-name>
+		<url-pattern>/statistic/*</url-pattern>
+	</servlet-mapping>	
 	<servlet>
 		<servlet-name>CronjobServlet</servlet-name>
 		<servlet-class>org.immopoly.appengine.CronjobServlet</servlet-class>
