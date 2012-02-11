@@ -150,19 +150,24 @@ public class IndexServlet extends HttpServlet {
 //	}
 
 	private void createDummyBadge2(PersistenceManager pm) {
-		{User  u = DBManager.getUser(pm, "mrschtief");
-		Badge b = new Badge(2, u.getId(), System.currentTimeMillis(), "Du bist der Fuchs der das goldene Ticket '#32 notification by übernahmeversuch' programmiert hat!!!",
-				"http://immopoly.appspot.com/img/c2dm.png", 0.0,null);
+		{
+			User u = DBManager.getUser(pm, "Wurstladen");
+			Badge b = new Badge(333, u.getId(), System.currentTimeMillis(),
+					"Du bist der einmalige Fuchs der die Badges für Immopoly baut <3",
+ "http://immopoly.org/img/badges/kleiner3.png", 0.0,
+					null);
 		pm.makePersistent(b);
 		}
-		{User  u = DBManager.getUser(pm, "@tosa");
-		Badge b = new Badge(2, u.getId(), System.currentTimeMillis(), "Du bist der Fuchs der das goldene Ticket '#32 notification by übernahmeversuch' programmiert hat!!!",
-				"http://immopoly.appspot.com/img/c2dm.png", 0.0,null);
+		{
+			User u = DBManager.getUser(pm, "mrschtief");
+			Badge b = new Badge(3333, u.getId(), System.currentTimeMillis(), "Der @mrschtief liebt die @dinovansaurier <3",
+					"http://immopoly.org/img/badges/kleiner3.png", 0.0, null);
 		pm.makePersistent(b);
 		}
-		{User  u = DBManager.getUser(pm, "keyboardsurfer");
-		Badge b = new Badge(2, u.getId(), System.currentTimeMillis(), "Du bist der Fuchs der das goldene Ticket '#32 notification by übernahmeversuch' programmiert hat!!!",
-				"http://immopoly.appspot.com/img/c2dm.png", 0.0,null);
+		{
+			User u = DBManager.getUser(pm, "dinovansaurier");
+			Badge b = new Badge(3333, u.getId(), System.currentTimeMillis(), "Die @dinovansaurier liebt den @mrschtief <3",
+					"http://immopoly.org/img/badges/kleiner3.png", 0.0, null);
 		pm.makePersistent(b);
 		}
 	}
