@@ -50,8 +50,7 @@ public class WebHelper {
 			JSONObject obj = new JSONObject(tokener);
 			return obj;
 		} catch (Exception e) {
-			LOG.log(Level.SEVERE, " request failed", e);
-			e.printStackTrace();
+			LOG.log(Level.SEVERE, "request '" + url + "' failed", e);
 		}
 		return null;
 	}

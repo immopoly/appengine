@@ -69,7 +69,9 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 				if (expose.getUserId() == user.getId()) {
 					URL url = new URL(OAuthData.SERVER + OAuthData.SEARCH_PREFIX + "expose/" + exposeId + ".json");
 					JSONObject obj = WebHelper.getHttpData(url);
-					if (obj.has("expose.expose")) {
+					if (null == obj) {
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND, "Expose Response is null! " + exposeId);
+					} else if (obj.has("expose.expose")) {
 						double fine = Const.FINE_REMOVED * expose.getRent();
 						history = new History(History.TYPE_EXPOSE_REMOVED, user.getId(), System.currentTimeMillis(), "Strafe: "
 								+ History.MONEYFORMAT.format(fine) + " Du hast die Wohnung '" + expose.getName() + "' für "

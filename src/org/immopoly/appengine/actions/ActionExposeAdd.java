@@ -118,7 +118,9 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 			} else {
 				URL url = new URL(OAuthData.SERVER + OAuthData.SEARCH_PREFIX + "expose/" + exposeId + ".json");
 				JSONObject obj = WebHelper.getHttpData(url);
-				if (obj.has("expose.expose")) {
+				if (null == obj) {
+					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND, "Expose Response is null! " + exposeId);
+				} else if (obj.has("expose.expose")) {
 					LOG.info(obj.toString());
 					expose = new Expose(user.getId(), obj);
 					// nur wohnungen mit rent
