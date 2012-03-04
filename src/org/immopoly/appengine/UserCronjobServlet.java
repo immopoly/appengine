@@ -140,6 +140,10 @@ public class UserCronjobServlet extends HttpServlet {
 						expose.setLastcalculation(null);
 						pm.makePersistent(expose);
 						rentedPerDay++;
+
+						// uebernahmeversuche
+						if (expose.getOvertakestries() >= 3)
+							giveBadgeOvertakeTries(pm, user, expose);
 					}
 				}
 
@@ -198,6 +202,42 @@ public class UserCronjobServlet extends HttpServlet {
 		} finally {
 			pm.close();
 			// LOG.info("finally");
+		}
+	}
+
+	private void giveBadgeOvertakeTries(PersistenceManager pm, User user, Expose expose) {
+		if (expose.getOvertakestries() >= 3)
+			giveBadgeOvertakeTriesIfNotThere(pm, user, expose, 3);
+		if (expose.getOvertakestries() >= 5)
+			giveBadgeOvertakeTriesIfNotThere(pm, user, expose, 5);
+		if (expose.getOvertakestries() >= 10)
+			giveBadgeOvertakeTriesIfNotThere(pm, user, expose, 10);
+	}
+
+	private void giveBadgeOvertakeTriesIfNotThere(PersistenceManager pm, User user, Expose expose, int overtakeTries) {
+		// check if Badge already given
+		List<Badge> badges = DBManager.getBadges(pm, user.getId(), 300000 + overtakeTries, 0, 1);
+		if (null != badges && badges.size() > 0) {
+			LOG.info("Badge already given overtaketries " + overtakeTries);
+			return;
+		}
+		Badge b = new Badge(300000 + overtakeTries, user.getId(), System.currentTimeMillis(), "Deine Wohnung wollte " + overtakeTries
+				+ " mal uebernommen werden " + expose.getName(), "http://immopoly.org/img/badges/overtaketries" + overtakeTries + ".png",
+				0.0, null);
+		pm.makePersistent(b);
+		try {
+			if (null != user.getC2dmRegistrationId() && user.getC2dmRegistrationId().length() > 0) {
+				ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+				Map<String, String[]> params = new HashMap<String, String[]>();
+				// type message title
+				params.put("data.type", new String[] { "1" });
+				params.put("data.message", new String[] { b.getText() });
+				params.put("data.title", new String[] { "Immopoly" });
+				c2dm.sendNoRetry(user.getC2dmRegistrationId(), "mycollapse", params, true);
+				LOG.info("Send c2dm message to" + user.getUserName() + " " + b.getText());
+			}
+		} catch (Exception e) {
+			LOG.log(Level.SEVERE, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
 		}
 	}
 
