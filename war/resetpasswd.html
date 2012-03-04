@@ -21,10 +21,10 @@
                    data:{'password':password,'token':token},
                    dataType:"json",
                    success: function(data){
-                     alert('Neues Passwort gesetzt'+JSON.stringify(data));
+                     alert('Antwort: kontaktiere immopolyteam@gmail.com falls nicht OK:OK '+JSON.stringify(data));
                    },
-                     error: function(data){
-                     alert('Fehler beim Password setzen, kontaktiere immopolyteam@gmail.com '+JSON.stringify(data));
+                     error: function(){
+                     alert('Fehler beim Password setzen, kontaktiere immopolyteam@gmail.com');
                    }
                  });
     	}
@@ -33,7 +33,7 @@
 <body onload="getTokenFromUrl()">
 
 <h1>Neues Passwort setzen</h1>
-<form><input type="text" name="token">Password:<input type="text" name="password"><input value="Passwort setzen" type="submit" onClick="javascript:changePassword();return false;"></form> 
+<form><input type="hidden" name="token">Password:<input type="text" name="password"><input value="Passwort setzen" type="submit" onClick="javascript:changePassword();return false;"></form> 
 
 </body>
 </html>

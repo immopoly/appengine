@@ -46,6 +46,10 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<servlet-name>ImmopolyServlet</servlet-name>
 		<url-pattern>/statistic/*</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ImmopolyServlet</servlet-name>
+		<url-pattern>/setemail</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>ExposeCronjobServlet</servlet-name>
@@ -72,6 +76,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<web-resource-collection>
 			<url-pattern>/cron/*</url-pattern>
 			<url-pattern>/appstats/*</url-pattern>
+			<url-pattern>/setemail</url-pattern>
 		</web-resource-collection>
 		<auth-constraint>
 			<role-name>admin</role-name>

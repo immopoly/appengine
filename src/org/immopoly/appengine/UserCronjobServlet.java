@@ -45,22 +45,22 @@ public class UserCronjobServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		// logHeaders(req);
 		PersistenceManager pm = PMF.get().getPersistenceManager();
-//		int count = 1;
+		// int count = 1;
 		try {
 			// alle benutzer die seit TIME_CALC_DIFF millisekunden nicht
 			// berechnet worden sind
-			long lastCalculation =System.currentTimeMillis() - TIME_CALC_DIFF;
+			long lastCalculation = System.currentTimeMillis() - TIME_CALC_DIFF;
 			List<User> users;
-			boolean debug=false;
-			
-			if(null!=req.getParameter("username")){
-				debug=true;
-				users= new ArrayList<User>();
+			boolean debug = false;
+
+			if (null != req.getParameter("username")) {
+				debug = true;
+				users = new ArrayList<User>();
 				users.add(DBManager.getUser(pm, req.getParameter("username")));
-			}
-			else
-				users	= DBManager.getUsersToCheck(pm, lastCalculation, 10);
-			//			LOG.log(Level.INFO, System.currentTimeMillis()+" users to check since "+lastCalculation);
+			} else
+				users = DBManager.getUsersToCheck(pm, lastCalculation, 10);
+			// LOG.log(Level.INFO,
+			// System.currentTimeMillis()+" users to check since "+lastCalculation);
 
 			// List<User> users =new ArrayList<User>();
 			// users.add(DBManager.getUser(pm, "mrschtief"));
@@ -80,22 +80,24 @@ public class UserCronjobServlet extends HttpServlet {
 				user.setLastcalculation(System.currentTimeMillis());
 				pm.makePersistent(user);
 
-				//count all sold
-				//only once countAllSold(pm,user);
-				
-				//give numexposesoldbadge
+				// count all sold
+				// only once countAllSold(pm,user);
+
+				// give numexposesoldbadge
 				giveNumberExposesSoldBadge(pm, user);
-				
+
 				double rent = 0;
 				double provision = 0;
 				// int numRemoved = 0;
 				int numRent = 0;
 				// get all Exposes des users
-				List<Expose> exposes = DBManager.getExposesForUserToCheck(pm, user.getId()/*, System.currentTimeMillis() - (TIME_CALC_DIFF)*/);
+				List<Expose> exposes = DBManager.getExposesForUserToCheck(pm, user.getId());
 				// TODO schtief count exposes each night brauchen wir noch?
 				// user.setNumExposes(exposes.size());
 				LOG.info("User " + user.getUserName() + " Exposes #" + exposes.size());
-				resp.getWriter().write(" User " + user.getUserName() + " Exposes #" + exposes.size()+"<br>");
+				resp.getWriter().write(" User " + user.getUserName() + " Exposes #" + exposes.size() + "<br>");
+
+				int rentedPerDay = 0;
 
 				for (Expose expose : exposes) {
 					// schauen ob es noch da ist
@@ -104,8 +106,8 @@ public class UserCronjobServlet extends HttpServlet {
 						// falls noch da, dann die Miete berechnen
 						rent += expose.getRent() / DAILY_RENT_FRACTION;
 						numRent++;
-						resp.getWriter().write(expose.getExposeId()+" OK <br>");
-						LOG.info(expose.getExposeId()+" OK");
+						resp.getWriter().write(expose.getExposeId() + " OK <br>");
+						LOG.info(expose.getExposeId() + " OK");
 					} else {
 						// falls nein provision drauf
 						provision += PROVISON_MULTIPLIER * expose.getRent();
@@ -131,14 +133,20 @@ public class UserCronjobServlet extends HttpServlet {
 						// nicht mehr loeschen sondern nur noch markieren
 						// expose.setDeleted(System.currentTimeMillis());
 						// pm.makePersistent(expose);
-						resp.getWriter().write(expose.getExposeId()+" Sold! <br>");
-						LOG.info(expose.getExposeId()+" Sold!");
+						resp.getWriter().write(expose.getExposeId() + " Sold! <br>");
+						LOG.info(expose.getExposeId() + " Sold!");
 						// jetzt lastcalculation auf null setzen damit es nicht
 						// wieder geholt wird
 						expose.setLastcalculation(null);
 						pm.makePersistent(expose);
+						rentedPerDay++;
 					}
 				}
+
+				// give rentedPerDayBacgde
+				if (rentedPerDay >= 3)
+					giveBadgeRentedPerDay(pm, user, rentedPerDay);
+
 				// check miete mit num wohnungen
 				if (user.getNumExposes() != numRent) {
 					LOG.log(Level.SEVERE, "NumExposes " + user.getNumExposes() + "!= numRent " + numRent);
@@ -153,24 +161,22 @@ public class UserCronjobServlet extends HttpServlet {
 				user.setLastProvision(provision);
 				user.setLastRent(rent);
 
-				//monthly balance
-				//delete on first of month
-				if(Calendar.getInstance().get(Calendar.DAY_OF_MONTH)==1)
+				// monthly balance
+				// delete on first of month
+				if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1)
 					user.setBalanceMonth(0);
-				user.setBalanceMonth(user.getBalanceMonth() - rent+provision);
-				
-				if(numRent!=0)
-				{
+				user.setBalanceMonth(user.getBalanceMonth() - rent + provision);
+
+				if (numRent != 0) {
 					History historyRent = new History(History.TYPE_DAILY_RENT, user.getId(), System.currentTimeMillis(), "Miete: "
 							+ History.MONEYFORMAT.format(rent) + " Tagesabrechnung Miete für " + user.getNumExposes() + " Wohnungen", rent,
-							null,
-							null);
+							null, null);
 					// History historyProvision = new
 					// History(History.TYPE_DAILY_PROVISION, user.getId(),
 					// System.currentTimeMillis(),
 					// "Tagesabrechnung Provision: " +
 					// MONEYFORMAT.format(provision), provision, null);
-	
+
 					resp.getWriter().write(historyRent.getText() + "<br>");
 					LOG.info(historyRent.getText());
 					// LOG.info(historyProvision.getText());
@@ -180,10 +186,9 @@ public class UserCronjobServlet extends HttpServlet {
 				// resp.getWriter().write(historyProvision.getText() + "<br>");
 				resp.getWriter().flush();
 
-
 				// pm.makePersistent(historyProvision);
 				user.setLastcalculation(System.currentTimeMillis());
-				LOG.info("save User "+System.currentTimeMillis());
+				LOG.info("save User " + System.currentTimeMillis());
 				pm.makePersistent(user);
 			}
 			resp.getWriter().write("OK ");
@@ -196,30 +201,26 @@ public class UserCronjobServlet extends HttpServlet {
 		}
 	}
 
-	private void giveNumberExposesSoldBadge(PersistenceManager pm,User user) {
-		if(user.getNumExposesSold()>=10)
-			giveNumberExposesSoldBadge(pm, user,10);
-		if(user.getNumExposesSold()>=30)
-			giveNumberExposesSoldBadge(pm, user,30);
-		if(user.getNumExposesSold()>=60)
-			giveNumberExposesSoldBadge(pm, user,60);
-		if(user.getNumExposesSold()>=80)
-			giveNumberExposesSoldBadge(pm, user,80);
-		if(user.getNumExposesSold()>=100)
-			giveNumberExposesSoldBadge(pm, user,100);
+	private void giveBadgeRentedPerDay(PersistenceManager pm, User user, int rentedPerDay) {
+		if (rentedPerDay >= 3)
+			giveBadgeRentedPerDayIfNotThere(pm, user, 3);
+		if (rentedPerDay >= 5)
+			giveBadgeRentedPerDayIfNotThere(pm, user, 5);
+		if (rentedPerDay >= 10)
+			giveBadgeRentedPerDayIfNotThere(pm, user, 10);
 	}
 
-	private void giveNumberExposesSoldBadge(PersistenceManager pm, User user, int num) {
-		//check if Badge already given
-		List<Badge> badges = DBManager.getBadges(pm, user.getId(),100000+num, 0, 1);
-		if(null!=badges && badges.size()>0){
-			LOG.info("Badge already given "+100000+num);
+	private void giveBadgeRentedPerDayIfNotThere(PersistenceManager pm, User user, int rentedPerDay) {
+		// check if Badge already given
+		List<Badge> badges = DBManager.getBadges(pm, user.getId(), 200000 + rentedPerDay, 0, 1);
+		if (null != badges && badges.size() > 0) {
+			LOG.info("Badge already given rentedperday " + rentedPerDay);
 			return;
 		}
-		Badge b = new Badge(100000+num, user.getId(), System.currentTimeMillis(), "Du hast "+num+" Wohnungen vermietet!",
-				"http://immopoly.org/img/badges/"+num+".png", 0.0,	null);
+		Badge b = new Badge(200000 + rentedPerDay, user.getId(), System.currentTimeMillis(), "Du hast " + rentedPerDay
+				+ " Wohnungen an einem Tag vermietet!", "http://immopoly.org/img/badges/rentedperday" + rentedPerDay + ".png", 0.0, null);
 		pm.makePersistent(b);
-		try{
+		try {
 			if (null != user.getC2dmRegistrationId() && user.getC2dmRegistrationId().length() > 0) {
 				ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
 				Map<String, String[]> params = new HashMap<String, String[]>();
@@ -230,16 +231,55 @@ public class UserCronjobServlet extends HttpServlet {
 				c2dm.sendNoRetry(user.getC2dmRegistrationId(), "mycollapse", params, true);
 				LOG.info("Send c2dm message to" + user.getUserName() + " " + b.getText());
 			}
-		}catch(Exception e){
-			LOG.log(Level.SEVERE,"Send c2dm message to" + user.getUserName() + " FAILED ",e);									
+		} catch (Exception e) {
+			LOG.log(Level.SEVERE, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
 		}
+	}
+
+	private void giveNumberExposesSoldBadge(PersistenceManager pm, User user) {
+		if (user.getNumExposesSold() >= 10)
+			giveNumberExposesSoldBadge(pm, user, 10);
+		if (user.getNumExposesSold() >= 30)
+			giveNumberExposesSoldBadge(pm, user, 30);
+		if (user.getNumExposesSold() >= 60)
+			giveNumberExposesSoldBadge(pm, user, 60);
+		if (user.getNumExposesSold() >= 80)
+			giveNumberExposesSoldBadge(pm, user, 80);
+		if (user.getNumExposesSold() >= 100)
+			giveNumberExposesSoldBadge(pm, user, 100);
+	}
+
+	private void giveNumberExposesSoldBadge(PersistenceManager pm, User user, int num) {
+		// check if Badge already given
+		List<Badge> badges = DBManager.getBadges(pm, user.getId(), 100000 + num, 0, 1);
+		if (null != badges && badges.size() > 0) {
+			LOG.info("Badge already given " + 100000 + num);
+			return;
 		}
+		Badge b = new Badge(100000 + num, user.getId(), System.currentTimeMillis(), "Du hast " + num + " Wohnungen vermietet!",
+				"http://immopoly.org/img/badges/" + num + ".png", 0.0, null);
+		pm.makePersistent(b);
+		try {
+			if (null != user.getC2dmRegistrationId() && user.getC2dmRegistrationId().length() > 0) {
+				ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+				Map<String, String[]> params = new HashMap<String, String[]>();
+				// type message title
+				params.put("data.type", new String[] { "1" });
+				params.put("data.message", new String[] { b.getText() });
+				params.put("data.title", new String[] { "Immopoly" });
+				c2dm.sendNoRetry(user.getC2dmRegistrationId(), "mycollapse", params, true);
+				LOG.info("Send c2dm message to" + user.getUserName() + " " + b.getText());
+			}
+		} catch (Exception e) {
+			LOG.log(Level.SEVERE, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
+		}
+	}
 
 	private void countAllSold(PersistenceManager pm, User user) {
 		// get all expose deleted > 0
 		List<Expose> sold = DBManager.getSoldExposes(pm, user.getId());
 		user.setNumExposesSold(sold.size());
-		LOG.info("User "+user.getUserName()+" sold Expose : "+user.getNumExposesSold());
+		LOG.info("User " + user.getUserName() + " sold Expose : " + user.getNumExposesSold());
 	}
 
 	private void logHeaders(HttpServletRequest req) {

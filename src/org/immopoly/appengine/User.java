@@ -350,6 +350,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 	@Override
 	public void setNumExposes(int numExposes) {
+		this.numExposes = numExposes;
 	}
 
 	public double getBalanceMonth() {

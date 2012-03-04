@@ -75,7 +75,7 @@ public class ActionUserPasswordMail extends AbstractAction {
 			sendMail(user);
 			LOG.info("Send Token per mail " + user.getUserName());
 
-			resp.getOutputStream().write("OK".getBytes("UTF-8"));
+			resp.getOutputStream().write("{\"OK\":\"OK\"}".getBytes("UTF-8"));
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
