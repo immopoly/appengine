@@ -1,0 +1,39 @@
+<html>
+<head>
+	<title>Reset Password</title>
+	<script src="js/jquery-1.7.min.js" type="text/javascript" defer></script>
+	<script type="text/javascript">
+    	function getTokenFromUrl(){
+    		if(typeof document.location.search != "undefined"){
+    			token = document.location.search.substr(7);
+    			document.forms[0].token.value=token;
+			}
+		}
+		
+		function changePassword(){
+			password=document.forms[0].password.value;
+			token=document.forms[0].token.value;
+
+			//alert('Change Password '+username+' '+password);
+				$.ajax({
+                   url: "http://immopoly.appspot.com/user/password",
+                   context: document.body,
+                   data:{'password':password,'token':token},
+                   dataType:"json",
+                   success: function(data){
+                     alert('Neues Passwort gesetzt'+JSON.stringify(data));
+                   },
+                     error: function(data){
+                     alert('Fehler beim Password setzen, kontaktiere immopolyteam@gmail.com '+JSON.stringify(data));
+                   }
+                 });
+    	}
+</script>
+</head>
+<body onload="getTokenFromUrl()">
+
+<h1>Neues Passwort setzen</h1>
+<form><input type="text" name="token">Password:<input type="text" name="password"><input value="Passwort setzen" type="submit" onClick="javascript:changePassword();return false;"></form> 
+
+</body>
+</html>

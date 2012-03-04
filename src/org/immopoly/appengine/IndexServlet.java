@@ -151,25 +151,24 @@ public class IndexServlet extends HttpServlet {
 
 	private void createDummyBadge2(PersistenceManager pm) {
 		{
-			User u = DBManager.getUser(pm, "Wurstladen");
-			Badge b = new Badge(333, u.getId(), System.currentTimeMillis(),
-					"Du bist der einmalige Fuchs der die Badges für Immopoly baut <3",
- "http://immopoly.org/img/badges/kleiner3.png", 0.0,
-					null);
-		pm.makePersistent(b);
+			User u = DBManager.getUser(pm, "pointkilla");
+			Badge b = new Badge(444, u.getId(), System.currentTimeMillis(), "Du hast die Februar 2012 Wertung gewonnen!",
+					"http://immopoly.org/img/badges/feb121.png", 0.0, null);
+			pm.makePersistent(b);
 		}
 		{
-			User u = DBManager.getUser(pm, "mrschtief");
-			Badge b = new Badge(3333, u.getId(), System.currentTimeMillis(), "Der @mrschtief liebt die @dinovansaurier <3",
-					"http://immopoly.org/img/badges/kleiner3.png", 0.0, null);
-		pm.makePersistent(b);
+			User u = DBManager.getUser(pm, "tobi_h");
+			Badge b = new Badge(4444, u.getId(), System.currentTimeMillis(), "Du bist 2ter in der Februar 2012 Wertung geworden!",
+					"http://immopoly.org/img/badges/feb122.png", 0.0, null);
+			pm.makePersistent(b);
 		}
 		{
-			User u = DBManager.getUser(pm, "dinovansaurier");
-			Badge b = new Badge(3333, u.getId(), System.currentTimeMillis(), "Die @dinovansaurier liebt den @mrschtief <3",
-					"http://immopoly.org/img/badges/kleiner3.png", 0.0, null);
-		pm.makePersistent(b);
+			User u = DBManager.getUser(pm, "Tom");
+			Badge b = new Badge(44444, u.getId(), System.currentTimeMillis(), "Du bist 3ter in der Februar 2012 Wertung geworden!",
+					"http://immopoly.org/img/badges/feb123.png", 0.0, null);
+			pm.makePersistent(b);
 		}
+
 	}
 
 	private void updateDB(PersistenceManager pm, long start, long end) {

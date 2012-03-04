@@ -43,13 +43,14 @@ public class ActionUserPassword extends AbstractAction {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ImmopolyException {
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			String username = req.getParameter(USERNAME);
+			// String username = req.getParameter(USERNAME);
 			String token = req.getParameter(TOKEN);
 			String password = req.getParameter(PASSWORD);
-			String email = req.getParameter(EMAIL);
+			// String email = req.getParameter(EMAIL);
 
-			if (null == username || username.length() == 0)
-				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME,"missing username");
+			// if (null == username || username.length() == 0)
+			// throw new
+			// ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME,"missing username");
 			if (null == password || password.length() == 0)
 				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_PASSWORD,"missing password");
 			if (null == token || token.length() == 0)
@@ -59,18 +60,17 @@ public class ActionUserPassword extends AbstractAction {
 			if (null == user) {
 				throw new ImmopolyException(ImmopolyException.TOKEN_NOT_FOUND,"token not found " + token);
 			}
-			if (!username.equals(user.getUserName())) {
-				throw new ImmopolyException(ImmopolyException.USER_DOES_NOT_MATCH_TOKEN,"username does not match token "
-						+ token);
-			}
-			LOG.info("Change Password " + user.getUserName() + " "
-					+ user.toJSON().toString());
+			// if (!username.equals(user.getUserName())) {
+			// throw new
+			// ImmopolyException(ImmopolyException.USER_DOES_NOT_MATCH_TOKEN,"username does not match token "
+			// + token);
+			// }
+			LOG.info("Change Password " + user.getUserName());
 			user.setPassword(password);
-			if (null != email && email.length() > 0)
-				user.setEmail(email);
+			// if (null != email && email.length() > 0)
+			// user.setEmail(email);
 			pm.makePersistent(user);
-			resp.getOutputStream().write(
-					user.toJSON().toString().getBytes("UTF-8"));
+			resp.getOutputStream().write("OK".getBytes("UTF-8"));
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {

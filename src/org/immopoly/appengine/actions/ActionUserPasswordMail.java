@@ -63,18 +63,19 @@ public class ActionUserPasswordMail extends AbstractAction {
 				throw new ImmopolyException(ImmopolyException.USERNAME_NOT_FOUND,"User not found " + username);
 			}
 			if (user.getEmail() == null || user.getEmail().length() == 0) {
-				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_EMAIL,"Email for username " + username+ " is not set!");
+				throw new ImmopolyException(ImmopolyException.USER_SEND_PASSWORDMAIL_NOEMAIL, "Email for username " + username
+						+ " is not set!");
 			}
 
 			if (!email.equals(user.getEmail())) {
-				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_EMAIL,"Email for username " + username+ " does not match!");
+				throw new ImmopolyException(ImmopolyException.USER_SEND_PASSWORDMAIL_EMAIL_NOMATCH, "Email for username " + username
+						+ " does not match!");
 			}
 			// send email
 			sendMail(user);
 			LOG.info("Send Token per mail " + user.getUserName());
 
-			resp.getOutputStream().write(
-					user.toPublicJSON().toString().getBytes("UTF-8"));
+			resp.getOutputStream().write("OK".getBytes("UTF-8"));
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
@@ -88,7 +89,7 @@ public class ActionUserPasswordMail extends AbstractAction {
 		Properties props = new Properties();
 		Session session = Session.getDefaultInstance(props, null);
 
-		String msgBody = "please click the link http://immopoly.appspot.com/experimental.html?token="
+		String msgBody = "Klicke auf den Link um dein Passwort zu ändern http://immopoly.appspot.com/resetpasswd.html?token="
 				+ user.getToken() + " \n your Immopoly Team";
 
 			Message msg = new MimeMessage(session);
@@ -96,7 +97,7 @@ public class ActionUserPasswordMail extends AbstractAction {
 					"Immopoly Team"));
 			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(user
 					.getEmail(), user.getUserName()));
-			msg.setSubject("Password Reset");
+		msg.setSubject("Immopoly Password setzen");
 			msg.setText(msgBody);
 			Transport.send(msg);
 	}
