@@ -39,7 +39,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 public class Badge extends org.immopoly.common.Badge implements JSONable, Serializable, Comparable<Badge> {
 
 	private static final long serialVersionUID = 2L;
-
+	public static final int RELEASE_BADGE = 23;
 	static Logger LOG = Logger.getLogger(Badge.class.getName());
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

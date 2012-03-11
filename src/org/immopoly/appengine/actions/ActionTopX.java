@@ -34,6 +34,7 @@ public class ActionTopX extends AbstractAction {
 
 	public static String RANKTYPE_BALANCE_ALL = "balance";
 	public static String RANKTYPE_BALANCE_MONTH = "balanceMonth";
+	public static String RANKTYPE_BALANCE_RELEASE_BADGE = "balanceReleaseBadge";
 	
 	public ActionTopX(Map<String, Action> actions) {
 		super(actions);
@@ -64,6 +65,10 @@ public class ActionTopX extends AbstractAction {
 			if(null!=rankType && RANKTYPE_BALANCE_ALL.equals(rankType))
 			{
 				rankRowAndDirection="balance DESC";
+			}else if(null!=rankType && RANKTYPE_BALANCE_RELEASE_BADGE.equals(rankType))
+			{
+				rankRowAndDirection="balanceReleaseBadge DESC";
+				
 			}else{
 				rankRowAndDirection="balanceMonth DESC";
 			}
