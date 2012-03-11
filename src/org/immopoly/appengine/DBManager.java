@@ -167,6 +167,18 @@ public class DBManager {
 		return (List<User>) pm.newQuery(jdoql.toString()).execute();
 	}
 	
+	public static Counter getLatestCounter(PersistenceManager pm) {
+		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+		jdoql.append(Counter.class.getName());
+		jdoql.append(" ORDER BY date DESC RANGE 0,1");
+
+		List<Counter> result = (List<Counter>) pm.newQuery(jdoql.toString()).execute();
+		if (null == result || result.size() == 0)
+			return new Counter();
+		else
+			return result.get(0);
+	}
+
 	public static Expose getExpose(PersistenceManager pm, String exposeId) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());

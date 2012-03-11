@@ -1,6 +1,8 @@
 package org.immopoly.appengine;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,7 +41,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 public class Badge extends org.immopoly.common.Badge implements JSONable, Serializable, Comparable<Badge> {
 
 	private static final long serialVersionUID = 2L;
-	public static final int RELEASE_BADGE = 23;
+	public static final int ONE_OF_THE_FIRST = 23;
+	public static final int EARLY_ADOPTER = 123;
+	public static final int RENTED = 100000;
+	public static final int OVERTAKETRIES = 300000;
+
+	public static Map<Integer, String> IMAGE;
+	static {
+		IMAGE = new HashMap<Integer, String>();
+		IMAGE.put(ONE_OF_THE_FIRST, "http://immopoly.org/img/badges/badge-oftf.png");
+		IMAGE.put(EARLY_ADOPTER, "http://immopoly.org/img/badges/badge-ea.png");
+
+		IMAGE.put(RENTED + 10, "http://immopoly.org/img/badges/10.png");
+		IMAGE.put(RENTED + 30, "http://immopoly.org/img/badges/30.png");
+		IMAGE.put(RENTED + 60, "http://immopoly.org/img/badges/60.png");
+		IMAGE.put(RENTED + 80, "http://immopoly.org/img/badges/80.png");
+		IMAGE.put(RENTED + 100, "http://immopoly.org/img/badges/100.png");
+
+		IMAGE.put(OVERTAKETRIES + 3, "http://immopoly.org/img/badges/overtaketries3.png");
+		IMAGE.put(OVERTAKETRIES + 5, "http://immopoly.org/img/badges/overtaketries5.png");
+		IMAGE.put(OVERTAKETRIES + 10, "http://immopoly.org/img/badges/overtaketries10.png");
+	}
 	static Logger LOG = Logger.getLogger(Badge.class.getName());
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

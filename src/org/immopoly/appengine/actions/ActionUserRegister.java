@@ -6,6 +6,8 @@ import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.immopoly.appengine.Badge;
+import org.immopoly.appengine.Counter;
 import org.immopoly.appengine.DBManager;
 import org.immopoly.appengine.PMF;
 import org.immopoly.appengine.User;
@@ -52,6 +54,8 @@ public class ActionUserRegister extends AbstractAction {
 				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME,"missing username");
 			if (null == password || password.length() == 0)
 				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_PASSWORD,"missing password");
+			if (null == email || email.length() == 0)
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_EMAIL, "missing email");
 
 			// LOG.info("Register  "+username);
 			User user = DBManager.getUser(pm, username);
@@ -61,6 +65,17 @@ public class ActionUserRegister extends AbstractAction {
 				// kein user da? anlegen
 				user = new User(username, password,email,twitter);
 				pm.makePersistent(user);
+
+				// count everything
+				Counter counter = DBManager.getLatestCounter(pm);
+				counter = new Counter(counter);
+				count(counter);
+
+				// give badges
+				giveBadges(pm, user, counter);
+
+				pm.makePersistent(counter);
+
 				resp.getOutputStream().write(user.toJSON().toString().getBytes("UTF-8"));
 			}
 		} catch (ImmopolyException e) {
@@ -70,5 +85,21 @@ public class ActionUserRegister extends AbstractAction {
 		} finally {
 			pm.close();
 		}
+	}
+
+	private void count(Counter counter) {
+		counter.addUser(1);
+	}
+
+	private void giveBadges(PersistenceManager pm, User user, Counter counter) {
+		// one of the firsts ab 16.3.2012 00:00
+		if (System.currentTimeMillis() > 1331856000 && counter.getBadgeOneOfTheFirst() <= 1000) {
+			user.giveBadge(pm, Badge.ONE_OF_THE_FIRST, "Du bist der " + counter.getBadgeOneOfTheFirst()
+					+ " der 1000 ersten! schau in die Statistik für deinen Rang");
+			counter.addBadgeOneOfTheFirst(1);
+		}
+		if (System.currentTimeMillis() < 1331856000)
+			user.giveBadge(pm, Badge.EARLY_ADOPTER, "Du warst schon dabei, bevor Immopoly cool war ;)");
+
 	}
 }

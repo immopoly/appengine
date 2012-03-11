@@ -5,7 +5,9 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -63,7 +65,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 	@Persistent
 	private Double balanceMonth;
-	
+
 	@Persistent
 	private String token;
 
@@ -78,17 +80,16 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 	@Persistent
 	private String c2dmRegistrationId;
-	
-	@Persistent 
+
+	@Persistent
 	private Integer numExposes;
 
-	@Persistent 
+	@Persistent
 	private Integer numExposesSold;
 
 	@Persistent
 	private Double balanceReleaseBadge;
 
-	
 	public Double getBalanceReleaseBadge() {
 		return balanceReleaseBadge;
 	}
@@ -104,9 +105,9 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		this.password = digestPassword(password);
 		this.balance = 5000;
 		this.lastcalculation = null;
-		this.numExposes=0;
-		this.numExposesSold=0;
-		this.balanceReleaseBadge=0.0;
+		this.numExposes = 0;
+		this.numExposesSold = 0;
+		this.balanceReleaseBadge = 0.0;
 		generateToken();
 	}
 
@@ -183,17 +184,17 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
-			// last 10 history
+			// last 20 history
 			JSONArray historyList = new JSONArray();
-			List<History> history = DBManager.getHistory(pm, id, 0, 10);
+			List<History> history = DBManager.getHistory(pm, id, 0, 20);
 			for (History h : history) {
 				historyList.put(h.toJSON());
 			}
 			info.put(KEY_HISTORY_LIST, historyList);
 
-			// last 10 badges
+			// last 20 badges
 			JSONArray badgeList = new JSONArray();
-			List<Badge> badges = DBManager.getBadges(pm, id,null, 0, 10);
+			List<Badge> badges = DBManager.getBadges(pm, id, null, 0, 20);
 			for (Badge b : badges) {
 				badgeList.put(b.toJSON());
 			}
@@ -325,13 +326,13 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	}
 
 	public Integer getNumExposes() {
-		if(null==numExposes)
-			numExposes=0;
+		if (null == numExposes)
+			numExposes = 0;
 		return numExposes;
 	}
 
 	public void setNumExposes(Integer numExposes) {
-		this.numExposes=numExposes;
+		this.numExposes = numExposes;
 	}
 
 	public Long getId() {
@@ -343,9 +344,9 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	}
 
 	public void addExpose(int i) {
-		if(null==this.numExposes)
-			this.numExposes=0;
-		this.numExposes+=i;
+		if (null == this.numExposes)
+			this.numExposes = 0;
+		this.numExposes += i;
 	}
 
 	@Override
@@ -367,7 +368,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	}
 
 	public double getBalanceMonth() {
-		if(null==balanceMonth)
+		if (null == balanceMonth)
 			return 0;
 		return balanceMonth;
 	}
@@ -377,8 +378,8 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	}
 
 	public Integer getNumExposesSold() {
-		if(null==numExposesSold)
-			return 0;		
+		if (null == numExposesSold)
+			return 0;
 		return numExposesSold;
 	}
 
@@ -386,10 +387,33 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		this.numExposesSold = numExposesSold;
 	}
 
-	public boolean hasReleaseBadge(PersistenceManager pm) {
-		// TODO Auto-generated method stub
-		List<Badge> badges = DBManager.getBadges(pm, id, Badge.RELEASE_BADGE, 0, 1);
+	public boolean hasBadge(PersistenceManager pm, int type) {
+		List<Badge> badges = DBManager.getBadges(pm, id, type, 0, 1);
 		return badges != null && badges.size() > 0;
 	}
 
+	public boolean giveBadge(PersistenceManager pm, int type, String msg) {
+		// check if Badge already given
+		if (hasBadge(pm, type)) {
+			LOG.info("Badge already given type : " + msg);
+			return false;
+		}
+		Badge b = new Badge(type, id, System.currentTimeMillis(), msg, Badge.IMAGE.get(type), 0.0, null);
+		pm.makePersistent(b);
+		try {
+			if (null != getC2dmRegistrationId() && getC2dmRegistrationId().length() > 0) {
+				ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+				Map<String, String[]> params = new HashMap<String, String[]>();
+				// type message title
+				params.put("data.type", new String[] { "1" });
+				params.put("data.message", new String[] { b.getText() });
+				params.put("data.title", new String[] { "Immopoly" });
+				c2dm.sendNoRetry(getC2dmRegistrationId(), "mycollapse", params, true);
+				LOG.info("Send c2dm message to" + getUserName() + " " + b.getText());
+			}
+		} catch (Exception e) {
+			LOG.log(Level.SEVERE, "Send c2dm message to" + getUserName() + " FAILED ", e);
+		}
+		return true;
+	}
 }

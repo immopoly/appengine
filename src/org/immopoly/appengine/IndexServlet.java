@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.memcache.MemcacheServiceFactory;
-
 /*
  This is the server side Google App Engine component of Immopoly
  http://immopoly.appspot.com
@@ -66,7 +64,8 @@ public class IndexServlet extends HttpServlet {
 //					pm.makePersistent(user);
 ////				}
 //			}
-			MemcacheServiceFactory.getMemcacheService().clearAll();
+			// MemcacheServiceFactory.getMemcacheService().clearAll();
+			giveAllUSerEarlyAdopterBadge(pm);
 //				createDummyBadge(pm);
 			// createDummyBadge2(pm);
 			// updateDB(pm, 0,0);
@@ -148,6 +147,19 @@ public class IndexServlet extends HttpServlet {
 //			pm.makePersistent(b);
 //		}
 //	}
+
+	private void giveAllUSerEarlyAdopterBadge(PersistenceManager pm) {
+		List<User> users = DBManager.getUsers(pm, Long.MAX_VALUE);
+		// for (User user : users) {
+		// user.giveBadge(pm, Badge.EARLY_ADOPTER,
+		// "Du warst schon dabei, als Immopoly nur ein bisschen cool war ;)");
+		// }
+		LOG.info("Counted all user and gave badges " + users.size());
+		Counter counter = DBManager.getLatestCounter(pm);
+		counter.setUser(users.size());
+		LOG.info("Counter" + counter.toJSON().toString());
+		pm.makePersistent(counter);
+	}
 
 	private void createDummyBadge2(PersistenceManager pm) {
 		{

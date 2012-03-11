@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.immopoly.appengine.actions.Action;
 import org.immopoly.appengine.actions.ActionC2DMSend;
+import org.immopoly.appengine.actions.ActionCounter;
 import org.immopoly.appengine.actions.ActionExposeAdd;
 import org.immopoly.appengine.actions.ActionExposeRemove;
 import org.immopoly.appengine.actions.ActionPublicUserInfo;
@@ -70,6 +71,7 @@ public class ImmopolyServlet extends HttpServlet {
 		new ActionTopX(actions);
 		new ActionStatisticHeatmap(actions);
 		new ActionUserEmail(actions);
+		new ActionCounter(actions);
 	}
 
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
