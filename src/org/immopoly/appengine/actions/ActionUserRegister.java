@@ -93,13 +93,13 @@ public class ActionUserRegister extends AbstractAction {
 
 	private void giveBadges(PersistenceManager pm, User user, Counter counter) {
 		// one of the firsts ab 16.3.2012 00:00
-		if (System.currentTimeMillis() > 1331856000 && counter.getBadgeOneOfTheFirst() <= 1000) {
+//		if (System.currentTimeMillis() > 1331856000 && counter.getBadgeOneOfTheFirst() <= 1000) {
 			user.giveBadge(pm, Badge.ONE_OF_THE_FIRST, "Du bist der " + counter.getBadgeOneOfTheFirst()
 					+ " der 1000 ersten! schau in die Statistik für deinen Rang");
 			counter.addBadgeOneOfTheFirst(1);
-		}
-		if (System.currentTimeMillis() < 1331856000)
-			user.giveBadge(pm, Badge.EARLY_ADOPTER, "Du warst schon dabei, bevor Immopoly cool war ;)");
+//		}
+//		if (System.currentTimeMillis() < 1331856000)
+//			user.giveBadge(pm, Badge.EARLY_ADOPTER, "Du warst schon dabei, bevor Immopoly cool war ;)");
 
 	}
 }

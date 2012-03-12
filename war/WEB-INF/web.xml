@@ -97,41 +97,4 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 		<welcome-file>redirect.html</welcome-file>
 	</welcome-file-list>
 
-	<!-- TWITTER -->
-	<servlet>
-		<servlet-name>signin</servlet-name>
-		<servlet-class>org.immopoly.appengine.twitter.SigninServlet
-		</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>callback</servlet-name>
-		<servlet-class>org.immopoly.appengine.twitter.CallbackServlet
-		</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>logout</servlet-name>
-		<servlet-class>org.immopoly.appengine.twitter.LogoutServlet
-		</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>post</servlet-name>
-		<servlet-class>org.immopoly.appengine.twitter.PostServlet
-		</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>signin</servlet-name>
-		<url-pattern>/twitter/signin</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>callback</servlet-name>
-		<url-pattern>/twitter/callback</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>logout</servlet-name>
-		<url-pattern>/twitter/logout</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>post</servlet-name>
-		<url-pattern>/twitter/post</url-pattern>
-	</servlet-mapping>
 </web-app>
