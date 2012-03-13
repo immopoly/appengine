@@ -95,7 +95,7 @@ public class ActionUserRegister extends AbstractAction {
 		// one of the firsts ab 16.3.2012 00:00
 //		if (System.currentTimeMillis() > 1331856000 && counter.getBadgeOneOfTheFirst() <= 1000) {
 			user.giveBadge(pm, Badge.ONE_OF_THE_FIRST, "Du bist der " + counter.getBadgeOneOfTheFirst()
-					+ " der 1000 ersten! schau in die Statistik für deinen Rang");
+				+ " der 2000 ersten! schau in die Statistik auf immopoly.org für deinen Rang");
 			counter.addBadgeOneOfTheFirst(1);
 //		}
 //		if (System.currentTimeMillis() < 1331856000)

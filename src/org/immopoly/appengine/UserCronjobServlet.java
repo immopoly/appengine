@@ -58,7 +58,7 @@ public class UserCronjobServlet extends HttpServlet {
 				users = new ArrayList<User>();
 				users.add(DBManager.getUser(pm, req.getParameter("username")));
 			} else
-				users = DBManager.getUsersToCheck(pm, lastCalculation, 10);
+				users = DBManager.getUsersToCheck(pm, lastCalculation, 15);
 			// LOG.log(Level.INFO,
 			// System.currentTimeMillis()+" users to check since "+lastCalculation);
 
