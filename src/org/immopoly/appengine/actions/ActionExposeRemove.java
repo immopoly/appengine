@@ -2,7 +2,6 @@ package org.immopoly.appengine.actions;
 
 import java.net.URL;
 import java.util.Map;
-import java.util.logging.Level;
 
 import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
@@ -82,13 +81,31 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 						user.addExpose(-1);
 						pm.makePersistent(user);
 						pm.makePersistent(history);
-					} else if (obj.toString().contains("ERROR_RESOURCE_NOT_FOUND")) {
-						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,
-								"expose jibs nich mehr, eventuell heute schon vermietet");
+						// } else if
+						// (obj.toString().contains("RESOURCE_NOT_FOUND")) {
+						// throw new
+						// ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,
+						// "expose jibs nich mehr, eventuell heute schon vermietet");
+						// } else {
+						// LOG.log(Level.SEVERE,
+						// "merkwürdig, merkwürdig, wo isset hin? " +
+						// obj.toString());
+						// throw new
+						// ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,
+						// "merkwürdig, merkwürdig, wo isset hin? ");
 					} else {
-						LOG.log(Level.SEVERE, "merkwürdig, merkwürdig, wo isset hin? " + obj.toString());
-						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND, "merkwürdig, merkwürdig, wo isset hin? ");
+						// #https://github.com/immopoly/appengine/issues/20
+						history = new History(History.TYPE_EXPOSE_REMOVED, user.getId(), System.currentTimeMillis(),
+								"Du hast die Wohnung '" + expose.getName() + "' für " + History.MONEYFORMAT.format(expose.getRent())
+										+ " im Monat zurückgegeben. Sie wurde aber nicht gefunden, keine Strafe.", 0.0,
+								expose.getExposeId(),
+								null);
+						pm.deletePersistent(expose);
+						user.addExpose(-1);
+						pm.makePersistent(user);
+						pm.makePersistent(history);
 					}
+
 				} else {
 					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_OWNED, "gehört nem anderen penner");
 				}

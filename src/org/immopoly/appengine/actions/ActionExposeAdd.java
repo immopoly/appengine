@@ -152,7 +152,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					user.addExpose(1);
 					pm.makePersistent(user);
 					pm.makePersistent(history);
-				} else if (obj.toString().contains("ERROR_RESOURCE_NOT_FOUND"))
+				} else if (obj.toString().contains("RESOURCE_NOT_FOUND"))
 					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND, "expose jibs nich");
 			}
 			// history eintrag
