@@ -55,10 +55,6 @@ public class ActionUserLogin extends AbstractAction {
 			if (null == user) {
 				throw new ImmopolyException(ImmopolyException.USER_LOGIN_FAILED,"username or password not found " + username);
 			} else {
-				// LOG.info("login  "+username);
-				// generate new token
-				user.generateToken();
-				pm.makePersistent(user);
 				resp.getOutputStream().write(user.toJSON().toString().getBytes("UTF-8"));
 			}
 		} catch (ImmopolyException e) {

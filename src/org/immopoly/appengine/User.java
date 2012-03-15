@@ -134,7 +134,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			o.put("email", email);
 			o.put("twitter", twitter);
 			o.put("token", token);
-			o.put("info", getInfo(false));
+			o.put("info", getInfo(false, true, true));
 			resp.put("org.immopoly.common.User", o);
 		} catch (JSONException e) {
 			LOG.log(Level.SEVERE, " User.toJSON ", e);
@@ -143,13 +143,13 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		return resp;
 	}
 
-	public JSONObject toPublicJSON() {
+	public JSONObject toPublicJSON(boolean whistory, boolean wbadges) {
 		JSONObject resp = new JSONObject();
 		JSONObject o = new JSONObject();
 		try {
 			o.put("username", username);
 			o.put("twitter", twitter);
-			o.put("info", getInfo(true));
+			o.put("info", getInfo(true, whistory, wbadges));
 			resp.put("org.immopoly.common.User", o);
 		} catch (JSONException e) {
 			LOG.log(Level.SEVERE, " User.toJSON ", e);
@@ -158,7 +158,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		return resp;
 	}
 
-	private JSONObject getInfo(boolean pub) throws JSONException {
+	private JSONObject getInfo(boolean pub, boolean whistory, boolean wbadges) throws JSONException {
 		JSONObject info = new JSONObject();
 		info.put(KEY_BALANCE, balance);
 		if (null != numExposes)
@@ -185,21 +185,24 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		PersistenceManager pm = PMF.get().getPersistenceManager();
 		try {
 			// last 20 history
-			JSONArray historyList = new JSONArray();
-			List<History> history = DBManager.getHistory(pm, id, 0, 20);
-			for (History h : history) {
-				historyList.put(h.toJSON());
+			if (whistory) {
+				JSONArray historyList = new JSONArray();
+				List<History> history = DBManager.getHistory(pm, id, 0, 20);
+				for (History h : history) {
+					historyList.put(h.toJSON());
+				}
+				info.put(KEY_HISTORY_LIST, historyList);
 			}
-			info.put(KEY_HISTORY_LIST, historyList);
 
 			// last 20 badges
-			JSONArray badgeList = new JSONArray();
-			List<Badge> badges = DBManager.getBadges(pm, id, null, 0, 20);
-			for (Badge b : badges) {
-				badgeList.put(b.toJSON());
+			if (wbadges) {
+				JSONArray badgeList = new JSONArray();
+				List<Badge> badges = DBManager.getBadges(pm, id, null, 0, 20);
+				for (Badge b : badges) {
+					badgeList.put(b.toJSON());
+				}
+				info.put(KEY_BADGES_LIST, badgeList);
 			}
-			info.put(KEY_BADGES_LIST, badgeList);
-
 			if (pub)
 				return info;
 

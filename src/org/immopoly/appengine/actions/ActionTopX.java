@@ -59,6 +59,9 @@ public class ActionTopX extends AbstractAction {
 			} catch (NumberFormatException nfe) {
 				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_START_END,"start end not Integers" + startS + "," + endS);
 			}
+			if (end - start > 15)
+				throw new ImmopolyException(ImmopolyException.PARAMETER_START_END_TO_WIDE, "end - start > 15 " + startS + "," + endS);
+
 			//https://github.com/immopoly/appengine/issues/14
 			String rankRowAndDirection;
 			String rankType = req.getParameter(RANKTYPE);
@@ -79,7 +82,7 @@ public class ActionTopX extends AbstractAction {
 			} else {
 				JSONArray topx = new JSONArray();
 				for (User user : users) {
-					topx.put(user.toPublicJSON());
+					topx.put(user.toPublicJSON(false, false));
 				}
 				resp.getOutputStream().write(topx.toString().getBytes("UTF-8"));
 			}

@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
+
 /*
  This is the server side Google App Engine component of Immopoly
  http://immopoly.appspot.com
@@ -64,8 +66,8 @@ public class IndexServlet extends HttpServlet {
 //					pm.makePersistent(user);
 ////				}
 //			}
-			// MemcacheServiceFactory.getMemcacheService().clearAll();
-			giveAllUSerEarlyAdopterBadge(pm);
+			MemcacheServiceFactory.getMemcacheService().clearAll();
+			// giveAllUSerEarlyAdopterBadge(pm);
 //				createDummyBadge(pm);
 			// createDummyBadge2(pm);
 			// updateDB(pm, 0,0);

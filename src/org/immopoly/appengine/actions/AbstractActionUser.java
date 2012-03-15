@@ -33,7 +33,7 @@ public abstract class AbstractActionUser extends AbstractAction {
 			}
 			
 			if(end-start > 50)
-				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_START_END,"end - start > 50 " + startS + "," + endS);
+				throw new ImmopolyException(ImmopolyException.PARAMETER_START_END_TO_WIDE, "end - start > 50 " + startS + "," + endS);
 	
 			String token = req.getParameter(TOKEN);
 			User user = null;

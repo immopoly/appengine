@@ -62,7 +62,7 @@ public class ActionPublicUserInfo extends AbstractAction {
 			} else {
 				LOG.info("Profile " + user.getUserName());
 				if(mode==RESPONSETYPE.JSON){
-					resp.getOutputStream().write(user.toPublicJSON().toString().getBytes("UTF-8"));
+					resp.getOutputStream().write(user.toPublicJSON(true, true).toString().getBytes("UTF-8"));
 				}else if(mode==RESPONSETYPE.HTML){
 					String template = getTemplate("Profile.html");
 					template = template.replace("_USERNAME_", username);

