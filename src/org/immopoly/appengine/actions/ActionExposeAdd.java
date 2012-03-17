@@ -85,11 +85,11 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 
 					history = new History(History.TYPE_EXPOSE_MONOPOLY_NEGATIVE, user.getId(), System.currentTimeMillis(), "Strafe: "
 							+ History.MONEYFORMAT.format(fine) + " Die Wohnung '" + expose.getName() + "' gehört schon '"
-							+ otherUser.getUserName() + "'", -fine, expose.getExposeId(), otherUser.getUserName());
+							+ otherUser.getUserName() + "'", -fine, expose.getExposeId(), user.getUserName(), otherUser.getUserName());
 					History otherHistory = new History(History.TYPE_EXPOSE_MONOPOLY_POSITIVE, otherUser.getId(),
 							System.currentTimeMillis(), "Belohnung: " + History.MONEYFORMAT.format(fine) + " " + user.getUserName()
 									+ " wollte deine Wohnung '" + expose.getName() + "' übernehmen", fine, expose.getExposeId(),
-							user.getUserName());
+							otherUser.getUserName(), user.getUserName());
 					pm.makePersistent(otherHistory);
 					// c2dm
 					try{
@@ -147,7 +147,8 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 					double fine = 2 * expose.getRent() / 30.0;
 					history = new History(History.TYPE_EXPOSE_ADDED, user.getId(), System.currentTimeMillis(), "Übernahmekosten: "
 							+ History.MONEYFORMAT.format(fine) + " Du hast die Wohnung '" + expose.getName() + "' gemietet für "
-							+ History.MONEYFORMAT.format(expose.getRent()) + " im Monat", -fine, expose.getExposeId(), null);
+							+ History.MONEYFORMAT.format(expose.getRent()) + " im Monat", -fine, expose.getExposeId(), user.getUserName(),
+							null);
 					user.setBalance(user.getBalance() - fine);
 					user.addExpose(1);
 					pm.makePersistent(user);

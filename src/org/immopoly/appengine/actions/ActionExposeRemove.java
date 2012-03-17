@@ -74,8 +74,8 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 						double fine = Const.FINE_REMOVED * expose.getRent();
 						history = new History(History.TYPE_EXPOSE_REMOVED, user.getId(), System.currentTimeMillis(), "Strafe: "
 								+ History.MONEYFORMAT.format(fine) + " Du hast die Wohnung '" + expose.getName() + "' für "
-								+ History.MONEYFORMAT.format(expose.getRent()) + " im Monat zurückgegeben.", -fine,
-								expose.getExposeId(), null);
+								+ History.MONEYFORMAT.format(expose.getRent()) + " im Monat zurückgegeben.", -fine, expose.getExposeId(),
+								user.getUserName(), null);
 						pm.deletePersistent(expose);
 						user.setBalance(user.getBalance() - fine);
 						user.addExpose(-1);
@@ -98,8 +98,7 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 						history = new History(History.TYPE_EXPOSE_REMOVED, user.getId(), System.currentTimeMillis(),
 								"Du hast die Wohnung '" + expose.getName() + "' für " + History.MONEYFORMAT.format(expose.getRent())
 										+ " im Monat zurückgegeben. Sie wurde aber nicht gefunden, keine Strafe.", 0.0,
-								expose.getExposeId(),
-								null);
+								expose.getExposeId(), user.getUserName(), null);
 						pm.deletePersistent(expose);
 						user.addExpose(-1);
 						pm.makePersistent(user);

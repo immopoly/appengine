@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.jdo.PersistenceManager;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.IdentityType;
 import javax.jdo.annotations.PersistenceCapable;
@@ -71,13 +70,14 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 	@Persistent
 	private String otherUsername = null;
 
-	public History(int type, long userId, long time, String text, Double amount, Long exposeId, String otherUsername) {
+	public History(int type, long userId, long time, String text, Double amount, Long exposeId, String username, String otherUsername) {
 		this.userId = userId;
 		this.time = time;
 		this.text = text;
 		this.type = type;
 		this.exposeId = exposeId;
 		this.amount = amount;
+		this.username = username;
 		this.otherUsername=otherUsername;
 	}
 
@@ -89,11 +89,11 @@ public class History extends org.immopoly.common.History implements JSONable, Se
 		this.id = id;
 	}
 	
-	public void loadUsername(PersistenceManager pm){
-		User u = DBManager.getUser(pm, userId);
-		if(u!=null)
-			this.username=u.getUserName();
-	}
+	// public void loadUsername(PersistenceManager pm){
+	// User u = DBManager.getUser(pm, userId);
+	// if(u!=null)
+	// this.username=u.getUserName();
+	// }
 
 	public JSONObject toJSON() {
 		JSONObject resp = new JSONObject();

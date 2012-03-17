@@ -59,8 +59,8 @@ public class ActionTopX extends AbstractAction {
 			} catch (NumberFormatException nfe) {
 				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_START_END,"start end not Integers" + startS + "," + endS);
 			}
-			if (end - start > 15)
-				throw new ImmopolyException(ImmopolyException.PARAMETER_START_END_TO_WIDE, "end - start > 15 " + startS + "," + endS);
+			if (end - start > 30)
+				throw new ImmopolyException(ImmopolyException.PARAMETER_START_END_TO_WIDE, "end - start > 30 " + startS + "," + endS);
 
 			//https://github.com/immopoly/appengine/issues/14
 			String rankRowAndDirection;

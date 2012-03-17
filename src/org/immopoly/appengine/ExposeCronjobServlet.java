@@ -86,9 +86,9 @@ public class ExposeCronjobServlet extends HttpServlet {
 							resp.getWriter().write("ExposeId " + expose.getExposeId() + " SOLD!" + " <br>");
 							// Historieneintrag erstellen
 							History history = new History(History.TYPE_EXPOSE_SOLD, user.getId(), System.currentTimeMillis(), "Provision: "
-									+ History.MONEYFORMAT.format(PROVISON_MULTIPLIER * expose.getRent()) + " Wohnung '"
-									+ expose.getName() + "' vermietet.", PROVISON_MULTIPLIER * expose.getRent(),
-									expose.getExposeId(),null);
+									+ History.MONEYFORMAT.format(PROVISON_MULTIPLIER * expose.getRent()) + " Wohnung '" + expose.getName()
+									+ "' vermietet.", PROVISON_MULTIPLIER * expose.getRent(), expose.getExposeId(), user.getUserName(),
+									null);
 
 							resp.getWriter().write(history.getText() + "<br>");
 							// LOG.info(history.getText());

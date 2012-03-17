@@ -49,8 +49,8 @@ public class ActionUserHistory extends AbstractActionUser {
 		//throw new ImmopolyException(ImmopolyException.NO_MORE_DATA, "Keine Daten mehr von " + start + " bis " + end);
 
 		for (History h : history) {
-			if (null == user)
-				h.loadUsername(pm);
+			// if (null == user)
+			// h.loadUsername(pm);
 			array.put(h.toJSON());
 		}
 		return array;
