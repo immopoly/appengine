@@ -67,13 +67,13 @@ public class ActionTopX extends AbstractAction {
 			String rankType = req.getParameter(RANKTYPE);
 			if(null!=rankType && RANKTYPE_BALANCE_ALL.equals(rankType))
 			{
-				rankRowAndDirection="balance DESC";
+				rankRowAndDirection = "ORDER by balance DESC";
 			}else if(null!=rankType && RANKTYPE_BALANCE_RELEASE_BADGE.equals(rankType))
 			{
-				rankRowAndDirection="balanceReleaseBadge DESC";
+				rankRowAndDirection = "WHERE releaseBadge == true ORDER by balance DESC";
 				
 			}else{
-				rankRowAndDirection="balanceMonth DESC";
+				rankRowAndDirection = "ORDER by balanceMonth DESC";
 			}
 			
 			List<User> users = DBManager.getTopUser(pm, start, end, rankRowAndDirection);

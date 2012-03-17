@@ -88,15 +88,8 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	private Integer numExposesSold;
 
 	@Persistent
-	private Double balanceReleaseBadge;
+	private Boolean releaseBadge = Boolean.FALSE;
 
-	public Double getBalanceReleaseBadge() {
-		return balanceReleaseBadge;
-	}
-
-	public void setBalanceReleaseBadge(Double balanceReleaseBadge) {
-		this.balanceReleaseBadge = balanceReleaseBadge;
-	}
 
 	public User(String name, String password, String email, String twitter) {
 		this.username = name;
@@ -107,7 +100,6 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		this.lastcalculation = null;
 		this.numExposes = 0;
 		this.numExposesSold = 0;
-		this.balanceReleaseBadge = 0.0;
 		generateToken();
 	}
 
@@ -418,5 +410,15 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			LOG.log(Level.SEVERE, "Send c2dm message to" + getUserName() + " FAILED ", e);
 		}
 		return true;
+	}
+
+	public Boolean getReleaseBadge() {
+		if(null==releaseBadge)
+			return false;
+		return releaseBadge;
+	}
+
+	public void setReleaseBadge(Boolean releaseBadge) {
+		this.releaseBadge = releaseBadge;
 	}
 }

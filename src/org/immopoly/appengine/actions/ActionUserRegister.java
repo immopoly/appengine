@@ -12,24 +12,25 @@ import org.immopoly.appengine.DBManager;
 import org.immopoly.appengine.PMF;
 import org.immopoly.appengine.User;
 import org.immopoly.common.ImmopolyException;
+
 /*
-This is the server side Google App Engine component of Immopoly
-http://immopoly.appspot.com
-Copyright (C) 2011 Mister Schtief
+ This is the server side Google App Engine component of Immopoly
+ http://immopoly.appspot.com
+ Copyright (C) 2011 Mister Schtief
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU Affero General Public License as
+ published by the Free Software Foundation, either version 3 of the
+ License, or (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ You should have received a copy of the GNU Affero General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 public class ActionUserRegister extends AbstractAction {
 
 	public ActionUserRegister(Map<String, Action> actions) {
@@ -51,19 +52,19 @@ public class ActionUserRegister extends AbstractAction {
 			String twitter = req.getParameter(TWITTER);
 
 			if (null == username || username.length() == 0)
-				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME,"missing username");
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_USERNAME, "missing username");
 			if (null == password || password.length() == 0)
-				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_PASSWORD,"missing password");
+				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_PASSWORD, "missing password");
 			if (null == email || email.length() == 0)
 				throw new ImmopolyException(ImmopolyException.MISSING_PARAMETER_EMAIL, "missing email");
 
 			// LOG.info("Register  "+username);
 			User user = DBManager.getUser(pm, username);
 			if (null != user) {
-				throw new ImmopolyException(ImmopolyException.REGISTER_USERNAME_ALREADY_TAKEN,"username already taken " + username);
+				throw new ImmopolyException(ImmopolyException.REGISTER_USERNAME_ALREADY_TAKEN, "username already taken " + username);
 			} else {
 				// kein user da? anlegen
-				user = new User(username, password,email,twitter);
+				user = new User(username, password, email, twitter);
 				pm.makePersistent(user);
 
 				// count everything
@@ -81,7 +82,7 @@ public class ActionUserRegister extends AbstractAction {
 		} catch (ImmopolyException e) {
 			throw e;
 		} catch (Exception e) {
-			throw new ImmopolyException(ImmopolyException.REGISTER_FAILED,"could not register user",  e);
+			throw new ImmopolyException(ImmopolyException.REGISTER_FAILED, "could not register user", e);
 		} finally {
 			pm.close();
 		}
@@ -93,13 +94,15 @@ public class ActionUserRegister extends AbstractAction {
 
 	private void giveBadges(PersistenceManager pm, User user, Counter counter) {
 		// one of the firsts ab 16.3.2012 00:00
-//		if (System.currentTimeMillis() > 1331856000 && counter.getBadgeOneOfTheFirst() <= 1000) {
+		if (counter.getBadgeOneOfTheFirst() <= 2000) {
 			user.giveBadge(pm, Badge.ONE_OF_THE_FIRST, "Du bist der " + counter.getBadgeOneOfTheFirst()
-				+ " der 2000 ersten! schau in die Statistik auf immopoly.org für deinen Rang");
+					+ " der 2000 ersten! schau in die Statistik auf immopoly.org für deinen Rang");
 			counter.addBadgeOneOfTheFirst(1);
-//		}
-//		if (System.currentTimeMillis() < 1331856000)
-//			user.giveBadge(pm, Badge.EARLY_ADOPTER, "Du warst schon dabei, bevor Immopoly cool war ;)");
+			user.setReleaseBadge(true);
+		}
+		// if (System.currentTimeMillis() < 1331856000)
+		// user.giveBadge(pm, Badge.EARLY_ADOPTER,
+		// "Du warst schon dabei, bevor Immopoly cool war ;)");
 
 	}
 }

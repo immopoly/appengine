@@ -161,8 +161,8 @@ public class UserCronjobServlet extends HttpServlet {
 				// Provision wird jetzt im ExposeCronjob gemacht
 				user.setBalance(user.getBalance() - rent);
 				// user.addExpose(-numRemoved);
-				if (user.hasBadge(pm, Badge.ONE_OF_THE_FIRST)) {
-					user.setBalanceReleaseBadge(user.getBalance());
+				if (user.getReleaseBadge()) {
+					// user.setBalanceReleaseBadge(user.getBalance());
 					// add rented
 					if (rentedPerDay > 0) {
 						Counter counter = DBManager.getLatestCounter(pm);

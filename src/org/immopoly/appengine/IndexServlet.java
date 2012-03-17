@@ -67,7 +67,7 @@ public class IndexServlet extends HttpServlet {
 ////				}
 //			}
 			MemcacheServiceFactory.getMemcacheService().clearAll();
-			// giveAllUSerEarlyAdopterBadge(pm);
+			// giveAllEarlyAdopterBadgeBoolean(pm);
 //				createDummyBadge(pm);
 			// createDummyBadge2(pm);
 			// updateDB(pm, 0,0);
@@ -150,18 +150,36 @@ public class IndexServlet extends HttpServlet {
 //		}
 //	}
 
-	private void giveAllUSerEarlyAdopterBadge(PersistenceManager pm) {
+	private void giveAllEarlyAdopterBadgeBoolean(PersistenceManager pm) {
 		List<User> users = DBManager.getUsers(pm, Long.MAX_VALUE);
-		// for (User user : users) {
-		// user.giveBadge(pm, Badge.EARLY_ADOPTER,
-		// "Du warst schon dabei, als Immopoly nur ein bisschen cool war ;)");
-		// }
-		LOG.info("Counted all user and gave badges " + users.size());
+		int i = 0;
+		for (User user : users) {
+			if (!user.getReleaseBadge() && user.hasBadge(pm, Badge.ONE_OF_THE_FIRST)) {
+				user.setReleaseBadge(true);
+				pm.makePersistent(user);
+				i++;
+				LOG.info("user " + user.getUserName() + " " + i);
+				if (i == 200)
+					break;
+			}
+		}
+		LOG.info("Counted all user with EA badges " + i);
 		Counter counter = DBManager.getLatestCounter(pm);
-		counter.setUser(users.size());
 		LOG.info("Counter" + counter.toJSON().toString());
-		pm.makePersistent(counter);
 	}
+
+	// private void giveAllEarlyAdopterBadgesBoolean(PersistenceManager pm) {
+	// List<User> users = DBManager.getUsers(pm, Long.MAX_VALUE);
+	// // for (User user : users) {
+	// // user.giveBadge(pm, Badge.EARLY_ADOPTER,
+	// // "Du warst schon dabei, als Immopoly nur ein bisschen cool war ;)");
+	// // }
+	// LOG.info("Counted all user and gave badges " + users.size());
+	// Counter counter = DBManager.getLatestCounter(pm);
+	// counter.setUser(users.size());
+	// LOG.info("Counter" + counter.toJSON().toString());
+	// pm.makePersistent(counter);
+	// }
 
 	private void createDummyBadge2(PersistenceManager pm) {
 		{

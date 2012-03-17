@@ -255,7 +255,7 @@ public class DBManager {
 		try {
 			StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 			jdoql.append(User.class.getName());
-			jdoql.append(" ORDER by "+rankRowAndDirection+" RANGE " + start + "," + end);
+			jdoql.append(" " + rankRowAndDirection + " RANGE " + start + "," + end);
 			return (List<User>) pm.newQuery(jdoql.toString()).execute();
 		} catch (Exception e) {
 			e.printStackTrace();
