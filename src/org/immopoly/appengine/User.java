@@ -103,10 +103,10 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		generateToken();
 	}
 
-	public static String digestPassword(String password) {
+	public static String digestPassword(String p) {
 		try {
 			MessageDigest m = MessageDigest.getInstance("MD5");
-			m.update(password.getBytes(), 0, password.length());
+			m.update(p.getBytes(), 0, p.length());
 			return new BigInteger(1, m.digest()).toString(16);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
@@ -223,7 +223,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 	}
 
 	public void generateToken() {
-		this.token = Long.toString(System.currentTimeMillis());
+		this.token = digestPassword(Long.toString(System.currentTimeMillis()) + password + username);
 	}
 
 	@Override
