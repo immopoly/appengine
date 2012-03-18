@@ -122,7 +122,7 @@ public class DBManager {
 	public static List<Expose> getExposesForUserToCheck(PersistenceManager pm, long userId/*, long lastcalculation*/) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE userId == " + userId+" && lastcalculation != null ");//+lastcalculation/*+" ORDER BY time DESC"*/);
+		jdoql.append(" WHERE userId == " + userId + " && lastcalculation != null");
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
 	
@@ -166,6 +166,13 @@ public class DBManager {
 		return (List<User>) pm.newQuery(jdoql.toString()).execute();
 	}
 
+	public static List<User> getUsers(PersistenceManager pm, String where) {
+		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+		jdoql.append(User.class.getName());
+		jdoql.append(where);
+		return (List<User>) pm.newQuery(jdoql.toString()).execute();
+	}
+
 	public static List<User> getUsersToCheck(PersistenceManager pm, long lastcalculation, int count) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(User.class.getName());
@@ -192,6 +199,18 @@ public class DBManager {
 		jdoql.append(Expose.class.getName());
 		jdoql.append(" WHERE exposeId == ").append(exposeId).append(" RANGE 0,1");
 
+		List<Expose> result = (List<Expose>) pm.newQuery(jdoql.toString()).execute();
+		if (null == result || result.size() == 0)
+			return null;
+		else
+			return result.get(0);
+	}
+
+	public static Expose getLastExposeForUser(PersistenceManager pm, long userId) {
+		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+		jdoql.append(Expose.class.getName());
+		jdoql.append(" WHERE userId == ").append(userId);
+		jdoql.append(" ORDER BY time DESC RANGE 0,1");
 		List<Expose> result = (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 		if (null == result || result.size() == 0)
 			return null;

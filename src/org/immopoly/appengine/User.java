@@ -407,7 +407,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 				LOG.info("Send c2dm message to" + getUserName() + " " + b.getText());
 			}
 		} catch (Exception e) {
-			LOG.log(Level.SEVERE, "Send c2dm message to" + getUserName() + " FAILED ", e);
+			LOG.log(Level.WARNING, "Send c2dm message to" + getUserName() + " FAILED ", e);
 		}
 		return true;
 	}

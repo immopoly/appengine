@@ -9,6 +9,7 @@ import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.immopoly.appengine.Const;
 import org.immopoly.appengine.DBManager;
 import org.immopoly.appengine.Expose;
 import org.immopoly.appengine.History;
@@ -104,7 +105,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 							LOG.info("Send c2dm message to" + otherUser.getUserName() + " " + history.getText());
 						}
 					}catch(Exception e){
-						LOG.log(Level.SEVERE,"Send c2dm message to" + otherUser.getUserName() + " FAILED ",e);									
+						LOG.log(Level.WARNING, "Send c2dm message to" + otherUser.getUserName() + " FAILED ", e);
 					}
 					
 					pm.makePersistent(history);
@@ -141,7 +142,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 
 					// check distance to last exposes
 					// https://github.com/immopoly/immopoly/issues/26
-					// if(!checkDistance(pm,expose))
+					checkDistance(pm, user, expose);
 					// throw new ImmopolyException("SPOOFING ALERT", 441);
 					pm.makePersistent(expose);
 					double fine = 2 * expose.getRent() / 30.0;
@@ -166,32 +167,22 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 			pm.close();
 		}
 	}
+	
+	
+	private void checkDistance(PersistenceManager pm, User user, Expose expose) {
+		Expose lastExpose = DBManager.getLastExposeForUser(pm, expose.getUserId());
+		if (null != lastExpose) {
+			double distance = calcDistance(expose.getLatitude(), expose.getLongitude(), lastExpose.getLatitude(), lastExpose.getLongitude());
+			double distancePerSecond = distance / ((expose.getTime() - lastExpose.getTime()) / 1000);
+			LOG.info("distance " + distance + " distancePerSecond " + distancePerSecond + " max " + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
+			if (distance > Const.MAX_SPOOFING_DISTANCE && distancePerSecond > Const.MAX_SPOOFING_DISTANCE_PER_SECOND) {
+				LOG.severe("LOCATION SPOOFING ALERT!! " + user.getUserName() + " !! distance " + distance + " distancePerSecond "
+						+ distancePerSecond + " max " + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
+			}
+		}
+	}
 
-	// private boolean checkDistance(PersistenceManager pm, Expose expose) {
-	// // get last x entries
-	// List<Expose> lastExposes = DBManager.getLastExposes(pm,
-	// expose.getUserId(), System.currentTimeMillis() - (60 * 60 * 1000));
-	// LOG.info("lastExposes " + lastExposes.size() + " userId: " +
-	// expose.getUserId() + " "
-	// + (System.currentTimeMillis() - (60 * 60 * 1000)));
-	// for (Expose e : lastExposes) {
-	// // wenn e weiter weg ist als MAX_SPOOFING_METER_PER_SECOND per
-	// // return false
-	// double distance = calcDistance(expose.getLatitude(),
-	// expose.getLongitude(), e.getLatitude(), e.getLongitude());
-	// double distancePerSecond = distance / ((System.currentTimeMillis() -
-	// e.getTime()) / 1000);
-	// LOG.info("distance " + distance + " distancePerSecond " +
-	// distancePerSecond + " max " + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
-	// if (distancePerSecond > Const.MAX_SPOOFING_DISTANCE_PER_SECOND) {
-	// LOG.severe("distance " + distance + " distancePerSecond " +
-	// distancePerSecond + " max "
-	// + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
-	// return false;
-	// }
-	// }
-	// return true;
-	// }
+	
 
 	public static double calcDistance(double lat1, double lng1, double lat2, double lng2) {
 		double earthRadius = 3958.75;

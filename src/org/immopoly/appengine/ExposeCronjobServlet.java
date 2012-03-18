@@ -116,7 +116,7 @@ public class ExposeCronjobServlet extends HttpServlet {
 									LOG.info("Send c2dm message to" + user.getUserName() + " " + history.getText());
 									resp.getWriter().write("Send c2dm message to" + user.getUserName() + " " + history.getText());
 								}catch(Exception e){
-									LOG.log(Level.SEVERE,"Send c2dm message to" + user.getUserName() + " FAILED ",e);									
+									LOG.log(Level.WARNING, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
 								}
 							}
 							// nicht mehr loeschen sondern nur noch markieren

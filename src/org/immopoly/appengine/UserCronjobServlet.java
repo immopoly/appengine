@@ -98,7 +98,6 @@ public class UserCronjobServlet extends HttpServlet {
 				resp.getWriter().write(" User " + user.getUserName() + " Exposes #" + exposes.size() + "<br>");
 
 				int rentedPerDay = 0;
-
 				for (Expose expose : exposes) {
 					// schauen ob es noch da ist
 					// es ist noch da, wenn deleted == null ist
@@ -153,7 +152,7 @@ public class UserCronjobServlet extends HttpServlet {
 
 				// check miete mit num wohnungen
 				if (user.getNumExposes() != numRent) {
-					LOG.log(Level.SEVERE, "NumExposes " + user.getNumExposes() + "!= numRent " + numRent);
+					LOG.log(Level.WARNING, "NumExposes " + user.getNumExposes() + "!= numRent " + numRent);
 					user.setNumExposes(numRent);
 				}
 
@@ -246,7 +245,7 @@ public class UserCronjobServlet extends HttpServlet {
 				LOG.info("Send c2dm message to" + user.getUserName() + " " + b.getText());
 			}
 		} catch (Exception e) {
-			LOG.log(Level.SEVERE, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
+			LOG.log(Level.WARNING, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
 		}
 	}
 
@@ -281,7 +280,7 @@ public class UserCronjobServlet extends HttpServlet {
 				LOG.info("Send c2dm message to" + user.getUserName() + " " + b.getText());
 			}
 		} catch (Exception e) {
-			LOG.log(Level.SEVERE, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
+			LOG.log(Level.WARNING, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
 		}
 	}
 
@@ -320,7 +319,7 @@ public class UserCronjobServlet extends HttpServlet {
 				LOG.info("Send c2dm message to" + user.getUserName() + " " + b.getText());
 			}
 		} catch (Exception e) {
-			LOG.log(Level.SEVERE, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
+			LOG.log(Level.WARNING, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
 		}
 	}
 

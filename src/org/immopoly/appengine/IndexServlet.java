@@ -7,10 +7,16 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.jdo.PersistenceManager;
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -166,6 +172,44 @@ public class IndexServlet extends HttpServlet {
 		LOG.info("Counted all user with EA badges " + i);
 		Counter counter = DBManager.getLatestCounter(pm);
 		LOG.info("Counter" + counter.toJSON().toString());
+	}
+
+	private void sendAllEarlyAdopterMail(PersistenceManager pm) {
+		List<User> users = DBManager.getUsers(pm, " WHERE releaseBadge == true");
+		int i = 0;
+		for (User user : users) {
+			if (user.getReleaseBadge()) {
+				i++;
+				LOG.info("user " + user.getUserName() + " " + i);
+				try {
+					sendMail(user);
+					// user.setMailsent(true);
+					// pm.makePersistent(user);
+				} catch (Exception e) {
+					LOG.log(Level.SEVERE, "could not mail", e);
+				}
+				if (i == 200)
+					break;
+			}
+		}
+		LOG.info("Counted all user with EA badges " + i);
+		Counter counter = DBManager.getLatestCounter(pm);
+		LOG.info("Counter" + counter.toJSON().toString());
+	}
+
+	private void sendMail(User user) throws Exception {
+		Properties props = new Properties();
+		Session session = Session.getDefaultInstance(props, null);
+
+		String msgBody = "Klicke auf den Link um dein Passwort zu ändern http://immopoly.appspot.com/resetpasswd.html?token="
+				+ user.getToken() + " \n your Immopoly Team";
+
+		Message msg = new MimeMessage(session);
+		msg.setFrom(new InternetAddress("immopolyteam@googlemail.com", "Immopoly Team"));
+		msg.addRecipient(Message.RecipientType.TO, new InternetAddress(user.getEmail(), user.getUserName()));
+		msg.setSubject("Immopoly Password setzen");
+		msg.setText(msgBody);
+		Transport.send(msg);
 	}
 
 	// private void giveAllEarlyAdopterBadgesBoolean(PersistenceManager pm) {
