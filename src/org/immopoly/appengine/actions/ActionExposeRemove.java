@@ -81,18 +81,9 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 						user.addExpose(-1);
 						pm.makePersistent(user);
 						pm.makePersistent(history);
-						// } else if
-						// (obj.toString().contains("RESOURCE_NOT_FOUND")) {
-						// throw new
-						// ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,
-						// "expose jibs nich mehr, eventuell heute schon vermietet");
-						// } else {
-						// LOG.log(Level.SEVERE,
-						// "merkwürdig, merkwürdig, wo isset hin? " +
-						// obj.toString());
-						// throw new
-						// ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,
-						// "merkwürdig, merkwürdig, wo isset hin? ");
+					} else if (obj.toString().contains("RESOURCE_NOT_FOUND")) {
+						throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_FOUND,
+								"Wohnung wurde schon vermietet? Warte maximal 24h auf die Provision, oder kontaktiere immopolyteam@gmail.com");
 					} else {
 						// #https://github.com/immopoly/appengine/issues/20
 						history = new History(History.TYPE_EXPOSE_REMOVED, user.getId(), System.currentTimeMillis(),
@@ -104,7 +95,6 @@ public class ActionExposeRemove extends AbstractAction implements Action {
 						pm.makePersistent(user);
 						pm.makePersistent(history);
 					}
-
 				} else {
 					throw new ImmopolyException(ImmopolyException.EXPOSE_NOT_OWNED, "gehört nem anderen penner");
 				}
