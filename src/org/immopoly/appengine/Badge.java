@@ -45,6 +45,7 @@ public class Badge extends org.immopoly.common.Badge implements JSONable, Serial
 	public static final int EARLY_ADOPTER = 123;
 	public static final int RENTED = 100000;
 	public static final int OVERTAKETRIES = 300000;
+	public static final int MONEY = 40000000;
 
 	public static Map<Integer, String> IMAGE;
 	static {
@@ -61,6 +62,12 @@ public class Badge extends org.immopoly.common.Badge implements JSONable, Serial
 		IMAGE.put(OVERTAKETRIES + 3, "http://immopoly.org/img/badges/overtaketries3.png");
 		IMAGE.put(OVERTAKETRIES + 5, "http://immopoly.org/img/badges/overtaketries5.png");
 		IMAGE.put(OVERTAKETRIES + 10, "http://immopoly.org/img/badges/overtaketries10.png");
+
+		IMAGE.put(MONEY + 10000, "http://immopoly.org/img/badges/money10k.png");
+		IMAGE.put(MONEY + 100000, "http://immopoly.org/img/badges/money100k.png");
+		IMAGE.put(MONEY + 500000, "http://immopoly.org/img/badges/money500k.png");
+		IMAGE.put(MONEY + 1000000, "http://immopoly.org/img/badges/money1000k.png");
+
 	}
 	static Logger LOG = Logger.getLogger(Badge.class.getName());
 	@PrimaryKey

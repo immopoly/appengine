@@ -179,6 +179,9 @@ public class UserCronjobServlet extends HttpServlet {
 					user.setBalanceMonth(0);
 				user.setBalanceMonth(user.getBalanceMonth() - rent + provision);
 
+				//allover balance 10k 100k 1Mio
+				giveBadgeMoney(pm, user);
+				
 				if (numRent != 0) {
 					History historyRent = new History(History.TYPE_DAILY_RENT, user.getId(), System.currentTimeMillis(), "Miete: "
 							+ History.MONEYFORMAT.format(rent) + " Tagesabrechnung Miete für " + user.getNumExposes() + " Wohnungen", rent,
@@ -210,6 +213,43 @@ public class UserCronjobServlet extends HttpServlet {
 		} finally {
 			pm.close();
 			// LOG.info("finally");
+		}
+	}
+
+	private void giveBadgeMoney(PersistenceManager pm, User user) {
+		if (user.getBalance() >= 10000)
+			giveBadgeMoney(pm, user, 10000);
+		if (user.getBalance() >= 100000)
+			giveBadgeMoney(pm, user, 100000);
+		if (user.getBalance() >= 500000)
+			giveBadgeMoney(pm, user, 500000);
+		if (user.getBalance() >= 1000000)
+			giveBadgeMoney(pm, user, 1000000);
+	}
+
+	private void giveBadgeMoney(PersistenceManager pm, User user, int money) {
+		// check if Badge already given
+		List<Badge> badges = DBManager.getBadges(pm, user.getId(), Badge.MONEY + money, 0, 1);
+		if (null != badges && badges.size() > 0) {
+			LOG.info("Badge already given money " + money);
+			return;
+		}
+		Badge b = new Badge(Badge.MONEY + money, user.getId(), System.currentTimeMillis(), "Du hast " + money + " €",
+				Badge.IMAGE.get(Badge.MONEY + money), 0.0, null);
+		pm.makePersistent(b);
+		try {
+			if (null != user.getC2dmRegistrationId() && user.getC2dmRegistrationId().length() > 0) {
+				ImmopolyC2DMMessaging c2dm = new ImmopolyC2DMMessaging();
+				Map<String, String[]> params = new HashMap<String, String[]>();
+				// type message title
+				params.put("data.type", new String[] { "1" });
+				params.put("data.message", new String[] { b.getText() });
+				params.put("data.title", new String[] { "Immopoly" });
+				c2dm.sendNoRetry(user.getC2dmRegistrationId(), "mycollapse", params, true);
+				LOG.info("Send c2dm message to" + user.getUserName() + " " + b.getText());
+			}
+		} catch (Exception e) {
+			LOG.log(Level.WARNING, "Send c2dm message to" + user.getUserName() + " FAILED ", e);
 		}
 	}
 
