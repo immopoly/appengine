@@ -34,6 +34,8 @@ public interface Action {
 	public final String TOPXSTART = "start";
 	public final String TOPXEND = "end";
 	public final String RANKTYPE = "ranktype";
+	public final String ACTIONTYPE = "actiontype";
+	public final String EXPOSES = "exposes";
 
 	String getURI();
 

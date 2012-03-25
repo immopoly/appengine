@@ -287,4 +287,29 @@ public class DBManager {
 		jdoql.append(Expose.class.getName()).append(" ORDER BY " + sortRow + " DESC RANGE 0," + lastExposeCount);
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
 	}
+
+	public static List<ActionItem> getActionItems(PersistenceManager pm, Long userId, Integer type) {
+		try {
+			StringBuffer jdoql = new StringBuffer("SELECT FROM ");
+			jdoql.append(ActionItem.class.getName());
+
+			if (null != userId || null != type)
+				jdoql.append(" WHERE ");
+
+			if (null != userId)
+				jdoql.append(" userId == ").append(userId);
+
+			if (null != type && null != userId)
+				jdoql.append(" && ");
+
+			if (null != type)
+				jdoql.append(" type == ").append(type);
+
+			jdoql.append(" ORDER BY time DESC");
+			return (List<ActionItem>) pm.newQuery(jdoql.toString()).execute();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
 }

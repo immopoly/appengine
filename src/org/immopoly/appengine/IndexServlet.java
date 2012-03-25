@@ -72,6 +72,8 @@ public class IndexServlet extends HttpServlet {
 //					pm.makePersistent(user);
 ////				}
 //			}
+
+			// giveAllActionItem(pm);
 			MemcacheServiceFactory.getMemcacheService().clearAll();
 			// giveAllEarlyAdopterBadgeBoolean(pm);
 //				createDummyBadge(pm);
@@ -166,6 +168,26 @@ public class IndexServlet extends HttpServlet {
 				i++;
 				LOG.info("user " + user.getUserName() + " " + i);
 				if (i == 200)
+					break;
+			}
+		}
+		LOG.info("Counted all user with EA badges " + i);
+		Counter counter = DBManager.getLatestCounter(pm);
+		LOG.info("Counter" + counter.toJSON().toString());
+	}
+
+	private void giveAllActionItem(PersistenceManager pm) {
+		List<User> users = DBManager.getUsers(pm, Long.MAX_VALUE);
+		int i = 0;
+		for (User user : users) {
+			if (!user.hasActionItem(pm, ActionItem.TYPE_ACTION_FREEEXPOSES)) {
+				ActionItem actionItem = new ActionItem(user.getId(), System.currentTimeMillis(), ActionItem.TYPE_ACTION_FREEEXPOSES, 1,
+						"Konkurrenzspion: Zeigt alle freien Wohnungen an, die noch nicht übernommen worden sind",
+						ActionItem.IMAGE.get(ActionItem.TYPE_ACTION_FREEEXPOSES));
+				pm.makePersistent(actionItem);
+				i++;
+				LOG.info("user " + user.getUserName() + " " + i);
+				if (i == 100)
 					break;
 			}
 		}

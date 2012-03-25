@@ -126,7 +126,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			o.put("email", email);
 			o.put("twitter", twitter);
 			o.put("token", token);
-			o.put("info", getInfo(false, true, true));
+			o.put("info", getInfo(false, true, true, true));
 			resp.put("org.immopoly.common.User", o);
 		} catch (JSONException e) {
 			LOG.log(Level.SEVERE, " User.toJSON ", e);
@@ -135,13 +135,13 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		return resp;
 	}
 
-	public JSONObject toPublicJSON(boolean whistory, boolean wbadges) {
+	public JSONObject toPublicJSON(boolean whistory, boolean wbadges, boolean wactions) {
 		JSONObject resp = new JSONObject();
 		JSONObject o = new JSONObject();
 		try {
 			o.put("username", username);
 			o.put("twitter", twitter);
-			o.put("info", getInfo(true, whistory, wbadges));
+			o.put("info", getInfo(true, whistory, wbadges, wactions));
 			resp.put("org.immopoly.common.User", o);
 		} catch (JSONException e) {
 			LOG.log(Level.SEVERE, " User.toJSON ", e);
@@ -150,7 +150,7 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		return resp;
 	}
 
-	private JSONObject getInfo(boolean pub, boolean whistory, boolean wbadges) throws JSONException {
+	private JSONObject getInfo(boolean pub, boolean whistory, boolean wbadges, boolean wactions) throws JSONException {
 		JSONObject info = new JSONObject();
 		info.put(KEY_BALANCE, balance);
 		if (null != numExposes)
@@ -197,6 +197,18 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			}
 			if (pub)
 				return info;
+
+			if (wactions) {
+				JSONArray actionItemList = new JSONArray();
+				List<ActionItem> actions = DBManager.getActionItems(pm, id, null);
+				for (ActionItem actionItem : actions) {
+
+				}
+				for (ActionItem a : actions) {
+					actionItemList.put(a.toJSON());
+				}
+				info.put(KEY_ACTIONITEM_LIST, actionItemList);
+			}
 
 			// expose
 			JSONObject resultlist = new JSONObject();
@@ -387,6 +399,11 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 		return badges != null && badges.size() > 0;
 	}
 
+	public boolean hasActionItem(PersistenceManager pm, int type) {
+		List<ActionItem> actionItems = DBManager.getActionItems(pm, this.getId(), type);
+		return actionItems != null && actionItems.size() > 0;
+	}
+
 	public boolean giveBadge(PersistenceManager pm, int type, String msg) {
 		// check if Badge already given
 		if (hasBadge(pm, type)) {
@@ -420,5 +437,14 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 
 	public void setReleaseBadge(Boolean releaseBadge) {
 		this.releaseBadge = releaseBadge;
+	}
+
+	@Override
+	public org.immopoly.common.ActionItem instantiateActionItem(JSONObject jsonObject) {
+		return null;
+	}
+
+	@Override
+	public void setActionItems(List<org.immopoly.common.ActionItem> actionItems) {
 	}
 }

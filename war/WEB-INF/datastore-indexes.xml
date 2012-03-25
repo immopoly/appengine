@@ -43,4 +43,13 @@
         <property name="releaseBadge" direction="asc"/>
         <property name="balance" direction="desc"/>
     </datastore-index>
+     <datastore-index kind="ActionItem" ancestor="false" source="manual">
+        <property name="userId" direction="asc"/>
+        <property name="time" direction="desc"/>
+    </datastore-index>
+     <datastore-index kind="ActionItem" ancestor="false" source="manual">
+        <property name="type" direction="asc"/>
+        <property name="userId" direction="asc"/>
+        <property name="time" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>

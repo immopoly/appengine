@@ -6,6 +6,7 @@ import javax.jdo.PersistenceManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.immopoly.appengine.ActionItem;
 import org.immopoly.appengine.Badge;
 import org.immopoly.appengine.Counter;
 import org.immopoly.appengine.DBManager;
@@ -103,6 +104,11 @@ public class ActionUserRegister extends AbstractAction {
 		// if (System.currentTimeMillis() < 1331856000)
 		// user.giveBadge(pm, Badge.EARLY_ADOPTER,
 		// "Du warst schon dabei, bevor Immopoly cool war ;)");
+
+		ActionItem actionItem = new ActionItem(user.getId(), System.currentTimeMillis(), ActionItem.TYPE_ACTION_FREEEXPOSES, 1,
+				"Konkurrenzspion: Zeigt alle freien Wohnungen an, die noch nicht übernommen worden sind",
+				ActionItem.IMAGE.get(ActionItem.TYPE_ACTION_FREEEXPOSES));
+		pm.makePersistent(actionItem);
 
 	}
 }

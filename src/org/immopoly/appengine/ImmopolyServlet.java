@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import org.immopoly.appengine.actions.ActionExposeRemove;
 import org.immopoly.appengine.actions.ActionPublicUserInfo;
 import org.immopoly.appengine.actions.ActionStatisticHeatmap;
 import org.immopoly.appengine.actions.ActionTopX;
+import org.immopoly.appengine.actions.ActionUserAction;
 import org.immopoly.appengine.actions.ActionUserBadges;
 import org.immopoly.appengine.actions.ActionUserC2DMRegister;
 import org.immopoly.appengine.actions.ActionUserEmail;
@@ -65,6 +67,7 @@ public class ImmopolyServlet extends HttpServlet {
 		new ActionUserExposes(actions);
 		new ActionExposeAdd(actions);
 		new ActionExposeRemove(actions);
+		new ActionUserAction(actions);
 		new ActionPublicUserInfo(actions);
 		new ActionUserC2DMRegister(actions);
 		new ActionC2DMSend(actions);
@@ -92,6 +95,11 @@ public class ImmopolyServlet extends HttpServlet {
 			LOG.log(e.getLogLevel(), "ImmopolyException " + req.getRequestURI(), e);
 			resp.getOutputStream().write(e.toJSON().toString().getBytes("UTF-8"));
 		}
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		doGet(req, resp);
 	}
 
 }

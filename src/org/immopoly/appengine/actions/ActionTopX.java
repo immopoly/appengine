@@ -82,7 +82,7 @@ public class ActionTopX extends AbstractAction {
 			} else {
 				JSONArray topx = new JSONArray();
 				for (User user : users) {
-					topx.put(user.toPublicJSON(false, false));
+					topx.put(user.toPublicJSON(false, false, false));
 				}
 				resp.getOutputStream().write(topx.toString().getBytes("UTF-8"));
 			}
