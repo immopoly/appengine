@@ -201,11 +201,9 @@ public class User extends org.immopoly.common.User implements JSONable, Serializ
 			if (wactions) {
 				JSONArray actionItemList = new JSONArray();
 				List<ActionItem> actions = DBManager.getActionItems(pm, id, null);
-				for (ActionItem actionItem : actions) {
-
-				}
 				for (ActionItem a : actions) {
-					actionItemList.put(a.toJSON());
+					if (a.getAmount() > 0)
+						actionItemList.put(a.toJSON());
 				}
 				info.put(KEY_ACTIONITEM_LIST, actionItemList);
 			}
