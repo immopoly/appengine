@@ -172,7 +172,7 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 	private void checkDistance(PersistenceManager pm, User user, Expose expose) {
 		Expose lastExpose = DBManager.getLastExposeForUser(pm, expose.getUserId());
 		if (null != lastExpose) {
-			double distance = calcDistance(expose.getLatitude(), expose.getLongitude(), lastExpose.getLatitude(), lastExpose.getLongitude());
+			double distance = Expose.calcDistance(expose.getLatitude(), expose.getLongitude(), lastExpose.getLatitude(), lastExpose.getLongitude());
 			double distancePerSecond = distance / ((expose.getTime() - lastExpose.getTime()) / 1000);
 			LOG.info("distance " + distance + " distancePerSecond " + distancePerSecond + " max " + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
 			if (distance > Const.MAX_SPOOFING_DISTANCE && distancePerSecond > Const.MAX_SPOOFING_DISTANCE_PER_SECOND) {
@@ -180,21 +180,5 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 						+ distancePerSecond + " max " + Const.MAX_SPOOFING_DISTANCE_PER_SECOND);
 			}
 		}
-	}
-
-	
-
-	public static double calcDistance(double lat1, double lng1, double lat2, double lng2) {
-		double earthRadius = 3958.75;
-		double dLat = Math.toRadians(lat2 - lat1);
-		double dLng = Math.toRadians(lng2 - lng1);
-		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
-				* Math.sin(dLng / 2) * Math.sin(dLng / 2);
-		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		double dist = earthRadius * c;
-
-		int meterConversion = 1609;
-
-		return new Double(dist * meterConversion).doubleValue();
 	}
 }

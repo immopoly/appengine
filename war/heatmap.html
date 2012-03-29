@@ -109,9 +109,8 @@ window.onload = function(){
 	
 	//request immopoly
 	$.ajax({
-                   url: "http://immopoly.appspot.com/statistic/heatmap?type=takeover",
+                   url: "http://1.immopoly.appspot.com/user/heatmap?username=mrschtief",
                    context: document.body,
-                   data:{'type':'takeover'},
                    dataType:"json",
                    success: function(data){
 			heatmap.setDataSet(data);

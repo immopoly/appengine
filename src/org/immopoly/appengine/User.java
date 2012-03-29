@@ -43,6 +43,7 @@ import org.json.JSONObject;
  */
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class User extends org.immopoly.common.User implements JSONable, Serializable {
+	private static final long serialVersionUID = 1L;
 	static Logger LOG = Logger.getLogger(User.class.getName());
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)

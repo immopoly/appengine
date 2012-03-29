@@ -35,6 +35,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 @PersistenceCapable(identityType = IdentityType.APPLICATION)
 public class Expose implements JSONable, Serializable, Comparable<Expose> {
 
+	private static final long serialVersionUID = 1L;
+
 	//TODO schtief fuck we need make use of a Key and exposeId
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
@@ -334,4 +336,26 @@ public class Expose implements JSONable, Serializable, Comparable<Expose> {
 		return lastcalculation;
 	}
 
+	public double calcDistance( Expose e) {
+		return calcDistance(this.latitude, this.longitude, e.latitude, e.longitude);
+	}
+	
+	public double calcDistance( double lat2, double lng2) {
+		return calcDistance(this.latitude, this.longitude, lat2, lng2);
+	}
+
+	public static double calcDistance(double lat1, double lng1, double lat2, double lng2) {
+		double earthRadius = 3958.75;
+		double dLat = Math.toRadians(lat2 - lat1);
+		double dLng = Math.toRadians(lng2 - lng1);
+		double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+				* Math.sin(dLng / 2) * Math.sin(dLng / 2);
+		double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+		double dist = earthRadius * c;
+
+		int meterConversion = 1609;
+
+		return new Double(dist * meterConversion).doubleValue();
+	}
+	
 }

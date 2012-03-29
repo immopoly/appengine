@@ -24,6 +24,7 @@ import org.immopoly.appengine.actions.ActionUserBadges;
 import org.immopoly.appengine.actions.ActionUserC2DMRegister;
 import org.immopoly.appengine.actions.ActionUserEmail;
 import org.immopoly.appengine.actions.ActionUserExposes;
+import org.immopoly.appengine.actions.ActionUserHeatmap;
 import org.immopoly.appengine.actions.ActionUserHistory;
 import org.immopoly.appengine.actions.ActionUserInfo;
 import org.immopoly.appengine.actions.ActionUserLogin;
@@ -68,6 +69,7 @@ public class ImmopolyServlet extends HttpServlet {
 		new ActionExposeAdd(actions);
 		new ActionExposeRemove(actions);
 		new ActionUserAction(actions);
+		new ActionUserHeatmap(actions);
 		new ActionPublicUserInfo(actions);
 		new ActionUserC2DMRegister(actions);
 		new ActionC2DMSend(actions);
