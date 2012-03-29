@@ -106,7 +106,7 @@ public class DBManager {
 	public static List<Expose> getExposes(PersistenceManager pm, long userId, Integer start, Integer end) {
 		StringBuffer jdoql = new StringBuffer("SELECT FROM ");
 		jdoql.append(Expose.class.getName());
-		jdoql.append(" WHERE userId == " + userId + " && deleted == null ");// +System.currentTimeMillis()/*+" ORDER BY time DESC"*/);
+		jdoql.append(" WHERE userId == " + userId + " && deleted != null ");// +System.currentTimeMillis()/*+" ORDER BY time DESC"*/);
 		if (null != start && null != end)
 			jdoql.append(" RANGE " + start + "," + end);
 		return (List<Expose>) pm.newQuery(jdoql.toString()).execute();
