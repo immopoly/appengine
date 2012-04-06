@@ -68,6 +68,13 @@ public class ActionExposeAdd extends AbstractAction implements Action {
 			// first check if already owned
 			Expose expose = DBManager.getExpose(pm, exposeId);
 			if (null != expose) {
+				// https://github.com/immopoly/appengine/issues/37
+				if (expose.getDeleted() != null) {
+					LOG.log(Level.SEVERE, "Expose " + exposeId + " wurde schonmal vermietet");
+					throw new ImmopolyException(
+							ImmopolyException.EXPOSE_ALREADY_RENTED,
+							"Die Wohnung wurde bereits vermietet und taucht plötzlich wieder auf o_O Das Immopoly Team kümmert sich hier https://github.com/immopoly/appengine/issues/37");
+				}
 				if (expose.getUserId() == user.getId()) {
 					throw new ImmopolyException(ImmopolyException.EXPOSE_ALREADY_IN_PORTFOLIO, "gehört dir schon du penner");
 				} else {

@@ -1,7 +1,6 @@
 package org.immopoly.appengine.actions;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -102,7 +101,7 @@ public class ActionUserHeatmap extends AbstractAction {
 						ImmopolyException.USERNAME_NOT_FOUND,
 						"user by name not found " + username);
 
-			List<Expose> exposes = DBManager.getExposes(pm, user.getId(), null,
+			List<Expose> exposes = DBManager.getRentedExposes(pm, user.getId(), null,
 					null);
 			LOG.info("found num exposes "+exposes.size());
 			// clustering
